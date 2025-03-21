@@ -2,7 +2,7 @@
 
 A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate on a configurable schedule.
 
-![BlockClock Control](Dashboard.png)
+![BlockClock Control](Images/Dashboard.png)
 
 ## Features
 
