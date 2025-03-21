@@ -1,5 +1,5 @@
 
-test github commit
+
 
 BlockClock Control
 A modern tool for controlling BlockClock Mini/Micro devices with custom text rotation.
