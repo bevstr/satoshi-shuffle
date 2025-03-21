@@ -1,0 +1,629 @@
+/* Custom styles for BlockClock Control */
+:root {
+    /* Light mode variables */
+    --bg-color: #f8f9fa;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-border: #dee2e6;
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+    --nav-bg: #343a40;
+    --nav-text: #ffffff;
+    --footer-bg: #f8f9fa;
+    --footer-text: #6c757d;
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --tab-active-bg: #ffffff;
+    --tab-active-text: #0d6efd;
+    --tab-inactive-bg: #f8f9fa;
+    --tab-inactive-text: #6c757d;
+    --tab-content-bg: #ffffff;
+    --log-bg: #212529;
+    --log-text: #f8f9fa;
+}
+
+[data-theme="dark"] {
+    /* Dark mode variables */
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --card-border: #2d2d2d;
+    --input-bg: #2d2d2d;
+    --input-border: #3d3d3d;
+    --nav-bg: #121212;
+    --nav-text: #ffffff;
+    --footer-bg: #1e1e1e;
+    --footer-text: #a0a0a0;
+    --primary-color: #3d8bfd;
+    --secondary-color: #909294;
+    --success-color: #28a745;
+    --danger-color: #e05260;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #2d2d2d;
+    --dark-color: #e0e0e0;
+    --tab-active-bg: #2d2d2d;
+    --tab-active-text: #3d8bfd;
+    --tab-inactive-bg: #1e1e1e;
+    --tab-inactive-text: #a0a0a0;
+    --tab-content-bg: #2d2d2d;
+    --log-bg: #000000;
+    --log-text: #e0e0e0;
+    --alert-text: #ffffff;
+}
+
+/* ------------------- GENERAL STYLES ------------------- */
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer {
+    margin-top: auto;
+    background-color: var(--footer-bg) !important;
+    color: var(--footer-text);
+}
+
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--card-bg);
+    border-color: var(--card-border);
+}
+
+.card-header {
+    font-weight: 500;
+    background-color: var(--card-bg);
+    border-bottom-color: var(--card-border);
+}
+
+.badge {
+    font-weight: 500;
+}
+
+/* Input styling */
+.form-control, .form-select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+/* Navbar styling */
+.navbar-dark {
+    background-color: var(--nav-bg) !important;
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: var(--nav-text);
+}
+
+/* Tab styling */
+.nav-tabs .nav-link.active {
+    background-color: var(--tab-active-bg);
+    color: var(--tab-active-text);
+    border-color: var(--card-border) var(--card-border) var(--tab-active-bg);
+}
+
+.nav-tabs .nav-link:not(.active) {
+    background-color: var(--tab-inactive-bg);
+    color: var(--tab-inactive-text);
+}
+
+.tab-content {
+    background-color: var(--tab-content-bg);
+}
+
+/* Alert styling */
+.alert {
+    color: var(--alert-text);
+}
+
+/* Log container styling */
+.log-container {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    background-color: var(--log-bg);
+    color: var(--log-text);
+}
+
+/* Dark mode toggle styling */
+.dark-mode-toggle {
+    width: 48px;
+    height: 24px;
+    position: relative;
+    display: inline-block;
+}
+
+.dark-mode-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.dark-mode-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.dark-mode-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .dark-mode-slider {
+    background-color: #2196F3;
+}
+
+input:checked + .dark-mode-slider:before {
+    transform: translateX(24px);
+}
+
+.dark-mode-toggle .bi-sun {
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    color: #ffc107;
+    font-size: 16px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.dark-mode-toggle .bi-moon {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    color: #ffffff;
+    font-size: 14px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ------------------- DARK MODE OVERRIDES ------------------- */
+
+/* Bootstrap component overrides */
+[data-theme="dark"] .bg-light {
+    background-color: var(--card-bg) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: #a0a0a0 !important;
+}
+
+[data-theme="dark"] .border {
+    border-color: var(--card-border) !important;
+}
+
+[data-theme="dark"] .btn-outline-secondary,
+[data-theme="dark"] .btn-outline-danger {
+    color: var(--text-color);
+    border-color: var(--card-border);
+}
+
+[data-theme="dark"] .btn-outline-secondary:hover,
+[data-theme="dark"] .btn-outline-danger:hover {
+    color: var(--bg-color);
+}
+
+[data-theme="dark"] .table {
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .form-text {
+    color: #a0a0a0;
+}
+
+/* Reduce brightness of large backgrounds in dark mode */
+[data-theme="dark"] .bg-primary,
+[data-theme="dark"] .bg-success,
+[data-theme="dark"] .bg-warning {
+    opacity: 0.85;
+}
+
+/* Card header styling in dark mode */
+[data-theme="dark"] .card-header.bg-primary,
+[data-theme="dark"] .card-header.bg-success,
+[data-theme="dark"] .card-header.bg-info {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* Improve contrast for text on colored backgrounds */
+[data-theme="dark"] .bg-primary h1, 
+[data-theme="dark"] .bg-primary h2, 
+[data-theme="dark"] .bg-primary h3, 
+[data-theme="dark"] .bg-primary h4, 
+[data-theme="dark"] .bg-primary h5, 
+[data-theme="dark"] .bg-primary h6,
+[data-theme="dark"] .bg-primary p,
+[data-theme="dark"] .bg-success h1, 
+[data-theme="dark"] .bg-success h2, 
+[data-theme="dark"] .bg-success h3, 
+[data-theme="dark"] .bg-success h4, 
+[data-theme="dark"] .bg-success h5, 
+[data-theme="dark"] .bg-success h6,
+[data-theme="dark"] .bg-success p {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure alert text is readable in dark mode */
+[data-theme="dark"] .alert-primary,
+[data-theme="dark"] .alert-success,
+[data-theme="dark"] .alert-info,
+[data-theme="dark"] .alert-warning,
+[data-theme="dark"] .alert-danger {
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* Log section styling in dark mode */
+[data-theme="dark"] .log-container .card-header,
+[data-theme="dark"] .log-header,
+[data-theme="dark"] .log-banner {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    font-weight: 500;
+    border-bottom-color: #3a3a3a;
+}
+
+[data-theme="dark"] .log-section .card-header,
+[data-theme="dark"] .log-section h5,
+[data-theme="dark"] .log-section .bg-light {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border-color: #3a3a3a;
+}
+
+/* ------------------- SPECIFIC COMPONENT OVERRIDES ------------------- */
+
+/* Badge styling for info badges */
+html[data-theme="dark"] body .badge.bg-info {
+    background-color: #0d6efd !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] body .badge.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000000 !important;
+}
+
+/* Alert-info styling */
+html[data-theme="dark"] body .alert.alert-info {
+    background-color: #0d3c48 !important;
+    color: #ffffff !important;
+    border-color: #0a4855 !important;
+}
+
+html[data-theme="light"] body .alert.alert-info {
+    background-color: #cff4fc !important;
+    color: #055160 !important;
+    border-color: #b6effb !important;
+}
+
+/* Inner elements of alert-info */
+html[data-theme="dark"] body .alert.alert-info * {
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] body .alert.alert-info * {
+    color: #055160 !important;
+}
+
+/* Spinner in alert-info */
+html[data-theme="dark"] body #monitoring-status .spinner-border {
+    border-color: rgba(255, 255, 255, 0.75) !important;
+    border-right-color: transparent !important;
+}
+
+html[data-theme="light"] body #monitoring-status .spinner-border {
+    border-color: rgba(5, 81, 96, 0.75) !important;
+    border-right-color: transparent !important;
+}
+
+/* Background color for .bg-info elements */
+html[data-theme="dark"] body .bg-info {
+    background-color: #0d3c48 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] body .bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000000 !important;
+}
+
+/* ------------------- SECTION-SPECIFIC OVERRIDES ------------------- */
+
+/* Timing section alert (white background in light mode) */
+html[data-theme="light"] body div.row div.col-md-6:has(h6 i.bi-clock) .alert.alert-info {
+    background-color: #ffffff !important;
+    border-color: #dee2e6 !important;
+    color: #212529 !important;
+}
+
+/* Devices section styling in dark mode */
+html[data-theme="dark"] body div.row div.col-md-6 h6 i.bi-hdd-rack ~ .list-group {
+    background-color: #0d3c48 !important;
+    border-color: #0a4855 !important;
+}
+
+html[data-theme="dark"] body div.row div.col-md-6 h6 i.bi-hdd-rack ~ .list-group .list-group-item {
+    background-color: #0d3c48 !important;
+    border-color: #0a4855 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] body div.row div.col-md-6 h6 i.bi-hdd-rack ~ .list-group .list-group-item * {
+    color: #ffffff !important;
+}
+/* Fix for devices section background in dark mode */
+html[data-theme="dark"] body div.col-md-6:has(h6 i.bi-hdd-rack) .list-group,
+html[data-theme="dark"] body div.col-md-6:has(h6:contains("Devices")) .list-group {
+    background-color: #0d3c48 !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] body div.col-md-6:has(h6 i.bi-hdd-rack) .list-group-item,
+html[data-theme="dark"] body div.col-md-6:has(h6:contains("Devices")) .list-group-item {
+    background-color: #0d3c48 !important;
+    border-color: #0a4855 !important;
+    color: #ffffff !important;
+}
+
+/* Alternative selector if :has doesn't work in your browser */
+html[data-theme="dark"] body .col-md-6 .list-group .list-group-item .badge.bg-primary {
+    background-color: #0a4855 !important;
+}
+
+/* More direct approach */
+@media (prefers-color-scheme: dark), (data-theme="dark") {
+    .col-md-6 h6 i.bi-hdd-rack ~ .list-group .list-group-item {
+        background-color: #0d3c48 !important;
+        border-color: #0a4855 !important;
+        color: #ffffff !important;
+    }
+    
+    .col-md-6 h6 i.bi-hdd-rack ~ .list-group .badge {
+        background-color: #0a4855 !important;
+    }
+}
+/* Add these CSS rules at the end of your existing CSS file */
+
+/* Current display styling */
+#current-display {
+    font-size: 2.5rem;  /* Smaller font size */
+    letter-spacing: 1px;  /* Slightly reduced letter spacing */
+    line-height: 1.2;  /* Tighter line height */
+    padding: 0.5rem;  /* Add padding */
+    margin: 0.5rem 0;  /* Add margin */
+    font-weight: 600;  /* Slightly less bold */
+}
+
+/* Display type label */
+#display-type {
+    font-size: 0.85rem;
+    opacity: 0.85;
+}
+
+/* Current display card styling */
+.card-header:has(+ .card-body #current-display),
+.card:has(#current-display) .card-header {
+    padding: 0.5rem 1rem;  /* Reduced padding for the header */
+}
+
+.card:has(#current-display) .card-body {
+    padding: 0.75rem;  /* Reduced padding for body */
+}
+
+/* Last updated badge */
+#last-updated {
+    font-size: 0.7rem;
+    font-weight: normal;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Improve input field text contrast in dark mode */
+[data-theme="dark"] input.form-control,
+[data-theme="dark"] textarea.form-control,
+[data-theme="dark"] select.form-control,
+[data-theme="dark"] .form-select {
+    color: #e0e0e0;  /* Light text color for better visibility */
+    background-color: #2d2d2d;  /* Dark background but not too dark */
+    border-color: #3d3d3d;
+}
+
+/* Improve placeholder text visibility in dark mode */
+[data-theme="dark"] input.form-control::placeholder,
+[data-theme="dark"] textarea.form-control::placeholder {
+    color: #a0a0a0;  /* Medium gray that's visible on dark background */
+    opacity: 1;  /* Ensure full opacity */
+}
+
+/* Specific fix for the custom text input in the main interface */
+[data-theme="dark"] #custom-text {
+    color: #e0e0e0;
+    background-color: #2d2d2d;
+}
+
+/* Focus state improvements for dark mode */
+[data-theme="dark"] input.form-control:focus,
+[data-theme="dark"] textarea.form-control:focus,
+[data-theme="dark"] select.form-control:focus,
+[data-theme="dark"] .form-select:focus {
+    background-color: #3d3d3d;  /* Slightly lighter when focused */
+    border-color: #5d5d5d;
+    box-shadow: 0 0 0 0.25rem rgba(66, 70, 73, 0.5);  /* Subtle glow */
+    color: #ffffff;  /* Brighter text when focused */
+}
+
+/* Rate limiting styles */
+#rate-limit-banner {
+    border-left: 4px solid #ffc107;
+    margin-bottom: 10px;
+}
+
+#rate-countdown {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Disabled input styling during rate limit */
+#custom-text.bg-light {
+    transition: background-color 0.3s ease;
+    cursor: not-allowed;
+}
+
+/* Dark mode specific styling for rate limiting */
+[data-theme="dark"] #rate-limit-banner {
+    background-color: #3a3200;
+    color: #ffdb7d;
+    border-color: #ffc107;
+}
+
+[data-theme="dark"] #rate-countdown {
+    background-color: #5e4a00;
+    color: #ffffff;
+}
+
+[data-theme="dark"] #custom-text.bg-light {
+    background-color: #3d3d3d !important;
+    color: #999999 !important;
+}
+
+/* Improve visibility of the rate limiting warning in both light and dark modes */
+.rate-limited-input {
+    position: relative;
+}
+
+.rate-limited-indicator {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffc107;
+}
+
+/* Pulsing animation for the hourglass icon during rate limiting */
+@keyframes pulse {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.bi-hourglass-split {
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Add to your styles.css */
+
+#space-warning {
+    border-left: 3px solid #ffc107;
+    font-size: 0.85rem;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Dark mode styling */
+[data-theme="dark"] #space-warning {
+    background-color: #332b00;
+    color: #ffdb7d;
+    border-color: #ffc107;
+}
+.log-container {
+    max-height: 60vh;
+    min-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: monospace;
+    width: 100%;
+}
+
+/* Add these specific styles to force text wrapping */
+.log-container pre {
+    white-space: pre-wrap !important; /* Force wrapping */
+    word-break: break-word !important; /* Break words at any character */
+    overflow-wrap: break-word !important; /* Alternative property for word-break */
+    word-wrap: break-word !important; /* For older browsers */
+    width: 100%; /* Ensure pre takes full width */
+    max-width: 100%; /* Force max width */
+    margin: 0; /* Remove margin */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .log-container {
+        max-height: 50vh; /* Smaller height on mobile */
+        min-height: 200px;
+    }
+}
+
+
+/* Add these styles to the end of your styles.css file */
+
+/* Initialization/Synchronization banner styling for dark mode */
+[data-theme="dark"] #initialization-banner {
+    background-color: #0d3c48 !important;
+    color: #ffffff !important;
+    border-color: #0a4855 !important;
+}
+
+[data-theme="dark"] #initialization-banner strong,
+[data-theme="dark"] #initialization-banner i,
+[data-theme="dark"] #initialization-banner div,
+[data-theme="dark"] #initialization-banner span {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] #countdown-timer {
+    background-color: #0a4855 !important;
+    color: #ffffff !important;
+}
+
+/* For the success message after synchronization */
+[data-theme="dark"] #initialization-banner.alert-success {
+    background-color: #0f5132 !important;
+    border-color: #0c6231 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] #initialization-banner.alert-success strong,
+[data-theme="dark"] #initialization-banner.alert-success i {
+    color: #ffffff !important;
+}

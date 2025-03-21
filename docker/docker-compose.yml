@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  satoshi-shuffle:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: satoshi-shuffle
+    restart: unless-stopped
+    ports:
+      - "5001:5001"
+    volumes:
+      - ../config:/app/config
+      - ../logs:/app/logs
+    networks:
+      - satoshi-network
+    environment:
+      - TZ=UTC
+
+networks:
+  satoshi-network:
+    driver: bridge

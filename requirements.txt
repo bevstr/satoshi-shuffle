@@ -1,0 +1,4 @@
+# Python requirements for BlockClock Control
+Flask==2.3.3
+Flask-WTF==1.1.1
+requests==2.32.3

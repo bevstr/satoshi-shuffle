@@ -1,0 +1,619 @@
+{% extends "base.html" %}
+
+{% block title %}Satoshi Shuffle - Settings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-10 offset-lg-1">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-gear"></i> Settings</h4>
+            </div>
+            <div class="card-body">
+                <form id="settings-form">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="devices-tab" data-bs-toggle="tab" data-bs-target="#devices" type="button" role="tab">
+                                <i class="bi bi-hdd-rack"></i> Devices
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="text-tab" data-bs-toggle="tab" data-bs-target="#text" type="button" role="tab">
+                                <i class="bi bi-chat-square-text"></i> Text Options
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="timing-tab" data-bs-toggle="tab" data-bs-target="#timing" type="button" role="tab">
+                                <i class="bi bi-clock"></i> Timing
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="system-tab" data-bs-toggle="tab" data-bs-target="#system" type="button" role="tab">
+                                <i class="bi bi-gear-wide-connected"></i> System
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="backup-tab" data-bs-toggle="tab" data-bs-target="#backup" type="button" role="tab">
+                                <i class="bi bi-archive"></i> Backup & Restore
+                            </button>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content p-3 border border-top-0 rounded-bottom">
+                        <!-- Devices Tab -->
+                        <div class="tab-pane fade show active" id="devices" role="tabpanel">
+                            <h5 class="mb-3">BlockClock Devices</h5>
+                            <div id="devices-container">
+                                {% for device in config.devices %}
+                                <div class="device-entry card mb-3" data-device-id="{{ device.id }}">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">Device {{ device.id }}</h6>
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-device">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">Name</label>
+                                                <input type="text" class="form-control device-name" value="{{ device.name }}" required>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">IP Address</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control device-ip" value="{{ device.ip }}" required>
+                                                    <button type="button" class="btn btn-outline-secondary check-device">
+                                                        <i class="bi bi-check-circle"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Password (if any)</label>
+                                                <input type="password" class="form-control device-password" value="{{ device.password }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <button type="button" id="add-device" class="btn btn-primary mt-2" {% if config.devices|length >= 5 %}disabled{% endif %}>
+                                <i class="bi bi-plus-circle"></i> Add Device
+                            </button>
+                            <small class="text-muted ms-2">Maximum 5 devices</small>
+                        </div>
+                        
+                        <!-- Text Options Tab -->
+                        <div class="tab-pane fade" id="text" role="tabpanel">
+                            <h5 class="mb-3">Custom Text Options</h5>
+                            <p class="text-muted">A random Custom Text from the list will display after each natural refresh sequence.</p>
+                            
+                            <div id="text-options-container" class="mb-3">
+                                {% for text in config.text_options %}
+                                <div class="input-group mb-2 text-option-entry">
+                                    <input type="text" class="form-control text-option" value="{{ text }}" maxlength="7" required>
+                                    <button type="button" class="btn btn-outline-danger remove-text-option">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            
+                            <button type="button" id="add-text-option" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Add Text Option
+                            </button>
+                            <small class="text-muted ms-2">Maximum 7 characters per option. Use only letters, numbers and underscore</small>
+                        </div>
+                        
+                        <!-- Timing Tab -->
+                        <div class="tab-pane fade" id="timing" role="tabpanel">
+                            <h5 class="mb-3">Timing Settings</h5>
+                            <p class="text-muted">Configure how often your custom text appears.</p>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Clock Refresh Time</label>
+                                <select class="form-select" id="clock-refresh-time">
+                                    <option value="300" {% if config.clock_refresh_time == 300 %}selected{% endif %}>5 minutes (300 seconds)</option>
+                                    <option value="600" {% if config.clock_refresh_time == 600 %}selected{% endif %}>10 minutes (600 seconds)</option>
+                                    <option value="900" {% if config.clock_refresh_time == 900 %}selected{% endif %}>15 minutes (900 seconds)</option>
+                                    <option value="1800" {% if config.clock_refresh_time == 1800 %}selected{% endif %}>30 minutes (1800 seconds)</option>
+                                    <option value="3600" {% if config.clock_refresh_time == 3600 %}selected{% endif %}>60 minutes (3600 seconds)</option>
+                                </select>
+                                <div class="form-text">The Screen Update Rate you chose in Blockclock preferences. This must match or it will not synchronise.</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Displays Between Custom Text</label>
+                                <input type="number" class="form-control" id="displays-between-text" value="{{ config.displays_between_text }}" min="1" max="10">
+                                <div class="form-text">Number of natural <strong>Display Values</strong> you chose in Blockclock preferences before showing your Custom Text.</div>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> Your Custom Text will appear every 
+                                <strong id="text-frequency">{{ (config.clock_refresh_time * config.displays_between_text) // 60 }}</strong> minutes.
+                            </div>
+                        </div>
+
+                        <!-- System Settings Tab -->
+                        <div class="tab-pane fade" id="system" role="tabpanel">
+                            <h5 class="mb-3">System Settings</h5>
+                            
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-journal-text"></i> Log Management</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Archive logs after</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" id="log-archive-days" value="{{ config.log_archive_days }}" min="1" max="30">
+                                                <span class="input-group-text">days</span>
+                                            </div>
+                                            <div class="form-text">How many days before current logs are archived</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Archive logs when they reach</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" id="log-archive-size" value="{{ config.log_archive_size }}" min="1" max="100">
+                                                <span class="input-group-text">MB</span>
+                                            </div>
+                                            <div class="form-text">Maximum size before logs are archived</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Delete archived logs after</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" id="log-delete-days" value="{{ config.log_delete_days }}" min="1" max="365">
+                                                <span class="input-group-text">days</span>
+                                            </div>
+                                            <div class="form-text">How long to keep archived logs</div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 text-muted small">
+                                        <i class="bi bi-info-circle"></i> Note: 1 day of logs will be approximately 2 MB.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="bi bi-palette"></i> Display Settings</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Default Theme</label>
+                                        <select class="form-select" id="default-theme">
+                                            <option value="light" {% if config.default_theme == 'light' %}selected{% endif %}>Light</option>
+                                            <option value="dark" {% if config.default_theme == 'dark' or not config.default_theme %}selected{% endif %}>Dark</option>
+                                            <option value="system" {% if config.default_theme == 'system' %}selected{% endif %}>Use System Setting</option>
+                                        </select>
+                                        <div class="form-text">The default theme to use when users first access the application</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Backup & Restore Tab -->
+                        <div class="tab-pane fade" id="backup" role="tabpanel">
+                            <h5 class="mb-3">Backup & Restore Configuration</h5>
+                            <p class="text-muted">Save your current configuration or restore from a previous backup.</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h6 class="mb-0"><i class="bi bi-download"></i> Backup Configuration</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Download a backup file containing all your current settings.</p>
+                                            <button type="button" id="backup-btn" class="btn btn-primary">
+                                                <i class="bi bi-download"></i> Download Backup
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h6 class="mb-0"><i class="bi bi-upload"></i> Restore Configuration</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Upload a previously saved backup file to restore your settings.</p>
+                                            <div class="mb-3">
+                                                <input class="form-control" type="file" id="restore-file" accept=".json">
+                                            </div>
+                                            <button type="button" id="restore-btn" class="btn btn-warning" disabled>
+                                                <i class="bi bi-upload"></i> Restore from Backup
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> Backups include all settings: devices, text options, timing, and system preferences.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 d-flex justify-content-between">
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-save"></i> Save Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Device Template (Hidden) -->
+<template id="device-template">
+    <div class="device-entry card mb-3" data-device-id="{id}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="mb-0">Device {id}</h6>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-device">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Name</label>
+                    <input type="text" class="form-control device-name" value="BlockClock Device {id}" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">IP Address</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control device-ip" required>
+                        <button type="button" class="btn btn-outline-secondary check-device">
+                            <i class="bi bi-check-circle"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Password (if any)</label>
+                    <input type="password" class="form-control device-password">
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Text Option Template (Hidden) -->
+<template id="text-option-template">
+    <div class="input-group mb-2 text-option-entry">
+        <input type="text" class="form-control text-option" maxlength="7" required>
+        <button type="button" class="btn btn-outline-danger remove-text-option">
+            <i class="bi bi-trash"></i>
+        </button>
+    </div>
+</template>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Update text frequency when timing settings change
+        function updateTextFrequency() {
+            const refreshTime = parseInt($('#clock-refresh-time').val());
+            const displaysBetween = parseInt($('#displays-between-text').val());
+            const frequency = Math.floor((refreshTime * displaysBetween) / 60);
+            $('#text-frequency').text(frequency);
+        }
+        
+        $('#clock-refresh-time, #displays-between-text').on('change input', updateTextFrequency);
+        
+        // Add new device
+        $('#add-device').click(function() {
+            const devices = $('.device-entry');
+            if (devices.length >= 5) {
+                alert('Maximum 5 devices allowed');
+                return;
+            }
+            
+            // Find the next available device ID
+            let nextId = 1;
+            const usedIds = [];
+            devices.each(function() {
+                usedIds.push(parseInt($(this).data('device-id')));
+            });
+            
+            for (let i = 1; i <= 5; i++) {
+                if (!usedIds.includes(i)) {
+                    nextId = i;
+                    break;
+                }
+            }
+            
+            // Clone template and update ID
+            const template = $('#device-template').html();
+            const newDevice = template.replace(/{id}/g, nextId);
+            $('#devices-container').append(newDevice);
+            
+            // Disable add button if we now have 5 devices
+            if ($('.device-entry').length >= 5) {
+                $('#add-device').prop('disabled', true);
+            }
+        });
+        
+        // Remove device
+        $(document).on('click', '.remove-device', function() {
+            $(this).closest('.device-entry').remove();
+            // Re-enable add button
+            $('#add-device').prop('disabled', false);
+        });
+        
+        // Add text option
+        $('#add-text-option').click(function() {
+            const template = $('#text-option-template').html();
+            $('#text-options-container').append(template);
+        });
+        
+        // Remove text option
+        $(document).on('click', '.remove-text-option', function() {
+            $(this).closest('.text-option-entry').remove();
+        });
+        
+        // Check device connectivity
+        $(document).on('click', '.check-device', function() {
+            const btn = $(this);
+            const ip = btn.prev('.device-ip').val().trim();
+            
+            if (!ip) {
+                alert('Please enter an IP address');
+                return;
+            }
+            
+            btn.prop('disabled', true);
+            btn.html('<span class="spinner-border spinner-border-sm"></span>');
+            
+            $.ajax({
+                url: '/check_device',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ ip: ip }),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.reachable) {
+                        alert('Success: Device is reachable!');
+                    } else {
+                        alert('Warning: Device is not reachable. Check the IP address and ensure the device is powered on and connected to the network.');
+                    }
+                },
+                error: function() {
+                    alert('Error checking device connectivity');
+                },
+                complete: function() {
+                    btn.prop('disabled', false);
+                    btn.html('<i class="bi bi-check-circle"></i>');
+                }
+            });
+        });
+
+        // Add this to your existing jQuery ready function in settings.html
+        // Backup and restore functionality
+        $('#backup-btn').click(function() {
+            // Show spinner while processing
+            $(this).prop('disabled', true);
+            $(this).html('<span class="spinner-border spinner-border-sm"></span> Generating...');
+            
+            // Request backup file
+            $.ajax({
+                url: '/backup_config',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Create a download link for the JSON data
+                        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(response.data, null, 2));
+                        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+                        
+                        const downloadAnchorNode = document.createElement('a');
+                        downloadAnchorNode.setAttribute("href", dataStr);
+                        downloadAnchorNode.setAttribute("download", `satoshi-shuffle-backup-${today}.json`);
+                        document.body.appendChild(downloadAnchorNode);
+                        downloadAnchorNode.click();
+                        downloadAnchorNode.remove();
+                    } else {
+                        alert('Error creating backup: ' + response.message);
+                    }
+                },
+                error: function() {
+                    alert('Network error occurred while creating backup');
+                },
+                complete: function() {
+                    // Reset button state
+                    $('#backup-btn').prop('disabled', false);
+                    $('#backup-btn').html('<i class="bi bi-download"></i> Download Backup');
+                }
+            });
+        });
+
+        // Enable/disable restore button based on file selection
+        $('#restore-file').on('change', function() {
+            if ($(this).val()) {
+                $('#restore-btn').prop('disabled', false);
+            } else {
+                $('#restore-btn').prop('disabled', true);
+            }
+        });
+
+        // Handle restore from backup
+        $('#restore-btn').click(function() {
+            const fileInput = $('#restore-file')[0];
+            if (fileInput.files.length === 0) {
+                alert('Please select a backup file to restore');
+                return;
+            }
+            
+            // Confirm before proceeding
+            if (!confirm('Warning: This will overwrite your current configuration with the backup. Continue?')) {
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            // Show spinner while processing
+            $(this).prop('disabled', true);
+            $(this).html('<span class="spinner-border spinner-border-sm"></span> Restoring...');
+            
+            reader.onload = function(e) {
+                try {
+                    // Parse the JSON file
+                    const backupData = JSON.parse(e.target.result);
+                    
+                    // Send to server for validation and restoration
+                    $.ajax({
+                        url: '/restore_config',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ backup: backupData }),
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                alert('Configuration restored successfully! Page will reload to apply changes.');
+                                window.location.reload();
+                            } else {
+                                alert('Error restoring configuration: ' + response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('Network error occurred during restoration');
+                        },
+                        complete: function() {
+                            // Reset button state
+                            $('#restore-btn').prop('disabled', false);
+                            $('#restore-btn').html('<i class="bi bi-upload"></i> Restore from Backup');
+                        }
+                    });
+                } catch (error) {
+                    alert('Error parsing backup file. Please ensure it is a valid JSON file.');
+                    $('#restore-btn').prop('disabled', false);
+                    $('#restore-btn').html('<i class="bi bi-upload"></i> Restore from Backup');
+                }
+            };
+            
+            reader.readAsText(file);
+        });
+
+        
+        // Save settings
+        $('#settings-form').submit(function(e) {
+            e.preventDefault();
+            
+            // Collect device data
+            const devices = [];
+            $('.device-entry').each(function() {
+                const device = {
+                    id: parseInt($(this).data('device-id')),
+                    name: $(this).find('.device-name').val().trim(),
+                    ip: $(this).find('.device-ip').val().trim(),
+                    password: $(this).find('.device-password').val()
+                };
+                
+                if (!device.name || !device.ip) {
+                    alert('Please fill in all required device fields');
+                    return false;
+                }
+                
+                devices.push(device);
+            });
+            
+            // Collect text options
+            const textOptions = [];
+            $('.text-option').each(function() {
+                const text = $(this).val().trim();
+                if (text) {
+                    textOptions.push(text);
+                }
+            });
+            
+            if (textOptions.length === 0) {
+                alert('Please add at least one text option');
+                return;
+            }
+            
+            // Collect timing settings
+            const clockRefreshTime = parseInt($('#clock-refresh-time').val());
+            const displaysBetweenText = parseInt($('#displays-between-text').val());
+            
+            if (isNaN(displaysBetweenText) || displaysBetweenText < 1) {
+                alert('Please enter a valid number for displays between Custom Text');
+                return;
+            }
+            
+            // Collect log management settings
+            const logArchiveDays = parseInt($('#log-archive-days').val());
+            const logArchiveSize = parseInt($('#log-archive-size').val());
+            const logDeleteDays = parseInt($('#log-delete-days').val());
+            
+            if (isNaN(logArchiveDays) || logArchiveDays < 1) {
+                alert('Please enter a valid number for log archive days');
+                return;
+            }
+            
+            if (isNaN(logArchiveSize) || logArchiveSize < 1) {
+                alert('Please enter a valid number for log archive size');
+                return;
+            }
+            
+            if (isNaN(logDeleteDays) || logDeleteDays < 1) {
+                alert('Please enter a valid number for log delete days');
+                return;
+            }
+            
+            // Collect display settings
+            const defaultTheme = $('#default-theme').val();
+            
+            // Prepare data
+            const data = {
+                devices: devices,
+                text_options: textOptions,
+                clock_refresh_time: clockRefreshTime,
+                displays_between_text: displaysBetweenText,
+                log_archive_days: logArchiveDays,
+                log_archive_size: logArchiveSize,
+                log_delete_days: logDeleteDays,
+                default_theme: defaultTheme
+            };
+            
+            // Submit data
+            const submitBtn = $(this).find('button[type="submit"]');
+            const originalBtnHtml = submitBtn.html();
+            
+            submitBtn.prop('disabled', true);
+            submitBtn.html('<span class="spinner-border spinner-border-sm"></span> Saving...');
+            
+            $.ajax({
+                url: '/save_settings',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        alert('Settings saved successfully!');
+                        window.location.href = '/';
+                    } else {
+                        alert('Error saving settings');
+                    }
+                },
+                error: function() {
+                    alert('Error saving settings');
+                },
+                complete: function() {
+                    submitBtn.prop('disabled', false);
+                    submitBtn.html(originalBtnHtml);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

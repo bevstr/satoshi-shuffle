@@ -1,0 +1,773 @@
+{% extends "base.html" %}
+
+{% block title %}Satoshi Shuffle - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-clock-history"></i> Satoshi Shuffle - BlockClock Custom Text Manager</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">Status</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="status-indicator" class="d-flex align-items-center mb-3">
+                                    <div id="status-badge" class="badge {% if rotation_active %}bg-success{% else %}bg-secondary{% endif %} p-2 me-2">
+                                        <i class="bi {% if rotation_active %}bi-play-fill{% else %}bi-stop-fill{% endif %}"></i>
+                                    </div>
+                                    <span id="status-text" class="fs-5">
+                                        {% if rotation_active %}
+                                            Running
+                                        {% else %}
+                                            Stopped
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <button id="toggle-button" class="btn {% if rotation_active %}btn-danger{% else %}btn-success{% endif %} w-100">
+                                    <i class="bi {% if rotation_active %}bi-stop-fill{% else %}bi-play-fill{% endif %} me-1"></i>
+                                    {% if rotation_active %}Stop{% else %}Start{% endif %} Text Rotation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">Quick Actions - <span style="font-size: 0.7em; font-weight: normal;">Send one time text</span></h5>
+
+                            </div>
+                            <div class="card-body">
+                                <form id="send-text-form" class="mb-3">
+                                    <div class="input-group">
+                                        <input type="text" id="custom-text" class="form-control" placeholder="Enter Custom Text" maxlength="7">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-send"></i> Send
+                                        </button>
+                                    </div>
+                                    <small class="text-muted">Maximum 7 characters</small>
+                                </form>
+                                <div class="text-center">
+                                    <a href="{{ url_for('settings') }}" class="btn btn-outline-primary w-100">
+                                        <i class="bi bi-gear"></i> Settings
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+<!-- This is the modified layout for the configuration summary section -->
+<div class="card">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Configuration Summary</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Current Display Panel (moved from bottom left to top left) -->
+            <div class="col-md-6">
+                <div class="card bg-dark">
+                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-display"></i> Current Display</span>
+                        <span id="last-updated" class="badge bg-primary">Updating...</span>
+                    </div>
+                    <div class="card-body text-center py-4">
+                        <div id="current-display" class="display-4 text-white font-monospace" style="letter-spacing: 2px; font-family: 'Courier New', monospace; font-weight: bold;">
+                            --------
+                        </div>
+                        <div class="mt-2 text-light small" id="display-type">--</div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Text Options Panel (stays in top right) -->
+            <div class="col-md-6">
+                <h6><i class="bi bi-chat-square-text"></i> Text Options:</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    {% for text in config.text_options %}
+                    <span class="badge bg-secondary p-2">{{ text }}</span>
+                    {% else %}
+                    <span class="text-muted">No text options configured</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Second row with Devices and Timing -->
+        <div class="row mt-3">
+            <!-- Devices Panel (moved from top left to bottom left) -->
+            <div class="col-md-6">
+                <h6><i class="bi bi-hdd-rack"></i> Devices:</h6>
+                <ul class="list-group">
+                    {% for device in config.devices %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ device.name }}</span>
+                        <span class="badge bg-primary">{{ device.ip }}</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item text-muted">No devices configured</li>
+                    {% endfor %}
+                </ul>
+            </div>
+                            
+            <!-- Timing Section (stays in bottom right) -->
+            <div class="col-md-6">
+                <h6><i class="bi bi-clock"></i> Timing:</h6>
+                <div class="alert alert-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Refresh Time</span>
+                        <strong>{{ config.clock_refresh_time // 60 }} minutes</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <span>Displays Between Custom Text</span>
+                        <strong>{{ config.displays_between_text }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col-lg-10 offset-lg-1">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-file-text"></i> Application Logs</h4>
+                    <button id="refresh-logs" class="btn btn-sm btn-outline-light">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="monitoring-status" class="mb-3 d-none">
+                    <div class="alert alert-info">
+                        <div class="text-center mb-2">
+                            <div class="d-inline-block">
+                                <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                <span id="monitoring-message" class="fw-bold">Monitoring for refresh...</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-4 align-items-center small">
+                            <span>
+                                <span class="fw-bold">Expected sleep:</span> <span id="monitoring-expected"></span>
+                            </span>
+                            <span>
+                                <span class="fw-bold">Elapsed this cycle:</span> <span id="monitoring-timer">00:00</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="log-container bg-dark text-light p-3 rounded" style="height: 400px; overflow-y: auto; font-family: monospace;">
+                    <pre id="log-content">Loading logs...</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Global variables for rate limiting UI
+        let rateLimitCountdown;
+        let submitButtonOriginalHtml;
+        
+        // Function to update rate limit status
+        function checkRateLimitStatus() {
+            $.get('/rate_limit_status', function(data) {
+                if (!data.can_send) {
+                    startRateLimitCountdown(data.wait_time);
+                } else {
+                    stopRateLimitCountdown();
+                }
+            });
+        }
+        
+        // Function to start rate limit countdown
+        function startRateLimitCountdown(seconds) {
+            // If countdown is already running, do nothing
+            if (rateLimitCountdown) {
+                return;
+            }
+            
+            // Create countdown banner if it doesn't exist
+            if (!$('#rate-limit-banner').length) {
+                const bannerHtml = `
+                    <div id="rate-limit-banner" class="alert alert-warning mb-2 small">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-hourglass-split me-1"></i>
+                                <strong>Rate limited:</strong> Display protection cooldown
+                            </div>
+                            <div>
+                                <span id="rate-countdown" class="badge bg-warning text-dark p-1"></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $('#send-text-form').before(bannerHtml);
+            }
+            
+            // Disable send button and save original HTML
+            const submitBtn = $('#send-text-form button[type="submit"]');
+            if (!submitButtonOriginalHtml) {
+                submitButtonOriginalHtml = submitBtn.html();
+            }
+            submitBtn.prop('disabled', true);
+            submitBtn.html('<i class="bi bi-hourglass-split"></i> Wait');
+            
+            // Add countdown class to input
+            $('#custom-text').addClass('bg-light');
+            
+            // Start countdown
+            let timeLeft = Math.ceil(seconds);
+            updateCountdownDisplay(timeLeft);
+            
+            rateLimitCountdown = setInterval(function() {
+                timeLeft--;
+                updateCountdownDisplay(timeLeft);
+                
+                if (timeLeft <= 0) {
+                    stopRateLimitCountdown();
+                }
+            }, 1000);
+        }
+        
+        // Replace your existing stopRateLimitCountdown function with this version
+        function stopRateLimitCountdown() {
+            if (rateLimitCountdown) {
+                clearInterval(rateLimitCountdown);
+                rateLimitCountdown = null;
+                
+                // Remove countdown banner
+                $('#rate-limit-banner').remove();
+                
+                // Re-enable send button and definitely restore original HTML
+                const submitBtn = $('#send-text-form button[type="submit"]');
+                submitBtn.prop('disabled', false);
+                
+                // Make sure we restore the original HTML content of the button
+                // If original html is not available, use a default
+                if (submitButtonOriginalHtml && submitButtonOriginalHtml.length > 0) {
+                    submitBtn.html(submitButtonOriginalHtml);
+                } else {
+                    submitBtn.html('<i class="bi bi-send"></i> Send');
+                }
+                
+                // Remove countdown class from input
+                $('#custom-text').removeClass('bg-light');
+                
+                console.log("Rate limit countdown stopped, button reset to:", submitBtn.html());
+            }
+            
+            // Even if there's no active countdown, make sure the button is in the right state
+            const submitBtn = $('#send-text-form button[type="submit"]');
+            if (submitBtn.find('.spinner-border').length > 0) {
+                console.log("Spinner still found after countdown ended, forcing reset");
+                submitBtn.prop('disabled', false);
+                submitBtn.html('<i class="bi bi-send"></i> Send');
+            }
+        }
+
+        // Add this function to manually reset the button if needed
+        function resetSendButton() {
+            const submitBtn = $('#send-text-form button[type="submit"]');
+            if (submitBtn.find('.spinner-border').length > 0) {
+                console.log("Manually resetting send button");
+                submitBtn.prop('disabled', false);
+                submitBtn.html('<i class="bi bi-send"></i> Send');
+            }
+        }
+
+// Call resetSendButton periodically to catch any stuck spinners
+// This is a failsafe in case the normal reset mechanism fails
+setInterval(resetSendButton, 75000); // Check every 75 seconds (just after rate limit period)
+
+
+// Function to update countdown display
+        function updateCountdownDisplay(seconds) {
+            if (seconds < 0) seconds = 0;
+            const display = `${seconds}s`;
+            $('#rate-countdown').text(display);
+        }
+        
+        // Check rate limit status when page loads
+        checkRateLimitStatus();
+        
+        // Global variable to track synchronization status
+        let isInitializing = false;
+        let initializationTimer = null;
+
+        // Function to start initialization countdown
+        function startInitializationCountdown() {
+            // Get the refresh time from the configuration (displayed in the UI)
+            const refreshTimeMinutes = parseInt($('.alert-info strong').first().text().trim());
+            const countdownSeconds = refreshTimeMinutes * 60; // Convert minutes to seconds
+            
+            // Set flag and start countdown based on actual refresh cycle
+            isInitializing = true;
+            let secondsRemaining = countdownSeconds;
+            
+            // Create countdown banner if it doesn't exist
+            if (!$('#initialization-banner').length) {
+                const bannerHtml = `
+                    <div id="initialization-banner" class="alert alert-primary mb-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                <strong>System is synchronizing</strong> - Waiting for first refresh cycle...
+                            </div>
+                            <div>
+                                <span id="countdown-timer" class="badge bg-primary p-2">${secondsRemaining}s</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $('.card-body').first().prepend(bannerHtml);
+            }
+            
+            // Update countdown every second
+            initializationTimer = setInterval(function() {
+                secondsRemaining--;
+                $('#countdown-timer').text(secondsRemaining + 's');
+                
+                // When countdown reaches zero
+                if (secondsRemaining <= 0) {
+                    clearInterval(initializationTimer);
+                    isInitializing = false;
+                    
+                    // Replace banner with success message
+                    $('#initialization-banner').removeClass('alert-primary').addClass('alert-success');
+                    $('#initialization-banner').html(`
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                <strong>System synchronized!</strong> - Ready to send custom text.
+                            </div>
+                            <button class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    `);
+                    
+                    // Auto-hide success message after 5 seconds
+                    setTimeout(function() {
+                        $('#initialization-banner').fadeOut('slow', function() {
+                            $(this).remove();
+                        });
+                    }, 5000);
+                }
+            }, 1000);
+        }
+
+        function checkSyncStatus() {
+        $.get('/sync_status', function(data) {
+            // We're just keeping track, not making UI changes here
+        });
+    }
+        // Call checkSyncStatus periodically
+        setInterval(checkSyncStatus, 5000); // Check every 5 seconds
+
+        // Function to update the status UI
+        function updateStatusUI(active) {
+            if (active) {
+                $('#status-badge').removeClass('bg-danger').addClass('bg-success');
+                $('#status-badge i').removeClass('bi-stop-fill').addClass('bi-play-fill');
+                $('#status-text').text('Running');
+                $('#toggle-button').removeClass('btn-success').addClass('btn-danger');
+                $('#toggle-button i').removeClass('bi-play-fill').addClass('bi-stop-fill');
+                $('#toggle-button').html('<i class="bi-stop-fill me-1"></i> Stop Text Rotation');
+            } else {
+                $('#status-badge').removeClass('bg-success').addClass('bg-danger');
+                $('#status-badge i').removeClass('bi-play-fill').addClass('bi-stop-fill');
+                $('#status-text').text('Stopped');
+                $('#toggle-button').removeClass('btn-danger').addClass('btn-success');
+                $('#toggle-button i').removeClass('bi-stop-fill').addClass('bi-play-fill');
+                $('#toggle-button').html('<i class="bi-play-fill me-1"></i> Start Text Rotation');
+            }
+        }
+        
+        // Toggle rotation
+        $('#toggle-button').click(function() {
+            let active = $('#status-text').text().trim() === 'Running';
+            let url = active ? '/stop' : '/start';
+            
+            $(this).prop('disabled', true);
+            $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        updateStatusUI(!active);
+                        
+                        // If starting the app, begin the initialization countdown
+                        if (!active) {
+                            startInitializationCountdown();
+                        } else {
+                            // If stopping, clear any active countdowns
+                            if (initializationTimer) {
+                                clearInterval(initializationTimer);
+                                $('#initialization-banner').remove();
+                            }
+                            isInitializing = false;
+                        }
+                    } else {
+                        alert('Error: ' + response.error);
+                    }
+                },
+                error: function() {
+                    alert('Network error occurred');
+                },
+                complete: function() {
+                    $('#toggle-button').prop('disabled', false);
+                }
+            });
+        });
+
+
+        // Add this to your existing JavaScript
+
+// Prevent spaces in the input and show feedback
+$('#custom-text').on('keydown', function(e) {
+    // Check if the key pressed is a space
+    if (e.key === ' ' || e.keyCode === 32) {
+        e.preventDefault();
+        
+        // Show a tooltip or message
+        showSpaceWarning();
+        
+        return false;
+    }
+});
+
+// Function to show space warning
+function showSpaceWarning() {
+    // Create warning element if it doesn't exist
+    if (!$('#space-warning').length) {
+        const warning = $('<div id="space-warning" class="alert alert-warning py-1 px-2 my-1 small">Spaces not allowed</div>');
+        
+        // Add warning after the input field
+        $('#custom-text').after(warning);
+        
+        // Auto-hide after 2 seconds
+        setTimeout(function() {
+            $('#space-warning').fadeOut('fast', function() {
+                $(this).remove();
+            });
+        }, 2000);
+    }
+}
+
+
+        // Function to validate characters in text input
+        function validateBlockClockText(text) {
+            // Check for spaces first (before any trimming)
+            if (text.includes(' ')) {
+                return {
+                    valid: false,
+                    message: "Spaces are not allowed. Use only letters, numbers, and underscores."
+                };
+            }
+            
+            // Define allowed characters (letters, numbers, underscore)
+            const validPattern = /^[a-zA-Z0-9_]+$/;
+            
+            // Check if text matches valid pattern
+            if (!validPattern.test(text)) {
+                return {
+                    valid: false,
+                    message: "Only letters, numbers, and underscores allowed."
+                };
+            }
+            
+            return { valid: true };
+        }
+
+// Update the send_text_form submit handler to check raw input before trimming
+
+// First, unbind any existing submit handlers
+$('#send-text-form').off('submit');
+
+$('#send-text-form').submit(function(e) {
+    e.preventDefault();
+    
+    // First get the raw input value (without trimming)
+    let rawText = $('#custom-text').val();
+    
+    // Check for spaces in the raw input
+    if (rawText.includes(' ')) {
+        alert("Spaces are not allowed. Use only letters, numbers, and underscores.");
+        return;
+    }
+    
+    // Now proceed with the trimmed value for other checks
+    let text = rawText.trim();
+    
+    if (!text) {
+        alert('Please enter text to send');
+        return;
+    }
+    
+    if (text.length > 7) {
+        alert('Text is too long. Maximum 7 characters allowed.');
+        return;
+    }
+    
+    // Add character validation
+    let validation = validateBlockClockText(text);
+    if (!validation.valid) {
+        alert(validation.message);
+        return;
+    }
+    
+    // If system is still initializing, show a warning confirmation
+    if (isInitializing) {
+        if (!confirm('System is still initializing. Sending text now may disrupt synchronization. Continue anyway?')) {
+            return; // User canceled
+        }
+    }
+    
+    let submitBtn = $(this).find('button[type="submit"]');
+    submitButtonOriginalHtml = submitBtn.html();
+    
+    submitBtn.prop('disabled', true);
+    submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...');
+    
+    $.ajax({
+        url: '/send_text',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ text: text }),
+        dataType: 'json',
+        success: function(response) {
+            if (response.success) {
+                $('#custom-text').val('');
+                alert('Text sent successfully!');
+                // Update display immediately after sending text
+                updateLiveDisplay();
+                
+                // Since text was sent successfully, start rate limit countdown
+                if (response.wait_time) {
+                    startRateLimitCountdown(response.wait_time);
+                } else {
+                    // Default wait time if not provided (70 seconds)
+                    startRateLimitCountdown(70);
+                }
+            } else {
+                // Check if this was a rate limit error
+                if (response.rate_limited) {
+                    startRateLimitCountdown(response.wait_time);
+                } else {
+                    alert('Error: ' + response.message);
+                    // Make sure to reset the button if there was an error not related to rate limiting
+                    submitBtn.prop('disabled', false);
+                    submitBtn.html(submitButtonOriginalHtml || '<i class="bi bi-send"></i> Send');
+                }
+            }
+        },
+        error: function() {
+            alert('Network error occurred');
+            // Make sure to reset the button on network error
+            submitBtn.prop('disabled', false);
+            submitBtn.html(submitButtonOriginalHtml || '<i class="bi bi-send"></i> Send');
+        }
+    });
+});
+
+// Optional: Prevent spaces in the input as the user types
+$('#custom-text').on('keydown', function(e) {
+    // Check if the key pressed is a space
+    if (e.key === ' ' || e.keyCode === 32) {
+        e.preventDefault();
+        return false;
+    }
+});
+
+
+
+        // Check status periodically
+        function checkStatus() {
+            $.get('/status', function(data) {
+                updateStatusUI(data.active);
+            });
+        }
+        
+        // Check status every 5 seconds
+        setInterval(checkStatus, 5000);
+        
+        // Fetch and display logs
+        function fetchLogs() {
+            $.get('/logs', function(data) {
+                if (data.success) {
+                    $('#log-content').text(data.logs || 'No logs available');
+                } else {
+                    $('#log-content').text('Error loading logs: ' + data.logs);
+                }
+                
+                // Scroll to bottom of log container
+                const logContainer = document.querySelector('.log-container');
+                logContainer.scrollTop = logContainer.scrollHeight;
+            });
+        }
+
+        // Fetch logs on page load
+        fetchLogs();
+
+        // Set up refresh button
+        $('#refresh-logs').click(function() {
+            $(this).html('<span class="spinner-border spinner-border-sm"></span>');
+            fetchLogs();
+            setTimeout(() => {
+                $(this).html('<i class="bi bi-arrow-clockwise"></i> Refresh');
+            }, 500);
+        });
+
+        // Refresh logs periodically (every 10 seconds)
+        setInterval(fetchLogs, 10000);
+        
+        // Monitoring status checking
+        let monitoringInterval;
+
+        function checkMonitoringStatus() {
+            $.get('/monitoring_status', function(data) {
+                if (data.active) {
+                    // Show monitoring status
+                    $('#monitoring-status').removeClass('d-none');
+                    $('#monitoring-message').text(data.message);
+                    $('#monitoring-timer').text(data.elapsed);
+                    
+                    // Show expected wait time if available
+                    if (data.expected) {
+                        $('#monitoring-expected').text(data.expected).show();
+                        $('#monitoring-expected').parent().show();
+                    } else {
+                        $('#monitoring-expected').parent().hide();
+                    } 
+                } else {
+                    // Hide monitoring status
+                    $('#monitoring-status').addClass('d-none');
+                }
+            });
+        }
+
+        // Start monitoring check when page loads
+        // Check monitoring status every second
+        setInterval(checkMonitoringStatus, 1000);
+        
+        // Initial check
+        checkMonitoringStatus();
+        
+        // Function to update the display
+        function updateLiveDisplay() {
+            $.ajax({
+                url: '/current_display',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        // Update the display content
+                        $('#current-display').text(response.display_text || '--------');
+                        
+                        // Update the display type
+                        $('#display-type').text(response.display_type || 'Unknown');
+                        
+                        // Update last updated time
+                        const now = new Date();
+                        const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+                        $('#last-updated').text(`Last updated: ${timeString}`);
+                        
+                        // Apply styling based on display type
+                        if (response.display_type.includes('Custom Text')) {
+                            $('#current-display').css('color', '#ffffff'); // White for default/unknown
+                        }
+                    } else {
+                        $('#current-display').text('ERROR');
+                        $('#display-type').text(response.error || 'Failed to get display');
+                        $('#current-display').css('color', '#dc3545'); // Red for errors
+                    }
+                },
+                error: function() {
+                    $('#current-display').text('ERROR');
+                    $('#display-type').text('Connection error');
+                    $('#current-display').css('color', '#dc3545'); // Red for errors
+                }
+            });
+        }
+
+        // Update the display immediately and then every 3 seconds
+        updateLiveDisplay();
+        setInterval(updateLiveDisplay, 3000);
+        
+        // Function for devices section dark mode styling
+        function updateDevicesSectionStyle() {
+            const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+            
+            // Find the devices section based on the icon
+            const devicesIcon = document.querySelector('h6 i.bi-hdd-rack');
+            if (devicesIcon) {
+                const devicesSection = devicesIcon.closest('.col-md-6');
+                const listGroup = devicesSection.querySelector('.list-group');
+                const listItems = devicesSection.querySelectorAll('.list-group-item');
+                
+                if (isDarkMode) {
+                    // Apply dark mode styling
+                    if (listGroup) {
+                        listGroup.style.backgroundColor = '#0d3c48';
+                    }
+                    
+                    listItems.forEach(item => {
+                        item.style.backgroundColor = '#0d3c48';
+                        item.style.borderColor = '#0a4855';
+                        item.style.color = '#ffffff';
+                        
+                        // Style all text in list items
+                        const textElements = item.querySelectorAll('*');
+                        textElements.forEach(el => {
+                            el.style.color = '#ffffff';
+                        });
+                    });
+                } else {
+                    // Reset to light mode
+                    if (listGroup) {
+                        listGroup.style.backgroundColor = '';
+                    }
+                    
+                    listItems.forEach(item => {
+                        item.style.backgroundColor = '';
+                        item.style.borderColor = '';
+                        item.style.color = '';
+                        
+                        // Reset text color
+                        const textElements = item.querySelectorAll('*');
+                        textElements.forEach(el => {
+                            el.style.color = '';
+                        });
+                    });
+                }
+            }
+        }
+
+        // Call initially
+        updateDevicesSectionStyle();
+
+        // Set up observer for theme changes
+        const devicesObserver = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.attributeName === 'data-theme') {
+                    updateDevicesSectionStyle();
+                }
+            });
+        });
+
+        // Start observing the html element for theme changes
+        devicesObserver.observe(document.documentElement, { attributes: true });
+    });
+</script>
+{% endblock %}
