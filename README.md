@@ -1,86 +1,86 @@
+# Satoshi Shuffle
 
+A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate on a configurable schedule.
 
+![BlockClock Control](Images/Main Screen.png)
 
-BlockClock Control
-A modern tool for controlling BlockClock Mini/Micro devices with custom text rotation.
-Features
+## Features
 
-Multi-device support: Control multiple BlockClock devices simultaneously
-Custom Text Rotation: Display your own messages on a schedule
-Web Interface: Easy-to-use browser-based control panel
-Multiple Installation Options: Choose between web app, Docker, or simple bash script
+- Manage multiple BlockClock devices from a single interface
+- Configure custom text messages that appear between regular BlockClock displays
+- Easy-to-use web interface with dark mode support
+- Real-time monitoring of your BlockClock devices
+- Three installation options to suit your preference
 
-Installation Options
-Choose the installation method that works best for you:
-1. One-Click Installation (Recommended for most users)
-The easiest way to get started is to use the installation script:
-bashCopy# Clone the repository
-git clone https://github.com/yourusername/blockclock-control.git
-cd blockclock-control
+## Installation Options
 
-# Run the installer
+### Option 1: One-Click Installation (Recommended)
+
+The easiest way to get started:
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/satoshi-shuffle.git
+cd satoshi-shuffle
+
+# Run the installation script and follow the prompts
 python install.py
-The installer will guide you through configuration and setup.
+```
 
+### Option 2: Docker Installation
 
-2. Docker Installation (For users familiar with Docker)
-If you prefer to manually set up with Docker:
-bashCopy# Clone the repository
-git clone https://github.com/yourusername/blockclock-control.git
-cd blockclock-control
+For users who prefer Docker:
 
-# Configure your settings
-nano webapp/config/blockclock.conf
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/satoshi-shuffle.git
+cd satoshi-shuffle
 
 # Build and start the Docker container
 docker-compose -f docker/docker-compose.yml up -d
+```
 
+### Option 3: Manual Python Installation
 
-3. Python Web App (Direct installation)
-If you prefer to run the web app directly:
-bashCopy# Clone the repository
-git clone https://github.com/yourusername/blockclock-control.git
-cd blockclock-control
+For advanced users who want more control:
 
-# Install Python dependencies
-pip install -r webapp/requirements.txt
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/satoshi-shuffle.git
+cd satoshi-shuffle
 
-# Configure your settings
-nano webapp/config/blockclock.conf
+# Install dependencies
+pip install -r requirements.txt
 
-# Run the web app
-cd webapp
-python blockclock_web.py
-4. Bash Script (Advanced users)
-For a lightweight solution, you can use the original bash script:
-bashCopy# Clone the repository
-git clone https://github.com/yourusername/blockclock-control.git
-cd blockclock-control/bash
+# Start the application
+python webapp/blockclock_web.py
+```
 
-# Edit the configuration
-nano blockclock.conf
+## Accessing the Web Interface
 
-# Make the script executable
-chmod +x blockclock.sh
+Once the application is running, open your web browser and visit:
+```
+http://localhost:5001
+```
 
-# Run the script
-./blockclock.sh
+## Setting Up Your BlockClock Devices
 
+1. After installation, open the web interface
+2. Go to the Settings page
+3. Add your BlockClock devices by IP address
+4. Configure your custom text messages
+5. Start the text rotation service
 
-System Requirements
+## Command Line Reference
 
-Python 3.6+ (for Python and Web versions)
-Docker & Docker Compose (for Docker version)
-bash, curl, jq (for bash script version)
-Linux or macOS (Windows not officially supported)
+For common command-line operations, see [CHEATSHEET.md](CHEATSHEET.md)
 
-Configuration
-You can configure your devices and text options through the web interface or by directly editing the configuration files:
+## Important Notes
 
-Web App: Edit through http://localhost:5000/settings
-Bash Script: Edit the blockclock.conf file
+- This project is not affiliated with Coinkite
+- BlockClock is a product of Coinkite - this is an unofficial companion tool
+- Requires Python 3.6 or higher
 
-Support
-If you encounter any issues, please create an issue on GitHub.
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
