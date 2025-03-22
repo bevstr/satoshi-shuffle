@@ -2,36 +2,100 @@
 
 This guide provides detailed instructions for installing Satoshi Shuffle directly using Python. This method is ideal for advanced users who want complete control over the installation and configuration process.
 
-## What You'll Need
+## Before You Begin
 
-Before starting, make sure you have:
+The Python installation method requires you to manually install Python and related dependencies before setting up Satoshi Shuffle.
 
-- Python 3.6 or higher installed
-- pip (Python package manager)
-- Internet connection
-- Administrator/sudo privileges (optional, for service setup)
-- At least one BlockClock device on your network
+### Step 1: Install Python
 
-## Step 1: Download the Repository
+First, install Python 3.6 or higher on your system:
+
+- **macOS**:
+  First, check if you have Homebrew installed:
+  ```bash
+  # Open Terminal and run:
+  brew --version
+
+  If you see "command not found", install Homebrew:
+
+  # In Terminal run:
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+   Then install Python:
+
+   # In Terminal run:
+   brew install python
+
+
+
+
+
+- **Ubuntu/Debian**:
+  ```bash
+  # Open Terminal and run:
+  sudo apt update
+  sudo apt install python3 python3-pip
+  ```
+  
+- **Windows**:
+  - Download the installer from [python.org](https://www.python.org/downloads/)
+  - Run the installer and check "Add Python to PATH"
+
+### Step 2: Verify Python Installation
+
+1. Open your Terminal (macOS/Linux) or Command Prompt (Windows)
+2. Run the following commands to check your Python installation:
+   ```bash
+   # Check Python version
+   python --version  # or python3 --version
+   
+   # Check pip installation
+   pip --version     # or pip3 --version
+   ```
+3. Make sure Python is version 3.6 or higher
+
+### Step 3: Install Git (Optional)
+
+Git is optional but recommended for downloading the source code:
+
+- **macOS**:
+  ```bash
+  brew install git
+  ```
+  
+- **Ubuntu/Debian**:
+  ```bash
+  sudo apt install git
+  ```
+  
+- **Windows**:
+  - Download Git from [git-scm.com](https://git-scm.com/downloads)
+  - Run the installer with default options
+
+## Installation Steps
+
+### Step 1: Download the Repository
 
 First, get a copy of the Satoshi Shuffle code:
 
 ```bash
+# Open Terminal (macOS/Linux) or Command Prompt (Windows)
+
 # Clone the repository using git
-git clone https://github.com/yourusername/satoshi-shuffle.git
+git clone https://github.com/bevstr/satoshi-shuffle.git
 
 # Navigate into the project directory
 cd satoshi-shuffle
 ```
 
 Don't have git? You can also:
-1. Go to https://github.com/yourusername/satoshi-shuffle
+1. Go to https://github.com/bevstr/satoshi-shuffle
 2. Click the green "Code" button
 3. Select "Download ZIP"
 4. Extract the ZIP file to a folder on your computer
-5. Open your terminal/command prompt and navigate to that folder
+5. Open your Terminal/Command Prompt and navigate to that folder
 
-## Step 2: Install Dependencies
+### Step 2: Install Dependencies
 
 Next, install the required Python packages:
 
@@ -55,7 +119,7 @@ This will install all the necessary libraries, including:
 - Requests (HTTP client)
 - Other dependencies needed for the application
 
-## Step 3: Configure Your Settings
+### Step 3: Configure Your Settings
 
 Before running the application, you'll need to set up your configuration:
 
@@ -81,7 +145,7 @@ Before running the application, you'll need to set up your configuration:
    # Or using vi
    vi blockclock.conf
    
-   # Or simply open with your desktop text editor
+   # Or open with your desktop text editor
    ```
 
 4. Add your device information and preferences:
@@ -111,11 +175,11 @@ Before running the application, you'll need to set up your configuration:
    cd ..
    ```
 
-## Step 4: Start the Application
+### Step 4: Start the Application
 
 Now you're ready to start the application:
 
-### Option A: Using the Startup Script (Recommended)
+#### Option A: Using the Startup Script (Recommended)
 
 The startup script handles the setup and monitoring for you:
 
@@ -127,7 +191,7 @@ chmod +x start_SatoshiShuffle.sh
 ./start_SatoshiShuffle.sh
 ```
 
-### Option B: Direct Python Launch
+#### Option B: Direct Python Launch
 
 If you prefer to run the application directly with Python:
 
@@ -146,7 +210,7 @@ python3 webapp/blockclock_web.py
 py -3 webapp/blockclock_web.py
 ```
 
-## Step 5: Access the Web Interface
+### Step 5: Access the Web Interface
 
 With the application running, open your web browser and navigate to:
 ```
@@ -255,13 +319,43 @@ For a more permanent installation, you can set up Satoshi Shuffle as a service:
 
 If you encounter issues:
 
-- **Port conflicts**: If port 5001 is already in use, you can change it in the `webapp/blockclock_web.py` file (look for the `app.run` line)
+- **Python not found**: Check that Python is in your PATH environment variable
 
-- **Permission errors**: Make sure you have the necessary permissions for the directories
+- **Dependency errors**: If you get errors during `pip install`, try:
+  ```bash
+  # Update pip first
+  pip install --upgrade pip
+  
+  # Then try installing dependencies
+  pip install -r requirements.txt
+  ```
 
-- **Dependency issues**: Ensure all dependencies are installed correctly
+- **Port conflicts**: If port 5001 is already in use, you can change it:
+  ```bash
+  # Edit the web app file
+  nano webapp/blockclock_web.py
+  
+  # Find the app.run line and change the port:
+  # app.run(debug=False, host='0.0.0.0', port=5001, use_reloader=True)
+  # Change to port=5002 or another available port
+  ```
 
-- **Logs**: Check the logs in the `logs/` directory for more information
+- **Permission errors**: Make sure you have the necessary permissions:
+  ```bash
+  # Check log directory permissions
+  ls -la logs/
+  
+  # Create directories if they don't exist
+  mkdir -p logs
+  mkdir -p config
+  ```
+
+- **Logs**: Check the logs for more information:
+  ```bash
+  cat logs/blockclock.log
+  # or
+  tail -f logs/blockclock.log
+  ```
 
 ## Advanced Configuration
 
@@ -281,3 +375,5 @@ After installation:
 1. Continue to the [Configuration Guide](configuration.md) for additional setup options
 2. Learn how to manage your BlockClock devices through the web interface
 3. Explore the [Troubleshooting Guide](troubleshooting.md) if you encounter any issues
+
+For a complete list of system requirements and dependencies, see the [Dependencies List](dependencies.md).

@@ -1,36 +1,59 @@
-
 # One-Click Script Installation Guide
 
 This guide provides detailed instructions for installing Satoshi Shuffle using the interactive installation script. This is the recommended method for most users.
 
-## What You'll Need
+## Before You Begin
 
-Before starting, make sure you have:
-- Python 3.6 or higher installed
-- Internet connection
-- Administrator/sudo privileges (for service installation)
-- At least one BlockClock device on your network
+The One-Click Script will handle most of the installation process for you, but you'll need to have Python installed on your computer first.
 
-## Step 1: Download the Repository
+### Step 1: Install Python
+
+The only prerequisite you need to install manually is Python 3.6 or higher:
+
+- **macOS**: Install using [Homebrew](https://brew.sh) with `brew install python` or download from [python.org](https://www.python.org/downloads/)
+- **Ubuntu/Debian**: Open Terminal and run `sudo apt update && sudo apt install python3 python3-pip`
+- **Windows**: Download and install from [python.org](https://www.python.org/downloads/)
+
+### Step 2: Verify Python Installation
+
+1. Open your Terminal (macOS/Linux) or Command Prompt (Windows)
+2. Run the following command to check your Python version:
+   ```bash
+   python --version  # or python3 --version on some systems
+   ```
+3. Make sure it shows version 3.6 or higher
+
+### What the Script Will Do For You
+
+The One-Click Script will automatically:
+- Install all required Python packages
+- Set up your configuration file
+- Configure connection to your BlockClock devices
+- Create directories for logs and data
+- Optionally set up as a system service
+
+## Installation Steps
+
+### Step 1: Download the Repository
 
 First, get a copy of the Satoshi Shuffle code:
 
 ```bash
 # Clone the repository using git
-git clone https://github.com/yourusername/satoshi-shuffle.git
+git clone https://github.com/bevstr/satoshi-shuffle.git
 
 # Navigate into the project directory
 cd satoshi-shuffle
 ```
 
 Don't have git? You can also:
-1. Go to https://github.com/yourusername/satoshi-shuffle
+1. Go to https://github.com/bevstr/satoshi-shuffle
 2. Click the green "Code" button
 3. Select "Download ZIP"
 4. Extract the ZIP file to a folder on your computer
-5. Open your terminal/command prompt and navigate to that folder
+5. Open your Terminal/Command Prompt and navigate to that folder
 
-## Step 2: Run the Installation Script
+### Step 2: Run the Installation Script
 
 The installation script will guide you through the setup process:
 
@@ -49,7 +72,7 @@ python3 install.py
 py -3 install.py
 ```
 
-## Step 3: Follow the Interactive Prompts
+### Step 3: Follow the Interactive Prompts
 
 The script will ask you several questions:
 
@@ -101,7 +124,7 @@ Number of displays between text (default: 3): 2
 With these settings, your custom text will appear every 20 minutes.
 ```
 
-## Step 4: Service Installation
+### Step 4: Service Installation
 
 The script will offer to set up Satoshi Shuffle as a system service so it can:
 - Start automatically when your computer boots
@@ -113,7 +136,7 @@ This requires administrator privileges:
 
 If you decline service installation, you'll need to manually start the application each time.
 
-## Step 5: Access the Web Interface
+### Step 5: Access the Web Interface
 
 Once installation is complete, the script will provide a URL to access the web interface:
 
@@ -160,3 +183,5 @@ cd path/to/satoshi-shuffle
 # Or directly with Python
 python webapp/blockclock_web.py
 ```
+
+For a complete list of system requirements and dependencies, see the [Dependencies List](dependencies.md).

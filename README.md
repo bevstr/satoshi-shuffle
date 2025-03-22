@@ -1,5 +1,15 @@
 # Satoshi Shuffle
 
+## Prerequisites
+
+- Python 3.6 or higher
+- pip (Python package manager)
+- Network connection to your BlockClock device(s)
+- For Docker installation: Docker and Docker Compose
+- Administrator/sudo privileges (for service installation)
+
+See [Dependencies List](docs/dependencies.md) for a complete list of requirements.
+
 A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate on a configurable schedule.
 
 ![BlockClock Control](Images/Dashboard.png)
