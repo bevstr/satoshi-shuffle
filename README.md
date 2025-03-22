@@ -14,9 +14,12 @@ A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi S
 
 ## Installation Options
 
-### Option 1: One-Click Installation (Recommended)
+---------------------------------------------------------------------------------
 
-The easiest way to get started:
+### 📦 OPTION 1: ONE-CLICK INSTALLATION (RECOMMENDED)
+
+Best for: Most users, especially those with limited technical experience.
+The easiest way to get started. This method guides you through setup with simple prompts, automatically checks requirements, and configures your system with minimal effort. Perfect if you just want the app working quickly without worrying about technical details.
 
 ```bash
 # Clone the repository
@@ -27,9 +30,14 @@ cd satoshi-shuffle
 python install.py
 ```
 
-### Option 2: Docker Installation
+**Need help?** See the [One-Click Script Installation Guide](docs/installation-script.md) for detailed instructions.
 
-For users who prefer Docker:
+---------------------------------------------------------------------------------
+
+### 🐳 OPTION 2: DOCKER INSTALLATION
+
+Best for: Users familiar with Docker or those who want containerized isolation.
+Cleanly isolates the application in a container without affecting your system. Provides consistent behavior across different operating systems and simplifies updates. Ideal if you already use Docker for other applications or want to avoid potential conflicts with existing software.
 
 ```bash
 # Clone the repository
@@ -40,9 +48,14 @@ cd satoshi-shuffle
 docker-compose -f docker/docker-compose.yml up -d
 ```
 
-### Option 3: Manual Python Installation
+**Need help?** See the [Docker Installation Guide](docs/installation-docker.md) for detailed instructions.
 
-For advanced users who want more control:
+---------------------------------------------------------------------------------
+
+### 🐍 OPTION 3: MANUAL PYTHON INSTALLATION
+
+Best for: Advanced users who want complete control over the installation.
+Gives you direct access to all components for customization. You'll install dependencies yourself and have full visibility into the process. Choose this if you're comfortable with Python development, want to customize the code, or need to integrate with existing systems.
 
 ```bash
 # Clone the repository
@@ -55,6 +68,10 @@ pip install -r requirements.txt
 # Start the application
 python webapp/blockclock_web.py
 ```
+
+**Need help?** See the [Python Installation Guide](docs/installation-python.md) for detailed instructions.
+
+---
 
 ## Accessing the Web Interface
 
@@ -71,9 +88,11 @@ http://localhost:5001
 4. Configure your custom text messages
 5. Start the text rotation service
 
-## Command Line Reference
+## Additional Documentation
 
-For common command-line operations, see [CHEATSHEET.md](CHEATSHEET.md)
+- [Configuration Guide](docs/configuration.md) - How to configure Satoshi Shuffle after installation
+- [Troubleshooting Guide](docs/troubleshooting.md) - Solutions for common issues
+- [Command Line Cheatsheet](CHEATSHEET.md) - Quick reference for terminal commands
 
 ## Important Notes
 

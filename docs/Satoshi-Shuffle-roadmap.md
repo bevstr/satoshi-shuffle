@@ -1,3 +1,218 @@
+Version 1.1 - March 22, 2025
+
+# Satoshi Shuffle (BlockClock Control) - Project Roadmap
+
+## Project Overview
+Satoshi Shuffle provides tools to control Coinkite BlockClock Mini/Micro devices by displaying custom text messages that rotate on a configurable schedule. The project has evolved from a bash script to a full web application with multiple deployment options.
+
+## Current Status
+- ✅ Original bash script implementation completed
+- ✅ Python conversion of the bash script completed
+- ✅ Web interface developed and functional
+- ✅ Dynamic port configuration implemented
+- ✅ Docker configuration completed
+- ✅ Installation script with multiple deployment options
+- ✅ Log rotation system implemented
+- ✅ Device connectivity checking functionality
+- ✅ GitHub repository structure established
+- ✅ Comprehensive documentation created
+
+## Components
+
+### 1. Bash Script (Original) - COMPLETED
+- Takes a configuration file to define device IPs, text messages, and timing
+- Controls multiple BlockClock devices simultaneously
+- Rotates custom text messages on a specified schedule
+
+### 2. Python Implementation - COMPLETED
+- Core functionality ported from bash to Python
+- Supports the same configuration format
+- Improved error handling and logging
+
+### 3. Web Application - COMPLETED
+- **Framework:** Flask
+- **Features:**
+  - Browser-based user interface
+  - Configuration through UI forms
+  - Device status monitoring
+  - Background service for text rotation
+  - Multi-device management
+  - Log rotation with archiving
+  - Dark mode support
+
+### 4. Deployment Options - COMPLETED
+- **Direct installation:** Running Python app directly
+- **Docker container:** Simplified deployment
+- **One-click install script:** For non-technical users
+
+## Technical Architecture
+
+### Core Python Module - COMPLETED
+- **Device communication:** Handles API calls to BlockClock devices
+- **Rotation service:** Manages the text rotation scheduling
+- **Configuration management:** Handles loading/saving settings
+
+### Web Application - COMPLETED
+- **Flask application:** Provides the web interface
+- **Background service:** Handles the text rotation in the background
+- **Monitoring system:** Real-time status updates
+
+### Docker Setup - COMPLETED
+- Application container with all dependencies
+- Volume for persistent configuration storage
+- Easy deployment across platforms
+
+## Project Structure
+```
+satoshi-shuffle/
+├── README.md                      # Main project documentation
+├── LICENSE                        # MIT license
+├── CHEATSHEET.md                  # Command-line reference
+├── config.py                      # Core configuration handling
+├── config/                        # Configuration directory
+│   └── blockclock.conf            # Main configuration file
+├── docker/                        # Docker configuration
+│   ├── Dockerfile                 # Container definition
+│   ├── README.md                  # Docker setup instructions
+│   └── docker-compose.yml         # Container orchestration
+├── docs/                          # Documentation
+│   ├── configuration.md           # Configuration guide
+│   ├── installation-docker.md     # Docker installation guide
+│   ├── installation-python.md     # Python installation guide
+│   ├── installation-script.md     # One-click script guide
+│   ├── troubleshooting.md         # Troubleshooting guide
+│   └── Satoshi-Shuffle-roadmap.md # Project roadmap
+├── filter_output.py               # Log filtering utility
+├── Images/                        # Screenshots and images
+│   └── Dashboard.png              # Main interface screenshot
+├── install.py                     # Installation script
+├── logs/                          # Logging directory
+│   └── archive/                   # Archived log files
+├── python/                        # Core Python module
+│   └── blockclock.py              # Main BlockClock control code
+├── requirements.txt               # Python dependencies
+├── start_SatoshiShuffle.sh        # Startup script
+└── webapp/                        # Web application
+    ├── __init__.py                # Flask app initialization
+    ├── blockclock_web.py          # Web app entry point
+    ├── routes.py                  # Web routes and API endpoints
+    ├── app/                       # Application components
+        ├── static/                # Static web assets
+        │   └── css/
+        │       └── styles.css     # CSS styling
+        └── templates/             # HTML templates
+            ├── base.html          # Base template
+            ├── index.html         # Main page
+            └── settings.html      # Settings page
+```
+
+## Completed Tasks
+
+### Code Enhancements
+- ✅ Implemented rate limiting mechanism to protect devices from too frequent text changes
+- ✅ Added synchronization management for text rotation
+- ✅ Enhanced error handling for network issues
+
+### Feature Additions
+- ✅ Added configuration backup/restore functionality
+- ✅ Implemented log rotation with configurable settings
+- ✅ Added theme preferences with dark mode support
+
+### UI Improvements
+- ✅ Implemented dark/light mode toggle functionality
+- ✅ Added visual indicators for system status
+- ✅ Created intuitive settings interface with tabbed navigation
+
+### Documentation
+- ✅ Created comprehensive README
+- ✅ Added detailed installation guides
+- ✅ Created configuration documentation
+- ✅ Added troubleshooting guide
+- ✅ Created command-line cheatsheet
+
+## Future Enhancements (If Needed)
+1. **Potential Improvements**
+   - ⏳ Add statistics tracking for device uptime/performance
+   - ⏳ Enhance mobile responsiveness
+   - ⏳ Implement notification system for critical errors
+   - ⏳ Improve log display and filtering
+
+2. **Testing**
+   - ⏳ Implement automated testing
+   - ⏳ Conduct user testing for UI improvements
+   - ⏳ Test installation on various platforms
+
+3. **GitHub Repository Enhancements**
+   - ⏳ Create issue templates
+   - ⏳ Set up automated builds
+   - ⏳ Configure release notes generation
+
+## Technical Requirements
+- Python 3.6+ for all Python components
+- Flask for the web framework
+- Docker & Docker Compose for containerized deployment
+- Linux or macOS (Windows not officially supported)
+
+## Installation Options
+1. **One-Click Installation** - Guided setup process
+2. **Docker Installation** - For users familiar with Docker
+3. **Direct Python Installation** - For users who prefer manual setup
+
+## Port Configuration
+The web application uses port 5001 by default. If this port is already in use on your system, you may encounter errors when starting the application.
+
+### Changing the Port
+To change the port, open the `webapp/blockclock_web.py` file and modify the port number:
+
+```python
+app.run(debug=False, host='0.0.0.0', port=5001, use_reloader=True)
+```
+
+Change `port=5001` to another port, such as 5002 or 5003.
+
+### Accessing the Web Interface
+After starting the web interface, you can access it using:
+
+- **From your local machine:** http://localhost:5001 (or whatever port you configured)
+- **From other devices on your network:** http://your-ip-address:5001 (replace "your-ip-address" with your computer's IP address)
+
+## Future Considerations
+- Support for additional BlockClock features as they are released
+- Integration with other Bitcoin-related services
+- Advanced scheduling options
+- Mobile app companion
+
+---
+*Last updated: March 22, 2025*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 current roadmap version
 
 # Satoshi Shuffle (BlockClock Control) - Updated Project Roadmap
