@@ -28,6 +28,30 @@ python webapp/blockclock_web.py
 python3 webapp/blockclock_web.py
 ```
 
+### Run in Background (Keep Running After Terminal Closes)
+```bash
+# On macOS/Linux - Keep running after terminal closes
+nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
+
+# Explanation:
+# nohup - Prevents the process from stopping when terminal closes
+# > /dev/null - Discards standard output
+# 2>&1 - Redirects error messages to standard output
+# & - Runs the process in background
+
+# Send output to log file instead of discarding
+nohup python3 webapp/blockclock_web.py > logs/webapp.log 2>&1 &
+
+# On Windows
+start /b python webapp\blockclock_web.py > nul 2>&1
+
+# Check if background process is running
+ps aux | grep blockclock_web.py
+
+# Stop background process
+pkill -f blockclock_web.py
+```
+
 ### Docker Method
 ```bash
 # Navigate to your Satoshi Shuffle directory
@@ -139,6 +163,10 @@ pkill -f blockclock_web.py
 
 # More forceful termination if needed
 pkill -9 -f blockclock_web.py
+
+# Find the process ID and kill it specifically
+ps aux | grep blockclock_web.py
+kill [PID]  # Replace [PID] with the actual process ID
 ```
 
 ### Docker Method
@@ -166,6 +194,10 @@ launchctl unload ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 # Kill and restart
 pkill -f blockclock_web.py
 python webapp/blockclock_web.py
+
+# Restart in background (macOS/Linux)
+pkill -f blockclock_web.py
+nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
 ```
 
 ### Docker Method
@@ -216,6 +248,10 @@ git pull
 
 # Restart application
 ./start_SatoshiShuffle.sh
+
+# Or restart in background
+pkill -f blockclock_web.py
+nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
 ```
 
 ### Docker Method
@@ -277,6 +313,36 @@ nano ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 
 # Load service
 launchctl load -w ~/Library/LaunchAgents/com.satoshi-shuffle.plist
+```
+
+## 💻 Screen Session (Alternative to nohup)
+
+Using `screen` is another way to keep applications running after closing your terminal:
+
+```bash
+# Install screen (if not already installed)
+# Ubuntu/Debian
+sudo apt install screen
+# macOS
+brew install screen
+
+# Start a new screen session
+screen -S satoshi-shuffle
+
+# Now run your application
+python3 webapp/blockclock_web.py
+
+# Detach from screen session (keeps running in background)
+# Press Ctrl+A, then D
+
+# List running screen sessions
+screen -ls
+
+# Reattach to a running session
+screen -r satoshi-shuffle
+
+# Kill a screen session (when attached)
+# Press Ctrl+A, then type :quit and press Enter
 ```
 
 ## 🔏 Docker-Specific Commands

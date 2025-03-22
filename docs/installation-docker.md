@@ -10,7 +10,27 @@ The Docker installation method requires Docker and Docker Compose to be installe
 
 Docker Engine and Docker Compose are required:
 
-- **macOS**: Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop) (includes both Docker Engine and Docker Compose)
+- **macOS**: 
+  First, check if you have Homebrew installed:
+  ```bash
+  # Open Terminal and run:
+  brew --version
+  ```
+
+  If you see "command not found", install Homebrew:
+  ```bash
+  # In Terminal run:
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
+
+  Then install Docker Desktop:
+  ```bash
+  # Using Homebrew
+  brew install --cask docker
+  ```
+  
+  Or download and install [Docker Desktop](https://www.docker.com/products/docker-desktop) directly (includes both Docker Engine and Docker Compose)
+
 - **Ubuntu/Debian**: 
   ```bash
   # Open Terminal and run:
@@ -39,6 +59,7 @@ The Docker installation automatically:
 - Sets up the Python runtime environment
 - Mounts your configuration and logs directories
 - Exposes the web interface on port 5001
+- **Keeps the application running in the background** (one of Docker's main advantages)
 
 ## Installation Steps
 
@@ -173,6 +194,28 @@ You should see the Satoshi Shuffle web interface. From here, you can:
 - Monitor your BlockClock devices
 - Access logs and status information
 
+## Background Operation
+
+One of the key advantages of using Docker is that the container runs in the background by default. The `-d` flag in the `docker-compose up -d` command makes the container run in "detached" mode, meaning:
+
+- It runs in the background without being attached to your terminal
+- It continues running even if you close your terminal or log out
+- It can be configured to restart automatically if your system reboots
+
+You can check the status of your container at any time with:
+```bash
+docker ps | grep satoshi-shuffle
+```
+
+If you want to see the logs from the application running in the container, use:
+```bash
+# View logs
+docker logs satoshi-shuffle
+
+# Follow logs in real-time (like tail -f)
+docker logs -f satoshi-shuffle
+```
+
 ## Troubleshooting
 
 If you encounter issues during installation or operation:
@@ -231,6 +274,40 @@ docker logs -f satoshi-shuffle
 
 # Access a shell in the container
 docker exec -it satoshi-shuffle /bin/bash
+```
+
+## Auto-Restart Configuration
+
+To ensure your container automatically restarts after a system reboot, you can modify the `docker-compose.yml` file to add a restart policy:
+
+```bash
+# Edit the docker-compose.yml file
+nano docker/docker-compose.yml
+```
+
+Change or add the `restart` policy to the service definition:
+```yaml
+services:
+  satoshi-shuffle:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: satoshi-shuffle
+    restart: always  # Makes the container restart automatically
+    ports:
+      - "5001:5001"
+    ...
+```
+
+Restart options include:
+- `always`: Always restart the container regardless of the exit status
+- `unless-stopped`: Restart the container unless it was explicitly stopped
+- `on-failure`: Restart only if the container exits with a non-zero status
+
+After making changes, restart your container:
+```bash
+docker-compose -f docker/docker-compose.yml down
+docker-compose -f docker/docker-compose.yml up -d
 ```
 
 ## Updating Satoshi Shuffle

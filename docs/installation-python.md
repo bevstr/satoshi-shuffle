@@ -15,17 +15,21 @@ First, install Python 3.6 or higher on your system:
   ```bash
   # Open Terminal and run:
   brew --version
+  ```
 
   If you see "command not found", install Homebrew:
-
+  ```bash
   # In Terminal run:
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
 
-   Then install Python:
-
-   # In Terminal run:
-   brew install python
-
+  Then install Python:
+  ```bash
+  # In Terminal run:
+  brew install python
+  ```
+  
+  If you prefer not to use Homebrew, you can download Python directly from [python.org](https://www.python.org/downloads/)
 
 - **Ubuntu/Debian**:
   ```bash
@@ -195,16 +199,49 @@ If you prefer to run the application directly with Python:
 ```bash
 # Start the Flask application
 python webapp/blockclock_web.py
-```
 
-If you have multiple Python versions installed:
-
-```bash
+# If you have multiple Python versions installed:
 # On macOS/Linux
 python3 webapp/blockclock_web.py
 
 # On Windows
 py -3 webapp/blockclock_web.py
+```
+
+#### Option C: Keep Running After Terminal Closes
+
+To run the application in the background so it continues even if you close your terminal:
+
+```bash
+# On macOS/Linux:
+nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
+```
+
+This command does the following:
+- `nohup`: Prevents the process from stopping when you close the terminal
+- `python3 webapp/blockclock_web.py`: Runs your application
+- `> /dev/null`: Redirects standard output to be discarded
+- `2>&1`: Redirects error messages to the same place as standard output
+- `&`: Runs the process in the background
+
+You can also send the output to a log file instead of discarding it:
+```bash
+nohup python3 webapp/blockclock_web.py > logs/webapp.log 2>&1 &
+```
+
+On Windows, use this command instead:
+```bash
+start /b python webapp\blockclock_web.py > nul 2>&1
+```
+
+To check if the process is running in the background:
+```bash
+ps aux | grep blockclock_web.py
+```
+
+To stop the background process:
+```bash
+pkill -f blockclock_web.py
 ```
 
 ### Step 5: Access the Web Interface
@@ -373,4 +410,4 @@ After installation:
 2. Learn how to manage your BlockClock devices through the web interface
 3. Explore the [Troubleshooting Guide](troubleshooting.md) if you encounter any issues
 
-For a complete list of system requirements and dependencies, see the [Dependencies List](dependencies.md).
+For a complete list of system requirements and dependencies, see the [Dependencies List](dependencies.md)

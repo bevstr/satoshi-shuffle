@@ -10,7 +10,27 @@ The One-Click Script will handle most of the installation process for you, but y
 
 The only prerequisite you need to install manually is Python 3.6 or higher:
 
-- **macOS**: Install using [Homebrew](https://brew.sh) with `brew install python` or download from [python.org](https://www.python.org/downloads/)
+- **macOS**: 
+  First, check if you have Homebrew installed:
+  ```bash
+  # Open Terminal and run:
+  brew --version
+  ```
+
+  If you see "command not found", install Homebrew:
+  ```bash
+  # In Terminal run:
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  ```
+
+  Then install Python:
+  ```bash
+  # In Terminal run:
+  brew install python
+  ```
+  
+  If you prefer not to use Homebrew, you can download Python directly from [python.org](https://www.python.org/downloads/)
+
 - **Ubuntu/Debian**: Open Terminal and run `sudo apt update && sudo apt install python3 python3-pip`
 - **Windows**: Download and install from [python.org](https://www.python.org/downloads/)
 
@@ -39,6 +59,8 @@ The One-Click Script will automatically:
 First, get a copy of the Satoshi Shuffle code:
 
 ```bash
+# Open Terminal (macOS/Linux) or Command Prompt (Windows)
+
 # Clone the repository using git
 git clone https://github.com/bevstr/satoshi-shuffle.git
 
@@ -182,6 +204,42 @@ cd path/to/satoshi-shuffle
 
 # Or directly with Python
 python webapp/blockclock_web.py
+```
+
+### Running in the Background
+
+To run the application in the background so it continues even if you close your terminal:
+
+```bash
+# On macOS/Linux:
+nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
+```
+
+This command does the following:
+- `nohup`: Prevents the process from stopping when you close the terminal
+- `python3 webapp/blockclock_web.py`: Runs your application
+- `> /dev/null`: Redirects standard output to be discarded
+- `2>&1`: Redirects error messages to the same place as standard output
+- `&`: Runs the process in the background
+
+You can also send the output to a log file instead of discarding it:
+```bash
+nohup python3 webapp/blockclock_web.py > logs/webapp.log 2>&1 &
+```
+
+On Windows, use this command instead:
+```bash
+start /b python webapp\blockclock_web.py > nul 2>&1
+```
+
+To check if the process is running in the background:
+```bash
+ps aux | grep blockclock_web.py
+```
+
+To stop the background process:
+```bash
+pkill -f blockclock_web.py
 ```
 
 For a complete list of system requirements and dependencies, see the [Dependencies List](dependencies.md).
