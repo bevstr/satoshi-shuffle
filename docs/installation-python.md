@@ -27,9 +27,6 @@ First, install Python 3.6 or higher on your system:
    brew install python
 
 
-
-
-
 - **Ubuntu/Debian**:
   ```bash
   # Open Terminal and run:
