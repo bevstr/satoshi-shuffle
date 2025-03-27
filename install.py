@@ -567,7 +567,7 @@ def configure_blockclock():
         "5": 3600  # 60 min
     }
     
-    print("Clock refresh time options:")
+    print("Clock refresh time options: This is the Display Preference you chose on BlockClock Interface")
     print("  1) 5 minutes (300 seconds) [default]")
     print("  2) 10 minutes (600 seconds)")
     print("  3) 15 minutes (900 seconds)")
@@ -577,8 +577,9 @@ def configure_blockclock():
     refresh_choice = input("Choose an option (1-5): ").strip()
     if refresh_choice in refresh_options:
         config['clock_refresh_time'] = refresh_options[refresh_choice]
-    
-    displays = input(f"Number of displays between text (default: {config['displays_between_text']}): ").strip()
+
+    print("\nNumber of displays (Displayed values you chose on BlockClock)")
+    displays = input(f"between when your Custom Text displays. (default: {config['displays_between_text']}): ").strip()
     if displays and displays.isdigit() and int(displays) > 0:
         config['displays_between_text'] = int(displays)
     
