@@ -744,7 +744,8 @@ def main():
     print("\n✅ Everything is set up!")
     print("\nTo start the application, run:")
     print("  ./start_SatoshiShuffle.sh")
-
+    print("\n💡 To keep the app running even after closing the terminal, use:")
+    print("  nohup ./start_SatoshiShuffle.sh &")
     print("\n📱 Once it's running, access the web interface at:")
     print("  http://localhost:5001")
     print("\nYou can use the web interface to configure your BlockClock devices,")

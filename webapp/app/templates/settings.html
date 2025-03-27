@@ -91,7 +91,7 @@
                             <div id="text-options-container" class="mb-3">
                                 {% for text in config.text_options %}
                                 <div class="input-group mb-2 text-option-entry">
-                                    <input type="text" class="form-control text-option" value="{{ text }}" maxlength="7" required>
+                                    <input type="text" class="form-control text-option" value="{{ text }}" maxlength="7" pattern="[a-zA-Z0-9_]+" title="Only letters, numbers, and underscores allowed" required>
                                     <button type="button" class="btn btn-outline-danger remove-text-option">
                                         <i class="bi bi-trash"></i>
                                     </button>
@@ -102,7 +102,7 @@
                             <button type="button" id="add-text-option" class="btn btn-primary">
                                 <i class="bi bi-plus-circle"></i> Add Text Option
                             </button>
-                            <small class="text-muted ms-2">Maximum 7 characters per option. Use only letters, numbers and underscore</small>
+                            <small class="text-muted ms-2">Maximum 7 characters per option. Use only letters, numbers and underscore. <strong>Spaces are not allowed.</strong></small>
                         </div>
                         
                         <!-- Timing Tab -->
@@ -287,7 +287,7 @@
 <!-- Text Option Template (Hidden) -->
 <template id="text-option-template">
     <div class="input-group mb-2 text-option-entry">
-        <input type="text" class="form-control text-option" maxlength="7" required>
+        <input type="text" class="form-control text-option" maxlength="7" pattern="[a-zA-Z0-9_]+" title="Only letters, numbers, and underscores allowed" required>
         <button type="button" class="btn btn-outline-danger remove-text-option">
             <i class="bi bi-trash"></i>
         </button>
@@ -359,6 +359,56 @@
         $(document).on('click', '.remove-text-option', function() {
             $(this).closest('.text-option-entry').remove();
         });
+        
+        // Validate text option inputs - prevent spaces and validate length
+        $(document).on('keydown', '.text-option', function(e) {
+            // Prevent spaces
+            if (e.key === ' ' || e.keyCode === 32) {
+                e.preventDefault();
+                showTextOptionWarning($(this), "Spaces are not allowed");
+                return false;
+            }
+        });
+        
+        // Validate input on change/blur
+        $(document).on('blur input', '.text-option', function() {
+            const input = $(this);
+            const text = input.val().trim();
+            
+            // Check for valid characters (letters, numbers, underscores)
+            const validPattern = /^[a-zA-Z0-9_]*$/;
+            if (text && !validPattern.test(text)) {
+                // Mark as invalid and show warning
+                input.addClass('is-invalid');
+                showTextOptionWarning(input, "Only letters, numbers, and underscores allowed");
+                
+                // Sanitize the input (remove invalid characters)
+                const sanitized = text.replace(/[^a-zA-Z0-9_]/g, '');
+                input.val(sanitized);
+            } else {
+                // Valid, remove any invalid styling
+                input.removeClass('is-invalid');
+            }
+        });
+        
+        // Function to show warning for text option inputs
+        function showTextOptionWarning(inputElement, message) {
+            // Remove any existing warning
+            inputElement.siblings('.text-warning').remove();
+            
+            // Create warning element
+            const warning = $(`<div class="text-warning small text-danger mt-1">${message}</div>`);
+            
+            // Add after the input
+            inputElement.after(warning);
+            
+            // Auto-hide after 2 seconds
+            setTimeout(function() {
+                warning.fadeOut('fast', function() {
+                    $(this).remove();
+                });
+            }, 2000);
+        }
         
         // Check device connectivity
         $(document).on('click', '.check-device', function() {
@@ -526,18 +576,49 @@
                 devices.push(device);
             });
             
-            // Collect text options
+            // Validate and collect text options
             const textOptions = [];
+            let hasInvalidText = false;
+            
             $('.text-option').each(function() {
                 const text = $(this).val().trim();
                 if (text) {
+                    // Validate text (letters, numbers, underscores only)
+                    const validPattern = /^[a-zA-Z0-9_]+$/;
+                    if (!validPattern.test(text)) {
+                        $(this).addClass('is-invalid');
+                        hasInvalidText = true;
+                        alert('Text option "' + text + '" contains invalid characters. Use only letters, numbers, and underscores.');
+                        return false;
+                    }
+                    
+                    // Check for spaces
+                    if (text.includes(' ')) {
+                        $(this).addClass('is-invalid');
+                        hasInvalidText = true;
+                        alert('Text option "' + text + '" contains spaces, which are not allowed.');
+                        return false;
+                    }
+                    
+                    // Check length
+                    if (text.length > 7) {
+                        $(this).addClass('is-invalid');
+                        hasInvalidText = true;
+                        alert('Text option "' + text + '" is too long. Maximum 7 characters allowed.');
+                        return false;
+                    }
+                    
                     textOptions.push(text);
                 }
             });
             
+            if (hasInvalidText) {
+                return false;
+            }
+            
             if (textOptions.length === 0) {
                 alert('Please add at least one text option');
-                return;
+                return false;
             }
             
             // Collect timing settings
