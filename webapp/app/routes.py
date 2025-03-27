@@ -360,7 +360,7 @@ def _monitor_logs_thread(log_path):
                                 "Sleeping before refresh #": "🔄 Monitoring BlockClock refresh cycles",
                                 "Actively monitoring for refresh #": "🔍 Actively monitoring for refresh",
                                 "Final refresh complete": "✅ Refresh cycle complete",
-                                "Sending new Custom Text": "📤 Sending custom text"
+                                "Sending new Custom Text": "Reset Timer"
                             }
                             
                             for pattern, message in cycle_patterns.items():
@@ -369,7 +369,7 @@ def _monitor_logs_thread(log_path):
                                     # Reset timer and update message for this phase
                                     monitoring_start_time = time.time()
                                     monitoring_message = message
-                                    logger.info(f"Monitoring phase changed: {message} (timer reset)")
+                                    logger.info(f"Monitoring phase changed: {message}")
                                     
                                     # If this is a new cycle starting, reset the refresh number counter
                                     if pattern == "Sleeping before refresh #":
