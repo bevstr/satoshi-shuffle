@@ -600,7 +600,7 @@ DEVICE_1_PASSWORD=""  # Leave empty if no password set on the device
 
 # --------- TEXT OPTIONS ---------
 # Text options to display (separated by spaces)
-TEXT_OPTIONS=("__GFY__" "_BTFD_" "__HODL_" "SATOSHI" "KIRSTY" "BEVO_21")
+TEXT_OPTIONS=("__GFY__" "_BTFD_" "_HODL_" "SATOSHI" "_NGMI_" "BITCOIN" "FIATSUX" "WENMOON" "BEVSTR")
 
 # --------- TIMING SETTINGS ---------
 # Options: 300 (5 min), 600 (10 min), 900 (15 min), 1800 (30 min), 3600 (hourly)

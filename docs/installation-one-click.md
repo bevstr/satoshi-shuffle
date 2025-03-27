@@ -1,18 +1,16 @@
-# Python Installation Guide
+# One-Click Script Installation Guide
 
-This guide provides detailed instructions for installing Satoshi Shuffle using Python.  
-**This method is best for advanced users who want full control over the installation.**
+This guide provides detailed instructions for installing Satoshi Shuffle using the interactive installation script. **This is the recommended method for most users.**
 
 ---
 
 ## 📌 Before You Begin
 
-Before installing, ensure you have:  
-✅ **Python 3.6 or higher** installed  
-✅ **pip (Python package manager)** installed  
-✅ **Terminal (Mac/Linux) or Command Prompt (Windows)** available  
+The One-Click Script will handle most of the installation process for you, but **you need to install Python first**.
 
 ### Step 1: Install Python
+
+You need Python 3.6 or higher. Follow the instructions for your operating system:
 
 #### **MacOS**  
 1. **Check if Homebrew is installed**  
@@ -24,6 +22,11 @@ Before installing, ensure you have:
    ```bash
    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
+   In **Terminal** run:  
+   ```bash
+   python3 --version
+   ```
+   If you see no version then
 
 2. **Install Python**  
    ```bash
@@ -45,20 +48,28 @@ sudo apt update && sudo apt install python3 python3-pip
 1. Open **Terminal (Mac/Linux)** or **Command Prompt (Windows)**  
 2. Run the following command to check your Python version:  
    ```bash
-   python --version  # or python3 --version
+   python --version  # or python3 --version on some systems
    ```  
    It should return version **3.6 or higher**.  
 
-3. Check if `pip` is installed:  
-   ```bash
-   pip --version  # or pip3 --version
-   ```  
+---
+
+## 🔧 What This Script Does
+
+The One-Click Script will **automatically**:  
+✅ Install required Python packages  
+✅ Set up configuration files  
+✅ Connect to your BlockClock devices  
+✅ Create directories for logs and data  
+✅ Optionally set up the app as a system service  
 
 ---
 
 ## 🚀 Installation Steps
 
 ### Step 1: Download the Repository
+
+Create a folder where you want to locate the files and now open terminal in that folder 
 
 To install Satoshi Shuffle, **you first need to download the code**:
 
@@ -76,64 +87,56 @@ cd satoshi-shuffle
 
 ---
 
-### Step 2: Install Dependencies
+### Step 2: Run the Installation Script
 
-Run this command to install all required Python packages:  
+Once inside the **satoshi-shuffle** folder, run:  
 ```bash
-pip install -r requirements.txt
+python install.py
+```
+or 
+```bash
+python3 install.py  # Mac/Linux
+py -3 install.py    # Windows
 ```
 
 **If you have multiple Python versions installed**, use:  
 ```bash
-python3 -m pip install -r requirements.txt  # Mac/Linux
-py -3 -m pip install -r requirements.txt    # Windows
+python3 install.py  # Mac/Linux
+py -3 install.py    # Windows
 ```
 
-This installs:  
-✅ Flask (web server)  
-✅ Requests (HTTP client)  
-✅ Other dependencies needed for the application  
+---
+
+### Step 3: Follow the Interactive Prompts  
+
+The script will ask you for:  
+- **BlockClock device details** (name, IP, password)  
+- **Custom text options** (Bitcoin-related phrases)  
+- **Timing settings** (how often text appears)  
+
+**Example Configuration:**  
+```
+Device 1:
+  Name: Living Room Clock
+  IP Address: 192.168.1.100
+  Password: (leave blank if none)
+
+Enter custom text options (max 7 characters each, separated by commas): BITCOIN, HODLER, BTFD
+
+Clock refresh time options:
+  1) 5 minutes
+  2) 10 minutes
+  3) 15 minutes
+Choose an option (1-3): 2
+
+Number of built-in screens between text (default: 3): 2
+```
 
 ---
 
-### Step 3: Configure Your Settings
+### Step 4: Running Satoshi Shuffle
 
-Before running Satoshi Shuffle, you need to **set up your configuration file**.
-
-1. Navigate to the `config` directory:  
-   ```bash
-   cd config
-   ```
-
-2. Create a new configuration file:  
-   ```bash
-   cp blockclock.conf.example blockclock.conf
-   ```
-
-3. Open the file for editing:  
-   ```bash
-   nano blockclock.conf  # For Linux/Mac users
-   notepad blockclock.conf  # For Windows users
-   ```
-
-4. **Example Configuration File:**  
-   ```bash
-   DEVICE_1_NAME="Living Room Clock"
-   DEVICE_1_IP="192.168.1.100"
-   DEVICE_1_PASSWORD=""
-   
-   TEXT_OPTIONS=("BITCOIN" "HODLER" "BTFD")
-   CLOCK_REFRESH_TIME=300
-   DISPLAYS_BETWEEN_TEXT=3
-   ```
-
-5. **Save and exit** (For nano, press `CTRL+X`, then `Y`, then `Enter`).
-
----
-
-### Step 4: Start the Application
-
-#### **Option 1: Run Directly**
+#### **Option 1: Start Manually**
 ```bash
 python webapp/blockclock_web.py
 ```
@@ -162,8 +165,7 @@ If you run into problems:
   ```  
 - **Restart Satoshi Shuffle:**  
   ```bash
-  pkill -f blockclock_web.py
-python webapp/blockclock_web.py  # Restart manually
+  sudo systemctl restart satoshi-shuffle
   ```  
 
 For more help, check the [Troubleshooting Guide](docs/troubleshooting.md).  

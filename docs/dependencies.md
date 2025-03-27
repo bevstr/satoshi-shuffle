@@ -1,85 +1,108 @@
-# Satoshi Shuffle Dependencies
+# 📦 Satoshi Shuffle Dependencies
 
-## System Requirements
+This guide provides a complete list of system and software requirements needed to run Satoshi Shuffle.
 
-- Operating System: Linux (Ubuntu/Debian recommended) or macOS (limited Windows support)
-- [Python 3.6 or higher](https://www.python.org/downloads/)
-- Network connection to your BlockClock device(s)
-- 100MB+ free disk space for application and logs
+---
 
-## Python Dependencies
+## 🖥 System Requirements
 
-The following Python packages are required:
-- [Flask==2.3.3](https://flask.palletsprojects.com/) - Web framework
-- [Flask-WTF==1.1.1](https://flask-wtf.readthedocs.io/) - Form handling for Flask
-- [Requests==2.32.3](https://requests.readthedocs.io/) - HTTP library for API calls
+✅ **Operating System**: Linux (Ubuntu/Debian recommended) or macOS (Windows limited support)  
+✅ **100MB+ free disk space** for application and logs  
+✅ **Network connection** to your BlockClock device(s)  
 
-These will be automatically installed by:
-- The One-Click Script installation
-- Running `pip install -r requirements.txt` in manual Python installation
-- Docker installation (included in the container)
+---
 
-## Installation-Specific Dependencies
+## 🛠 Required Software
 
-### One-Click Script Installation
-- [Python 3.6+](https://www.python.org/downloads/)
-- [pip](https://pip.pypa.io/en/stable/installation/) (Python package manager)
-- Administrator/sudo privileges (for service installation)
+| Dependency | Version | Installation Command |
+|------------|---------|----------------------|
+| Python     | 3.6+    | `sudo apt install python3` or `brew install python` |
+| Pip        | Latest  | `sudo apt install python3-pip` or `brew install pip` |
+| Git        | Latest  | `sudo apt install git` or `brew install git` |
+| Docker     | Latest  | `sudo apt install docker.io` or `brew install --cask docker` |
 
-### Docker Installation
-- [Docker Engine 19.03.0+](https://docs.docker.com/engine/install/)
-- [Docker Compose 1.27.0+](https://docs.docker.com/compose/install/)
+✅ **All dependencies are automatically handled by the installation script.**  
 
-### Manual Python Installation
-- [Python 3.6+](https://www.python.org/downloads/)
-- [pip](https://pip.pypa.io/en/stable/installation/) (Python package manager)
-- [Git](https://git-scm.com/downloads) (optional, for cloning)
-- Administrator/sudo privileges (optional, for service setup)
+---
 
-## BlockClock Requirements
+## 📦 Python Package Dependencies  
 
-- [Coinkite BlockClock Mini or BlockClock Micro device](https://blockclock.com/)
-- Device must be on the same network as the computer running Satoshi Shuffle
-- Device IP address must be known (check your router or the BlockClock settings)
-- The "Screen Update Rate" setting on your BlockClock should match the refresh time setting in Satoshi Shuffle
+The following Python libraries are required:  
 
-## Browser Requirements
+- **Flask** - Web framework  
+- **Requests** - HTTP library  
+- **Flask-WTF** - Form handling for Flask  
 
-The web interface works best with:
-- [Chrome/Chromium 80+](https://www.google.com/chrome/)
-- [Firefox 75+](https://www.mozilla.org/firefox/)
-- [Safari 13+](https://www.apple.com/safari/)
-- [Edge 80+](https://www.microsoft.com/edge)
+### Installing Dependencies Manually  
 
-## Network Requirements
-
-- Your computer must be able to reach the BlockClock devices via HTTP
-- Default port 5001 must be available (or configurable to an alternative)
-- No firewall blocking traffic between your computer and BlockClock devices
-
-## Checking Your System
-
-### Check Python Version
+If needed, install all Python dependencies with:  
 ```bash
-python --version
-# or
-python3 --version
+pip install -r requirements.txt
 ```
 
-### Check pip Installation
+**Or install them individually:**  
 ```bash
-pip --version
-# or
-pip3 --version
+pip install Flask requests Flask-WTF
 ```
 
-### Check Docker Installation
+---
+
+## 🖥 BlockClock Requirements
+
+✅ **Coinkite BlockClock Mini or Micro**  
+✅ **Device must be on the same WiFi/network as your computer**  
+✅ **Static IP recommended** for better stability  
+
+To find your BlockClock’s IP:  
+- Check your router settings  
+- Use a network scanner app  
+- Check the BlockClock settings menu  
+
+---
+
+## 🌍 Network Requirements  
+
+Your system must allow **outgoing HTTP requests** to communicate with your BlockClock.  
+
+- Default **port 5001** must be open  
+- No firewall should block requests  
+
+### Checking Your Connection  
+
+Run these commands to verify network connectivity:  
+
+**Check Python version:**  
+```bash
+python --version  # or python3 --version
+```
+
+**Check pip installation:**  
+```bash
+pip --version  # or pip3 --version
+```
+
+**Check Docker installation:**  
 ```bash
 docker --version
 docker-compose --version
 ```
 
-### Check Network Connectivity to BlockClock
+**Check if your system can reach the BlockClock:**  
 ```bash
 ping 192.168.1.100  # Replace with your BlockClock's IP
 ```
+
+---
+
+## 🛠 Need More Help?  
+
+If you encounter dependency issues:  
+📌 **Check the [Troubleshooting Guide](troubleshooting.md)**  
+📌 **Verify missing packages with**:  
+```bash
+pip list  # List all installed Python packages
+```
+
+✅ **Continue with [One-Click Installation](installation-one-click.md)**  
+- [Installation Guide](installation-one-click.md)  
+- [Configuration Guide](configuration.md)  

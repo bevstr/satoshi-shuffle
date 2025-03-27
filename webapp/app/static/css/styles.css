@@ -627,3 +627,37 @@ html[data-theme="dark"] body .col-md-6 .list-group .list-group-item .badge.bg-pr
 [data-theme="dark"] #initialization-banner.alert-success i {
     color: #ffffff !important;
 }
+/* Flash message styling for dark mode */
+[data-theme="dark"] .alert {
+    color: #ffffff;
+    font-weight: 500;
+  }
+  
+  /* Success alert in dark mode */
+  [data-theme="dark"] .alert-success {
+    background-color: #1e582a;
+    border-color: #0f5132;
+  }
+  
+  /* Danger/error alert in dark mode */
+  [data-theme="dark"] .alert-danger {
+    background-color: #842029;
+    border-color: #58151c;
+  }
+  
+  /* Info alert in dark mode */
+  [data-theme="dark"] .alert-info {
+    background-color: #0c5460;
+    border-color: #0a4b55;
+  }
+  
+  /* Warning alert in dark mode */
+  [data-theme="dark"] .alert-warning {
+    background-color: #664d03;
+    border-color: #513e02;
+  }
+  
+  /* Improved visibility for close button in dark mode */
+  [data-theme="dark"] .alert .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+  }

@@ -102,7 +102,7 @@ class BlockClockControl:
             }
         ]
         
-        self.text_options = ["__GFY__" "_BTFD_" "_HODL_" "SATOSHI" "_NGMI_" "BITCOIN" "FIATSUX" "WENMOON" "BEVSTR"]
+        self.text_options = ["__GFY__" "WENMOON" "_BTFD_" "FIATSUX" "_HODL_" "SATOSHI" "_NGMI_" "BITCOIN"]
         self.clock_refresh_time = 300  # in seconds
         self.displays_between_text = 3
         

@@ -41,14 +41,17 @@ def print_warning(text):
 def print_error(text):
     print(f"{Colors.RED}✗ {text}{Colors.ENDC}")
 
-def run_command(command, cwd=None):
-    """Run a system command and return the result"""
+def run_command(command, cwd=None, timeout=None):
+    """Run a system command with an optional timeout and return the result"""
     try:
-        result = subprocess.run(command, shell=True, check=True, text=True, 
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+        result = subprocess.run(command, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, timeout=timeout)
         return True, result.stdout
+    except subprocess.TimeoutExpired:
+        return False, "Command timed out!"
     except subprocess.CalledProcessError as e:
         return False, e.stderr
+
+
 
 def check_command(command):
     """Check if a command is available"""
@@ -460,22 +463,46 @@ def enable_service(service_path):
         return False
 
 def install_python_packages():
-    """Install required Python packages"""
+    """Ensure pip is updated and install required Python packages"""
+    print_step("Ensuring pip is installed and up to date...")
+
+    print("DEBUG: Running ensurepip")
+    success, output = run_command([sys.executable, "-m", "ensurepip", "--default-pip"], timeout=60)
+    print(f"DEBUG: ensurepip output: {output}")
+
+    if not success:
+        print_error(f"pip installation failed or timed out: {output}")
+        return False
+    else:
+        print_success("pip is installed!")
+
+    print("DEBUG: Running pip upgrade")
+    success, output = run_command([sys.executable, "-m", "pip", "install", "--upgrade", "pip"], timeout=60)
+    print(f"DEBUG: pip upgrade output: {output}")
+
+    if not success:
+        print_error(f"Failed to upgrade pip: {output}")
+        return False
+    else:
+        print_success("pip upgraded successfully!")
+
+    # Now install dependencies
     print_step("Installing required Python packages...")
-    
-    # Get the path to requirements.txt
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    webapp_requirements = os.path.join(current_dir, 'webapp', 'requirements.txt')
-    
-    # Install requirements
-    success, output = run_command(f"{sys.executable} -m pip install -r {webapp_requirements}")
-    
+    webapp_requirements = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'webapp', 'requirements.txt')
+
+    print(f"DEBUG: Installing from {webapp_requirements}")
+    success, output = run_command([sys.executable, "-m", "pip", "install", "-r", webapp_requirements], timeout=60)
+    print(f"DEBUG: Package install output: {output}")
+
     if not success:
         print_error(f"Failed to install packages: {output}")
         return False
-        
+
     print_success("Python packages installed successfully")
     return True
+
+
+
 
 def configure_blockclock():
     """Configure BlockClock devices interactively"""
@@ -483,7 +510,7 @@ def configure_blockclock():
     
     config = {
         'devices': [],
-        'text_options': ["__GFY__", "_BTFD_", "__HODL_", "SATOSHI", "KIRSTY", "BEVO_21"],
+        'text_options': ["__GFY__", "WENMOON", "_BTFD_", "FIATSUX", "_HODL_", "SATOSHI", "_NGMI_", "BITCOIN", "BEVSTR"],
         'clock_refresh_time': 300,
         'displays_between_text': 3
     }
@@ -495,8 +522,9 @@ def configure_blockclock():
     
     # Ask for device information
     print_step("Let's configure your BlockClock devices")
-    print("You can add up to 5 devices. Leave the IP empty when done.")
-    
+    print("You can add up to 5 devices. Leave the IP empty when done. Just keep pressing enter")
+    print ("If you dont input a name BlockClock Device 1 will be name")
+
     for i in range(1, 6):
         print(f"\nDevice {i}:")
         name = input(f"  Name (default: BlockClock Device {i}): ").strip() or f"BlockClock Device {i}"
@@ -519,12 +547,12 @@ def configure_blockclock():
     print_step("\nNow let's configure your custom text options")
     print("Default options: " + ", ".join(config['text_options']))
     
-    custom_text = input("Enter custom text options (comma-separated, max 8 chars each) or press Enter to use defaults: ").strip()
+    custom_text = input("Enter custom text options (comma-separated, max 7 chars each) or press Enter to use defaults: ").strip()
     if custom_text:
         # Split by comma and trim whitespace
         custom_options = [text.strip() for text in custom_text.split(',')]
-        # Filter out empty strings and limit to 8 characters
-        custom_options = [text[:8] for text in custom_options if text]
+        # Filter out empty strings and limit to  characters
+        custom_options = [text[:7] for text in custom_options if text]
         if custom_options:
             config['text_options'] = custom_options
     
@@ -587,9 +615,10 @@ DEVICE_{device['id']}_PASSWORD="{device['password']}"'''
     text_options_str = '" "'.join(config['text_options'])
     config_content += f'''
 
-# --------- TEXT OPTIONS ---------
-# Text options to display (separated by spaces)
-TEXT_OPTIONS=("{text_options_str}")
+    # --------- TEXT OPTIONS ---------
+    # Text options to display (separated by spaces)
+    TEXT_OPTIONS=("{text_options_str}")
+
 
 # --------- TIMING SETTINGS ---------
 # Options: 300 (5 min), 600 (10 min), 900 (15 min), 1800 (30 min), 3600 (hourly)
@@ -614,8 +643,8 @@ def build_docker_image():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     
     # Run docker-compose build
-    success, output = run_command("docker-compose -f docker/docker-compose.yml build", cwd=current_dir)
-    
+    success, output = run_command([sys.executable, "-m", "pip", "install", "-r", webapp_requirements])
+
     if not success:
         print_error(f"Failed to build Docker image: {output}")
         return False
@@ -707,42 +736,22 @@ def main():
             print_error("Failed to install required Python packages")
             sys.exit(1)
     
-    # Create service file
-    print_step("Creating service for automatic startup...")
-    service_path = create_service_file(use_docker)
     
-    if service_path:
-        # Enable and start service
-        if enable_service(service_path):
-            print_success("BlockClock Control service is now running!")
-        else:
-            print_warning("Service creation succeeded but failed to start automatically.")
-            print("You can start the service manually:")
-            if platform.system() == "Darwin":
-                print(f"  launchctl load -w {service_path}")
-            elif platform.system() == "Linux":
-                print(f"  sudo systemctl start {os.path.basename(service_path)}")
-    else:
-        # Manual start instructions
-        print_warning("Service creation skipped or failed.")
-        print("You can start the application manually:")
-        if use_docker:
-            print("  cd to the project directory and run:")
-            print("  docker-compose -f docker/docker-compose.yml up -d")
-        else:
-            print("  cd to the webapp directory and run:")
-            print("  python blockclock_web.py")
-    
-    # Final instructions
-    print_header("Installation Complete")
-    print("BlockClock Control should now be running!")
-    print(f"Open your web browser and navigate to: http://localhost:5001")
+    # 🚀 Installation Complete - Guide User to Start the App
+    print_header("🚀 Installation Complete!")
+
+    print("\n✅ Everything is set up!")
+    print("\nTo start the application, run:")
+    print("  ./start_SatoshiShuffle.sh")
+
+    print("\n📱 Once it's running, access the web interface at:")
+    print("  http://localhost:5001")
     print("\nYou can use the web interface to configure your BlockClock devices,")
     print("customize text options, and control the text rotation.")
+
+    print("\n💡 If you need to stop the app, use Ctrl+C.")
+    print("\nEnjoy Satoshi Shuffle! 🚀")
     
-    if not service_path:
-        print("\nNote: The application will stop when you close the terminal.")
-        print("To keep it running, use the service installation method or run in background.")
 
 if __name__ == "__main__":
     try:

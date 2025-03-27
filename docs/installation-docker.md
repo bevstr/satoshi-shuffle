@@ -1,331 +1,220 @@
 # Docker Installation Guide
 
-This guide provides detailed instructions for installing Satoshi Shuffle using Docker containers. This method is ideal for users familiar with Docker or those who want a clean, isolated installation.
+This guide provides detailed instructions for installing Satoshi Shuffle using Docker containers.  
+**This method is best for users who want an isolated installation or are already familiar with Docker.**
 
-## Before You Begin
+---
 
-The Docker installation method requires Docker and Docker Compose to be installed on your system. All other dependencies will be handled automatically inside the container.
+## 📌 Before You Begin
+
+The Docker installation method requires **Docker and Docker Compose**.  
+✅ **Docker handles all dependencies inside the container**  
+✅ **No need to install Python manually**  
 
 ### Step 1: Install Docker
 
-Docker Engine and Docker Compose are required:
+Follow the instructions for your operating system:
 
-- **macOS**: 
-  First, check if you have Homebrew installed:
-  ```bash
-  # Open Terminal and run:
-  brew --version
-  ```
+#### **MacOS**  
+1. **Check if Homebrew is installed**  
+   Open **Terminal** and run:  
+   ```bash
+   brew --version
+   ```
+   If you see "command not found," install Homebrew:  
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-  If you see "command not found", install Homebrew:
-  ```bash
-  # In Terminal run:
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  ```
+2. **Install Docker**  
+   ```bash
+   brew install --cask docker
+   ```
 
-  Then install Docker Desktop:
-  ```bash
-  # Using Homebrew
-  brew install --cask docker
-  ```
-  
-  Or download and install [Docker Desktop](https://www.docker.com/products/docker-desktop) directly (includes both Docker Engine and Docker Compose)
+3. **Start Docker Desktop**  
+   Open **Docker Desktop** and wait until it's fully running.
 
-- **Ubuntu/Debian**: 
-  ```bash
-  # Open Terminal and run:
-  sudo apt update
-  sudo apt install docker.io docker-compose
-  sudo usermod -aG docker $USER  # Add yourself to docker group
-  # Log out and log back in for group changes to take effect
-  ```
-- **Other Linux**: Follow the [official Docker installation instructions](https://docs.docker.com/engine/install/)
-- **Windows**: Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+#### **Ubuntu/Debian (Linux)**  
+```bash
+sudo apt update
+sudo apt install docker.io docker-compose
+sudo usermod -aG docker $USER  # Add yourself to the Docker group
+```
+
+#### **Windows**  
+1. Download **Docker Desktop** from [docker.com](https://www.docker.com/products/docker-desktop)  
+2. Install and **restart your computer**  
+3. Open **Docker Desktop** and wait for it to start  
 
 ### Step 2: Verify Docker Installation
 
-1. Open your Terminal (macOS/Linux) or Command Prompt (Windows)
-2. Run the following commands to check your Docker installation:
-   ```bash
-   docker --version
-   docker-compose --version
-   ```
-3. Make sure both commands return version information without errors
+Run these commands to ensure Docker is installed correctly:  
+```bash
+docker --version
+docker-compose --version
+```  
 
-### What Docker Will Handle For You
+Both should return version numbers without errors.
 
-The Docker installation automatically:
-- Creates an isolated environment with all required dependencies
-- Sets up the Python runtime environment
-- Mounts your configuration and logs directories
-- Exposes the web interface on port 5001
-- **Keeps the application running in the background** (one of Docker's main advantages)
+---
 
-## Installation Steps
+## 🚀 Installation Steps
 
 ### Step 1: Download the Repository
 
-First, get a copy of the Satoshi Shuffle code:
+To install Satoshi Shuffle, **first download the code**:
 
+#### **Option 1: Using Git (Recommended)**
 ```bash
-# Open Terminal (macOS/Linux) or Command Prompt (Windows)
-
-# Clone the repository using git
 git clone https://github.com/bevstr/satoshi-shuffle.git
-
-# Navigate into the project directory
 cd satoshi-shuffle
 ```
 
-Don't have git? You can also:
-1. Go to https://github.com/bevstr/satoshi-shuffle
-2. Click the green "Code" button
-3. Select "Download ZIP"
-4. Extract the ZIP file to a folder on your computer
-5. Open your Terminal/Command Prompt and navigate to that folder
+#### **Option 2: Manual Download**
+1. Go to **[Satoshi Shuffle GitHub](https://github.com/bevstr/satoshi-shuffle)**  
+2. Click the **green "Code" button** → **Download ZIP**  
+3. Extract the ZIP file to a folder on your computer  
+4. Open **Terminal/Command Prompt** and navigate to that folder  
+
+---
 
 ### Step 2: Configure Your Settings
 
-Before building the Docker container, you'll need to set up your configuration:
+Before building the Docker container, **set up your configuration**:
 
-1. Navigate to the config directory:
+1. Navigate to the `config` directory:  
    ```bash
    cd config
    ```
 
-2. Create a new configuration file:
+2. Create a new configuration file:  
    ```bash
-   # Copy the example config (if it exists)
    cp blockclock.conf.example blockclock.conf
-   
-   # Or create a new one if no example exists
-   touch blockclock.conf
    ```
 
-3. Edit the configuration file with your favorite text editor:
+3. Open the file for editing:  
    ```bash
-   # Using nano
-   nano blockclock.conf
-   
-   # Or using vi
-   vi blockclock.conf
-   
-   # Or open with your desktop text editor
+   nano blockclock.conf  # Linux/Mac
+   notepad blockclock.conf  # Windows
    ```
 
-4. Add your device information and preferences:
-   ```
-   # Device 1
+4. **Example Configuration File:**  
+   ```bash
    DEVICE_1_NAME="Living Room Clock"
    DEVICE_1_IP="192.168.1.100"
    DEVICE_1_PASSWORD=""
    
-   # Device 2 (optional)
-   DEVICE_2_NAME="Office Clock"
-   DEVICE_2_IP="192.168.1.101"
-   DEVICE_2_PASSWORD=""
-   
-   # Text options to display (separated by spaces)
-   TEXT_OPTIONS=("BITCOIN" "HODLER" "FREEDOM" "SATOSHI" "BTFD")
-   
-   # Clock refresh time (in seconds): 300 (5min), 600 (10min), 900 (15min), 1800 (30min), 3600 (60min)
+   TEXT_OPTIONS=("BITCOIN" "HODLER" "BTFD")
    CLOCK_REFRESH_TIME=300
-   
-   # Number of built-in screens to show between our text messages
    DISPLAYS_BETWEEN_TEXT=3
    ```
 
-5. Return to the main directory:
-   ```bash
-   cd ..
-   ```
+5. **Save and exit** (For nano, press `CTRL+X`, then `Y`, then `Enter`).
+
+---
 
 ### Step 3: Build and Start the Docker Container
 
-Now you'll build and start the Docker container:
-
+Run the following command:  
 ```bash
-# Build and start the container
 docker-compose -f docker/docker-compose.yml up -d
 ```
 
-This command:
-- Builds the Docker image with all necessary dependencies
-- Creates a container based on that image
-- Starts the container in the background (-d for "detached" mode)
-- Sets up volume mappings for config and logs directories
+**What this does:**  
+✅ **Builds** the Docker image  
+✅ **Starts** the container in the background  
+✅ **Exposes the web interface** on port 5001  
 
-You should see output similar to:
+You should see output similar to:  
 ```
 Creating network "satoshi-network" with driver "bridge"
 Building satoshi-shuffle
-[+] Building 2.5s (10/10) FINISHED
- => [internal] loading build definition from Dockerfile
- ...
 Successfully built 3a7c8f7e9b3e
 Successfully tagged satoshi-shuffle:latest
 Creating satoshi-shuffle ... done
 ```
 
+---
+
 ### Step 4: Verify the Container is Running
 
-Check that your container started successfully:
-
+Check if your container is running:  
 ```bash
 docker ps | grep satoshi-shuffle
 ```
 
-You should see output showing your container is running:
+You should see output like:  
 ```
-CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                    NAMES
-3a7c8f7e9b3e   satoshi-shuffle      "python webapp/block…"   30 seconds ago   Up 28 seconds   0.0.0.0:5001->5001/tcp   satoshi-shuffle
+CONTAINER ID   IMAGE                COMMAND                  STATUS         PORTS                   NAMES
+3a7c8f7e9b3e   satoshi-shuffle      "python webapp/block…"   Up 28 seconds  0.0.0.0:5001->5001/tcp  satoshi-shuffle
 ```
+
+---
 
 ### Step 5: Access the Web Interface
 
-With the container running, open your web browser and navigate to:
+Once the container is running, open your browser and go to:  
 ```
 http://localhost:5001
 ```
 
-You should see the Satoshi Shuffle web interface. From here, you can:
-- Start/stop the text rotation
-- Send custom text on demand
-- Monitor your BlockClock devices
-- Access logs and status information
+You should now see the **Satoshi Shuffle Web Interface**, where you can:  
+✅ Start/stop the text rotation  
+✅ Send custom text to your BlockClock  
+✅ Monitor your BlockClock devices  
 
-## Background Operation
+---
 
-One of the key advantages of using Docker is that the container runs in the background by default. The `-d` flag in the `docker-compose up -d` command makes the container run in "detached" mode, meaning:
+## 🔄 Managing the Container
 
-- It runs in the background without being attached to your terminal
-- It continues running even if you close your terminal or log out
-- It can be configured to restart automatically if your system reboots
-
-You can check the status of your container at any time with:
+**Stop the container**:  
 ```bash
-docker ps | grep satoshi-shuffle
+docker-compose -f docker/docker-compose.yml down
 ```
 
-If you want to see the logs from the application running in the container, use:
+**Restart the container**:  
 ```bash
-# View logs
+docker-compose -f docker/docker-compose.yml up -d
+```
+
+**Check logs**:  
+```bash
 docker logs satoshi-shuffle
-
-# Follow logs in real-time (like tail -f)
-docker logs -f satoshi-shuffle
 ```
 
-## Troubleshooting
+**Access the container shell**:  
+```bash
+docker exec -it satoshi-shuffle /bin/bash
+```
 
-If you encounter issues during installation or operation:
+---
 
-- **Docker not found**: Make sure Docker is properly installed and your user has permissions to run Docker commands
+## 🛠 Troubleshooting
 
-- **Port conflicts**: If port 5001 is already in use, modify the `docker-compose.yml` file to use a different port:
+If you encounter problems:
+
+- **Check if Docker is running**  
   ```bash
-  # Edit the docker-compose.yml file
-  nano docker/docker-compose.yml
-  
-  # Change this line in the file:
-  ports:
-    - "5002:5001"  # Maps port 5001 in container to port 5002 on host
-  
-  # Save and exit, then restart the container
-  docker-compose -f docker/docker-compose.yml down
-  docker-compose -f docker/docker-compose.yml up -d
-  ```
+  systemctl status docker  # Linux
+  ```  
 
-- **Container not starting**: Check logs for errors:
+- **Port conflict (5001 in use)**  
+  - Edit `docker-compose.yml`  
+  - Change `ports: - "5002:5001"`  
+  - Restart the container  
+
+- **Container not starting**  
   ```bash
   docker logs satoshi-shuffle
   ```
 
-- **Device connectivity issues**: Ensure your BlockClock devices are on the same network and accessible from the Docker container:
-  ```bash
-  docker exec -it satoshi-shuffle ping 192.168.1.100
-  ```
+For more help, check the [Troubleshooting Guide](docs/troubleshooting.md).
 
-- **Permission issues with volumes**: Check that the mounted directories have the correct permissions:
-  ```bash
-  ls -la config/
-  ls -la logs/
-  ```
+---
 
-## Managing the Container
+## ✅ Next Steps  
 
-Common commands for managing your Docker container:
-
-```bash
-# Stop the container
-docker-compose -f docker/docker-compose.yml down
-
-# Start an existing container
-docker-compose -f docker/docker-compose.yml up -d
-
-# Restart the container
-docker-compose -f docker/docker-compose.yml restart
-
-# View logs
-docker logs satoshi-shuffle
-
-# Follow logs in real-time
-docker logs -f satoshi-shuffle
-
-# Access a shell in the container
-docker exec -it satoshi-shuffle /bin/bash
-```
-
-## Auto-Restart Configuration
-
-To ensure your container automatically restarts after a system reboot, you can modify the `docker-compose.yml` file to add a restart policy:
-
-```bash
-# Edit the docker-compose.yml file
-nano docker/docker-compose.yml
-```
-
-Change or add the `restart` policy to the service definition:
-```yaml
-services:
-  satoshi-shuffle:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    container_name: satoshi-shuffle
-    restart: always  # Makes the container restart automatically
-    ports:
-      - "5001:5001"
-    ...
-```
-
-Restart options include:
-- `always`: Always restart the container regardless of the exit status
-- `unless-stopped`: Restart the container unless it was explicitly stopped
-- `on-failure`: Restart only if the container exits with a non-zero status
-
-After making changes, restart your container:
-```bash
-docker-compose -f docker/docker-compose.yml down
-docker-compose -f docker/docker-compose.yml up -d
-```
-
-## Updating Satoshi Shuffle
-
-To update to a newer version:
-
-```bash
-# Pull the latest code
-git pull
-
-# Rebuild and restart the container
-docker-compose -f docker/docker-compose.yml up -d --build
-```
-
-## Next Steps
-
-After installation:
-1. Continue to the [Configuration Guide](configuration.md) for additional setup options
-2. Learn how to manage your BlockClock devices through the web interface
-
-For a complete list of system requirements and dependencies, see the [Dependencies List](dependencies.md).
+🚀 Now that you’ve installed Satoshi Shuffle:  
+- Configure your settings → **[Configuration Guide](docs/configuration.md)**  
+- Learn how to manage BlockClock devices → **[Web Interface Guide](docs/web-interface.md)**  
+- Need more help? → **[Troubleshooting](docs/troubleshooting.md)**  

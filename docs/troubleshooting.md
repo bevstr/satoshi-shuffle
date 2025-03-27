@@ -1,294 +1,243 @@
-# Troubleshooting Guide\n\nCommon issues and their solutions.\n
-# Troubleshooting Guide
+# 🛠 Troubleshooting Guide
 
-This guide helps you solve common issues with Satoshi Shuffle. Follow the troubleshooting steps for your specific problem.
+This guide provides solutions to common issues when using Satoshi Shuffle. **Follow the steps carefully based on your problem.**  
 
-## Connection Issues
 
-### Web Interface Not Accessible
+---
 
-**Symptoms**: Cannot access the web interface at `http://localhost:5001`
 
-**Possible solutions**:
+## 🔌 Connection Issues
 
-1. **Check if the application is running**:
+### **Web Interface Not Accessible**  
+
+**Symptoms:** Cannot access `http://localhost:5001`  
+
+✅ **Fix Steps:**  
+1. **Check if the application is running:**  
    ```bash
-   # Check for running Python process
-   ps aux | grep blockclock_web.py
-   
-   # Check for Docker container
-   docker ps | grep satoshi-shuffle
+   ps aux | grep blockclock_web.py  # For Python installs
+   docker ps | grep satoshi-shuffle  # For Docker installs
    ```
 
-2. **Port conflict**:
-   - Another application might be using port 5001
-   - Try a different port by editing `webapp/blockclock_web.py`
-   - Change `port=5001` to another port (e.g., `port=5002`)
-   - Then access: `http://localhost:5002`
-
-3. **Firewall issues**:
-   - Check if your firewall is blocking port 5001
-   - Allow the port through your firewall settings
-
-4. **Restart the application**:
+2. **Restart the application:**  
    ```bash
-   # Using startup script
-   ./start_SatoshiShuffle.sh
-   
-   # Using Docker
-   docker-compose -f docker/docker-compose.yml restart
-   
-   # Using service (Linux)
-   sudo systemctl restart satoshi-shuffle
+   sudo systemctl restart satoshi-shuffle  # Linux
+   docker restart satoshi-shuffle  # Docker
    ```
 
-### BlockClock Devices Not Reachable
-
-**Symptoms**: "Device not reachable" warnings or custom text doesn't appear on your BlockClock
-
-**Possible solutions**:
-
-1. **Verify network connectivity**:
+3. **Check firewall settings:**  
    ```bash
-   # Ping the device directly
-   ping 192.168.1.100  # Replace with your device's IP
-   
-   # If using Docker, ping from inside the container
-   docker exec -it satoshi-shuffle ping 192.168.1.100
+   sudo ufw allow 5001  # Linux users
    ```
 
-2. **Check IP address**:
-   - Verify you're using the correct IP for your BlockClock
-   - IP addresses can change if your router assigns them dynamically
-   - Consider setting a static IP for your BlockClock in your router settings
 
-3. **Network isolation**:
-   - Ensure your computer and BlockClock are on the same network
-   - Some networks isolate IoT devices from regular devices
+---
 
-4. **Restart your BlockClock**:
-   - Power cycle your BlockClock device
-   - Wait for it to fully boot up and connect to Wi-Fi
 
-## Display Issues
+### **BlockClock Device Not Reachable**  
 
-### Custom Text Not Appearing
+**Symptoms:**  
+- BlockClock not displaying text  
+- "Device not reachable" error  
 
-**Symptoms**: The application runs but your custom text doesn't show up on the BlockClock
-
-**Possible solutions**:
-
-1. **Check if rotation is active**:
-   - In the web interface, verify that the status shows "Running"
-   - If not, click the "Start Text Rotation" button
-
-2. **Verify configuration**:
-   - Make sure you have added at least one text option
-   - Ensure the clock refresh time matches your BlockClock's setting
-   - The first custom text may take several minutes to appear depending on your settings
-
-3. **Check synchronization**:
-   - The app needs time to synchronize with your BlockClock's refresh cycle
-   - This initial sync can take up to 15 minutes
-   - Watch the logs for "First refresh detected" message
-
-4. **Manually send text**:
-   - Try sending a one-time text message using the "Quick Actions" section
-   - If this works but rotation doesn't, there might be a timing issue
-
-### Text Display Issues
-
-**Symptoms**: Text appears on the BlockClock but looks incorrect or cuts off
-
-**Possible solutions**:
-
-1. **Character limitations**:
-   - BlockClock only supports up to 7 characters per message
-   - Only use letters, numbers, and underscores
-   - Avoid spaces and special characters
-
-2. **Display formatting**:
-   - Try prefixing text with underscore for left alignment (e.g., `_BTFD_`)
-   - Try adding underscores on both sides for center alignment (e.g., `_HODL_`)
-
-## Application Issues
-
-### Unexpected Crashes
-
-**Symptoms**: The application stops unexpectedly or displays errors
-
-**Possible solutions**:
-
-1. **Check logs**:
-   - View the logs to identify the error:
+✅ **Fix Steps:**  
+1. **Verify network connection:**  
    ```bash
-   # View the last 50 lines of the log
-   tail -n 50 logs/blockclock.log
-   
-   # If using Docker
-   docker logs satoshi-shuffle | tail -n 50
+   ping 192.168.1.100  # Replace with your BlockClock IP
    ```
 
-2. **Common error messages**:
-   - "Connection refused": BlockClock is not reachable
-   - "Address already in use": Port conflict
-   - "Permission denied": File permission issues
-
-3. **Restart the application**:
-   - Stop and restart using the appropriate method for your installation
-
-4. **Clean installation**:
-   - As a last resort, consider a fresh installation
-   - Make sure to back up your configuration first
-
-### Rate Limiting
-
-**Symptoms**: "Rate limited" message when trying to send custom text
-
-**Solution**:
-- The application has a 70-second cooldown between manual text operations
-- This prevents flooding your BlockClock with too many requests
-- Wait for the cooldown period to end before trying again
-
-## Installation Issues
-
-### Python Installation Problems
-
-**Symptoms**: Errors during Python dependency installation
-
-**Possible solutions**:
-
-1. **Update pip**:
+2. **Check IP Address in Configuration:**  
    ```bash
-   python -m pip install --upgrade pip
+   nano config/blockclock.conf  # Ensure the correct IP is set
    ```
 
-2. **Install dependencies individually**:
+3. **Restart your BlockClock**  
+   - Unplug the power, wait **30 seconds**, then plug it back in  
+
+4. **Ensure your computer and BlockClock are on the same network.**  
+
+
+---
+
+
+## 📺 Display Issues
+
+### **Custom Text Not Appearing**  
+
+**Symptoms:**  
+- Text rotation is running, but no custom text appears on BlockClock  
+
+✅ **Fix Steps:**  
+1. **Check if rotation is active in the Web UI**  
+   - Open `http://localhost:5001`  
+   - Ensure "Text Rotation" is set to **ON**  
+
+2. **Verify Text Settings:**  
+   - Custom text **must be 7 characters or less**  
+   - Only **letters, numbers, and underscores** are supported  
+
+3. **Restart the Application:**  
    ```bash
-   pip install Flask
-   pip install requests
-   # Continue with other dependencies
+   sudo systemctl restart satoshi-shuffle  # Linux
+   docker restart satoshi-shuffle  # Docker
    ```
 
-3. **Check Python version**:
+
+---
+
+
+## 🚀 Application Issues
+
+### **Unexpected Crashes**  
+
+**Symptoms:** Application stops unexpectedly or exits with errors.  
+
+✅ **Fix Steps:**  
+1. **Check logs for errors:**  
    ```bash
-   python --version
+   tail -n 50 logs/blockclock.log  # View last 50 log lines
+   tail -f logs/blockclock.log  # View live log updates
    ```
-   - Ensure you're using Python 3.6 or higher
 
-### Docker Installation Problems
+2. **Common Errors & Fixes:**  
+   - `"Connection refused"` → BlockClock is offline → **Check device connectivity**  
+   - `"Permission denied"` → Run as administrator:  
+     ```bash
+     sudo python3 webapp/blockclock_web.py
+     ```
 
-**Symptoms**: Docker build fails or container won't start
-
-**Possible solutions**:
-
-1. **Check Docker logs**:
+3. **Reinstall dependencies:**  
    ```bash
-   docker-compose -f docker/docker-compose.yml logs
+   pip install --upgrade -r requirements.txt
    ```
 
-2. **Verify Docker installation**:
+
+---
+
+
+### **Rate Limiting Errors**  
+
+**Symptoms:** "Rate limited" message when sending custom text  
+
+✅ **Solution:**  
+- BlockClock enforces a **70-second cooldown** between text updates  
+- Wait before sending another request  
+
+
+---
+
+
+## 🖥 Installation Issues
+
+### **Python Installation Problems**  
+
+✅ **Fix Steps:**  
+1. **Update pip first:**  
+   ```bash
+   python3 -m pip install --upgrade pip
+   ```
+
+2. **Manually install dependencies:**  
+   ```bash
+   pip install Flask requests
+   ```
+
+
+---
+
+
+### **Docker Installation Problems**  
+
+✅ **Fix Steps:**  
+1. **Check if Docker is running:**  
    ```bash
    docker --version
    docker-compose --version
    ```
 
-3. **Build with debug output**:
+2. **Restart Docker:**  
    ```bash
-   docker-compose -f docker/docker-compose.yml build --no-cache --progress=plain
+   systemctl restart docker  # Linux
    ```
 
-## Service Issues
-
-### Service Won't Start
-
-**Symptoms**: The application won't start as a service
-
-**Possible solutions**:
-
-1. **Check service status**:
+3. **Check container logs for errors:**  
    ```bash
-   # Linux
-   sudo systemctl status satoshi-shuffle
-   
-   # macOS
-   launchctl list | grep satoshi-shuffle
+   docker logs satoshi-shuffle
    ```
 
-2. **Check service logs**:
-   ```bash
-   # Linux
-   sudo journalctl -u satoshi-shuffle
-   ```
 
-3. **Verify file paths**:
-   - Ensure all paths in your service file are absolute paths
-   - Double-check that these paths exist
+---
 
-4. **Permissions**:
-   - Ensure the service has permissions to access all required files
-   - Check that the user running the service has appropriate access
 
-## Advanced Troubleshooting
+---
 
-### Restarting All Components
+## 🔄 Restarting All Components  
 
-If all else fails, try this full restart sequence:
+If all else fails, try this **full reset sequence**:  
 
 ```bash
-# 1. Stop the application
-# Using Docker
-docker-compose -f docker/docker-compose.yml down
+# Stop the application (based on installation type)
 
-# Using service (Linux)
-sudo systemctl stop satoshi-shuffle
+# ❌ Mac does NOT use systemctl  
+# ✅ For One-Click Install & Python Users (Mac & Linux)  
+pkill -f blockclock_web.py  # Stop any running process
 
-# 2. Kill any remaining processes
-pkill -f blockclock
+# ✅ For Docker Users (Mac, Linux, Windows)  
+docker-compose -f docker/docker-compose.yml down  # Stop Docker container
 
-# 3. Restart your BlockClock device
-# (Physically power cycle the device)
+# ✅ For Linux Users who manually set up systemd (NOT for Mac)  
+sudo systemctl stop satoshi-shuffle  # Stop systemd service
 
-# 4. Start Satoshi Shuffle again
-# Using Docker
-docker-compose -f docker/docker-compose.yml up -d
+# Restart Your BlockClock
+# (Unplug power, wait 30 seconds, then plug back in)
 
-# Using service (Linux)
-sudo systemctl start satoshi-shuffle
+# Restart Satoshi Shuffle
+
+# ✅ For One-Click Install & Python Users (Mac & Linux)  
+python webapp/blockclock_web.py  # Restart manually
+
+# ✅ For Docker Users (Mac, Linux, Windows)  
+docker-compose -f docker/docker-compose.yml up -d  # Restart Docker container
+
+# ✅ For Linux Users who manually set up systemd (NOT for Mac)  
+sudo systemctl start satoshi-shuffle  # Restart systemd service
 ```
 
-### Checking Network Connectivity
 
-For more detailed network diagnostics:
+---
 
-```bash
-# 1. Check your own IP address
-ifconfig    # macOS/Linux
-ipconfig    # Windows
 
-# 2. Verify you can reach your router
-ping 192.168.1.1    # Replace with your router's IP
+## 📡 Checking Network Connectivity  
 
-# 3. Test connectivity to your BlockClock
-ping 192.168.1.100  # Replace with your BlockClock's IP
+For deeper network troubleshooting:  
 
-# 4. Try trace route
-traceroute 192.168.1.100  # macOS/Linux
-tracert 192.168.1.100     # Windows
-```
+1. **Check your IP address:**  
+   ```bash
+   ifconfig  # macOS/Linux
+   ipconfig  # Windows
+   ```
 
-## Getting Support
+2. **Test connectivity to your router:**  
+   ```bash
+   ping 192.168.1.1  # Replace with your router’s IP
+   ```
 
-If you're still experiencing issues after trying these troubleshooting steps:
+3. **Trace network path to BlockClock:**  
+   ```bash
+   traceroute 192.168.1.100  # macOS/Linux
+   tracert 192.168.1.100  # Windows
+   ```
 
-1. **Check GitHub Issues**:
-   - Search existing issues to see if others have encountered the same problem
-   - Open a new issue if your problem is unique
 
-2. **Provide Diagnostic Information**:
-   When seeking help, please include:
-   - Your installation method (Docker, Python, or Script)
-   - Operating system and version
-   - Error messages (from logs)
-   - Steps to reproduce the issue
-   - What you've already tried
+---
+
+
+## ✅ Need More Help?  
+
+If you're still having issues:  
+📌 **Check the [GitHub Issues](https://github.com/bevstr/satoshi-shuffle/issues)**  
+📌 **Join the community for help**  
+
+✅ **Now that you’ve resolved your issue, continue with:**  
+- [Configuration Guide](configuration.md)  
+- [Managing the Web Interface](web-interface.md)  
