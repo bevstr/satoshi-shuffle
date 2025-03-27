@@ -8,6 +8,10 @@ This guide provides detailed instructions for installing Satoshi Shuffle using t
 
 The One-Click Script will handle most of the installation process for you, but **you need to install Python first**.
 
+💡 **Need more details?** Check the [Dependencies Guide](dependencies.md) for complete system requirements and installation prerequisites.
+
+
+
 ### Step 1: Install Python
 
 You need Python 3.6 or higher. Follow the instructions for your operating system:

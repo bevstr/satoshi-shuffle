@@ -596,7 +596,9 @@ class BlockClockControl:
                 clean_current = self.clean_display_text(current_display)
                 display_info = self.get_display_info(current_display)
                 self.logger.info(f"🔄 BlockClock refresh {i}/{self.displays_between_text} - Displaying: \"{display_info}\"")
-            
+                time.sleep(0.5)
+
+
             wait_time = self.clock_refresh_time - 45
             self.logger.info("⏳ Sleeping before final refresh check...")
             self.countdown(wait_time)

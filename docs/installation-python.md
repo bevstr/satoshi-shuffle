@@ -10,7 +10,11 @@ This guide provides detailed instructions for installing Satoshi Shuffle using P
 Before installing, ensure you have:  
 ✅ **Python 3.6 or higher** installed  
 ✅ **pip (Python package manager)** installed  
-✅ **Terminal (Mac/Linux) or Command Prompt (Windows)** available  
+✅ **Terminal (Mac/Linux) or Command Prompt (Windows)** available 
+
+💡 **Need more details?** Check the [Dependencies Guide](dependencies.md) for complete system requirements and installation prerequisites.
+
+
 
 ### Step 1: Install Python
 

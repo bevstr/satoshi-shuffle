@@ -11,6 +11,8 @@ The Docker installation method requires **Docker and Docker Compose**.
 ✅ **Docker handles all dependencies inside the container**  
 ✅ **No need to install Python manually**  
 
+💡 **Need more details?** Check the [Dependencies Guide](dependencies.md) for complete system requirements and installation prerequisites.
+
 ### Step 1: Install Docker
 
 Follow the instructions for your operating system:

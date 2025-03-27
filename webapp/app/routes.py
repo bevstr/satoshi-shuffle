@@ -301,6 +301,7 @@ def _monitor_logs_thread(log_path):
     
     last_size = 0
     last_matched_pattern = ""  # Track the last pattern we matched
+    last_refresh_number = 0  # Track the last refresh number we detected
     
     # Do NOT set monitoring message here - it should be set in start_rotation()
     
@@ -338,16 +339,29 @@ def _monitor_logs_thread(log_path):
                                     last_matched_pattern = pattern
                                     break
                         else:
-                            # Already in sync, look for new cycle patterns
+                            # Already in sync, get only the newly added content
+                            new_content = log_content[-min(5000, current_size - last_size):]
+                            
+                            # First check for individual refresh changes
+                            refresh_match = re.search(r'BlockClock refresh (\d+)/(\d+)', new_content)
+                            if refresh_match:
+                                current_refresh = int(refresh_match.group(1))
+                                total_refreshes = int(refresh_match.group(2))
+                                
+                                # Only reset if this is a new refresh number
+                                if current_refresh != last_refresh_number:
+                                    logger.info(f"Individual refresh detected: {current_refresh}/{total_refreshes} (timer reset)")
+                                    monitoring_start_time = time.time()
+                                    monitoring_message = f"🔄 Monitoring refresh {current_refresh}/{total_refreshes}"
+                                    last_refresh_number = current_refresh
+                            
+                            # Then check for other cycle patterns
                             cycle_patterns = {
                                 "Sleeping before refresh #": "🔄 Monitoring BlockClock refresh cycles",
                                 "Actively monitoring for refresh #": "🔍 Actively monitoring for refresh",
                                 "Final refresh complete": "✅ Refresh cycle complete",
                                 "Sending new Custom Text": "📤 Sending custom text"
                             }
-                            
-                            # Get only the newly added content
-                            new_content = log_content[-min(5000, current_size - last_size):]
                             
                             for pattern, message in cycle_patterns.items():
                                 # Only update if we find a pattern in new content and it's different from last match
@@ -356,6 +370,10 @@ def _monitor_logs_thread(log_path):
                                     monitoring_start_time = time.time()
                                     monitoring_message = message
                                     logger.info(f"Monitoring phase changed: {message} (timer reset)")
+                                    
+                                    # If this is a new cycle starting, reset the refresh number counter
+                                    if pattern == "Sleeping before refresh #":
+                                        last_refresh_number = 0
                                     
                                     # Set as last matched pattern
                                     last_matched_pattern = pattern
@@ -368,7 +386,7 @@ def _monitor_logs_thread(log_path):
         except Exception as e:
             logger.error(f"❌ Error monitoring logs: {str(e)}")
             time.sleep(5)  # Wait longer on error
-
+            
 
 #######################################################
 # CONFIGURATION FUNCTIONS
