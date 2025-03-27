@@ -571,7 +571,7 @@ class BlockClockControl:
         while self.should_continue():
             cycle_count += 1
             self.logger.info("")  # Empty line
-            self.logger.info(f"🔄 Beginning cycle #{cycle_count}")
+            self.logger.info(f"🔄 Beginning rotation cycle #{cycle_count}")
             
             if cycle_count % 5 == 0:
                 self.logger.info("🔄 Performing periodic device check (every 5 cycles)")
