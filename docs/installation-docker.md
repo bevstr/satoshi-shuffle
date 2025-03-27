@@ -31,6 +31,7 @@ Follow the instructions for your operating system:
 2. **Install Docker**  
    ```bash
    brew install --cask docker
+   brew install docker-compose
    ```
 
 3. **Start Docker Desktop**  

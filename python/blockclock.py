@@ -97,7 +97,7 @@ class BlockClockControl:
         self.devices = [
             {
                 "name": "BlockClock Mini",
-                "ip": "192.168.0.177",
+                "ip": "192.168.x.xxx",
                 "password": "",
             }
         ]
