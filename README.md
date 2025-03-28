@@ -1,5 +1,17 @@
 # Satoshi Shuffle
 
+## Features - What is it?
+
+- Manage multiple BlockClock devices from a single interface
+- Configure custom text messages that appear between regular BlockClock displays
+- Easy-to-use web interface with dark mode support
+- Real-time monitoring of your BlockClock devices
+- Three installation options to suit your preference
+
+[📹 Watch the WebApp Demo](https://v.nostr.build/zgTHMtswb6CRQ6cy.mp4)
+
+![BlockClock Control](Images/Dashboard.png)
+
 ## Prerequisites
 
 - Python 3.6 or higher
@@ -12,15 +24,7 @@ See [Dependencies List](docs/dependencies.md) for a complete list of requirement
 
 A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate on a configurable schedule.
 
-![BlockClock Control](Images/Dashboard.png)
 
-## Features
-
-- Manage multiple BlockClock devices from a single interface
-- Configure custom text messages that appear between regular BlockClock displays
-- Easy-to-use web interface with dark mode support
-- Real-time monitoring of your BlockClock devices
-- Three installation options to suit your preference
 
 ## Installation Options
 
