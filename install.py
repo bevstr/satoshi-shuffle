@@ -741,22 +741,18 @@ def main():
     # 🚀 Installation Complete - Guide User to Start the App
     print_header("🚀 Installation Complete!")
 
-    print("\n✅ Everything is set up! Your web app is now running. 🎉")
-    print("\n📱 Access the web interface at:")
-    print("  http://localhost:5001")
-
-    print("\n💡 If you need to stop the app, use Ctrl+C.")
-    print("\n🛠 If you ever need to start it manually in the future, run:")
+    print("\n✅ Everything is set up!")
+    print("\nTo start the application, run:")
     print("  ./start_SatoshiShuffle.sh")
     print("\n💡 To keep the app running even after closing the terminal, use:")
     print("  nohup ./start_SatoshiShuffle.sh &")
+    print("\n📱 Once it's running, access the web interface at:")
+    print("  http://localhost:5001")
+    print("\nYou can use the web interface to configure your BlockClock devices,")
+    print("customize text options, and control the text rotation.")
 
+    print("\n💡 If you need to stop the app, use Ctrl+C.")
     print("\nEnjoy Satoshi Shuffle! 🚀")
-
-    # 🚀 Auto-start the web app after installation
-    import subprocess
-    print("\n🚀 Starting Satoshi Shuffle automatically...")
-    subprocess.Popen(["./start_SatoshiShuffle.sh"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
 
 if __name__ == "__main__":
