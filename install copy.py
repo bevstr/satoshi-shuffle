@@ -14,7 +14,6 @@ import shutil
 import platform
 import getpass
 import re
-import time
 
 # Colors for terminal output
 class Colors:
@@ -489,30 +488,10 @@ def install_python_packages():
 
     # Now install dependencies
     print_step("Installing required Python packages...")
-    
-    # Check for requirements.txt in the root directory first
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    root_requirements = os.path.join(current_dir, 'requirements.txt')
-    
-    if os.path.exists(root_requirements):
-        requirements_path = root_requirements
-    else:
-        # Fall back to webapp directory
-        requirements_path = os.path.join(current_dir, 'webapp', 'requirements.txt')
-    
-    print(f"DEBUG: Installing from {requirements_path}")
-    
-    if not os.path.exists(requirements_path):
-        print_error(f"Requirements file not found at {requirements_path}")
-        print_step("Creating a basic requirements file...")
-        
-        # Create a basic requirements file
-        with open(root_requirements, 'w') as f:
-            f.write("Flask==2.3.3\nrequests==2.32.3\nFlask-WTF==1.1.1\n")
-        
-        requirements_path = root_requirements
-    
-    success, output = run_command([sys.executable, "-m", "pip", "install", "-r", requirements_path], timeout=60)
+    webapp_requirements = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'webapp', 'requirements.txt')
+
+    print(f"DEBUG: Installing from {webapp_requirements}")
+    success, output = run_command([sys.executable, "-m", "pip", "install", "-r", webapp_requirements], timeout=60)
     print(f"DEBUG: Package install output: {output}")
 
     if not success:
@@ -521,6 +500,9 @@ def install_python_packages():
 
     print_success("Python packages installed successfully")
     return True
+
+
+
 
 def configure_blockclock():
     """Configure BlockClock devices interactively"""
@@ -662,7 +644,7 @@ def build_docker_image():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     
     # Run docker-compose build
-    success, output = run_command("docker-compose -f docker/docker-compose.yml build", cwd=current_dir)
+    success, output = run_command([sys.executable, "-m", "pip", "install", "-r", webapp_requirements])
 
     if not success:
         print_error(f"Failed to build Docker image: {output}")
@@ -705,68 +687,6 @@ def create_directory_structure():
     
     print_success("Directory structure created")
     return True
-
-def start_application():
-    """Start the application after installation"""
-    try:
-        print_step("Starting Satoshi Shuffle automatically...")
-        
-        # Get the current directory and Python executable
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        python_executable = sys.executable
-        
-        # First check if start script exists
-        start_script = os.path.join(current_dir, 'start_SatoshiShuffle.sh')
-        
-        if os.path.exists(start_script):
-            # Make the script executable
-            os.chmod(start_script, 0o755)
-            
-            # Create a simple shell script that redirects output properly
-            with open('temp_start.sh', 'w') as f:
-                f.write(f'''#!/bin/bash
-cd "{current_dir}"
-nohup ./start_SatoshiShuffle.sh > logs/startup.log 2>&1 &
-''')
-            os.chmod('temp_start.sh', 0o755)
-            
-            # Execute with proper output redirection
-            subprocess.call(['./temp_start.sh'])
-            os.remove('temp_start.sh')  # Clean up
-        else:
-            # Start the Python app directly
-            print_warning(f"Start script not found at {start_script} - starting Python app directly")
-            webapp_path = os.path.join(current_dir, 'webapp', 'blockclock_web.py')
-            
-            # Create a temporary shell script to start app in background
-            with open('temp_webapp_start.sh', 'w') as f:
-                f.write(f'''#!/bin/bash
-cd "{current_dir}"
-nohup {python_executable} {webapp_path} > logs/webapp.log 2>&1 &
-''')
-            os.chmod('temp_webapp_start.sh', 0o755)
-            
-            # Execute with proper output redirection
-            subprocess.call(['./temp_webapp_start.sh'])
-            os.remove('temp_webapp_start.sh')  # Clean up
-        
-        # Give it a moment to start
-        time.sleep(2)
-        
-        # Check if the process actually started
-        if platform.system() != "Windows":
-            ps_output = subprocess.check_output(["ps", "aux"]).decode()
-            if "blockclock_web.py" in ps_output:
-                print_success("Satoshi Shuffle started successfully!")
-            else:
-                print_warning("Application may not have started. Check logs/startup.log or logs/webapp.log")
-        
-        print("\n📱 Access the web interface at:")
-        print("  http://localhost:5001")
-        
-    except Exception as e:
-        print_error(f"Failed to start application: {str(e)}")
-        print_step("You can start it manually with: ./start_SatoshiShuffle.sh")
 
 def main():
     print_header("BlockClock Control - Installation")
@@ -822,17 +742,16 @@ def main():
     print_header("🚀 Installation Complete!")
 
     print("\n✅ Everything is set up!")
-    
-    # Start the application
-    start_application()
-    
-    print("\n💡 If you need to stop the app, use:")
-    print("  pkill -f blockclock_web.py")
-    print("\n💡 To start it again in the future, run:")
+    print("\nTo start the application, run:")
     print("  ./start_SatoshiShuffle.sh")
     print("\n💡 To keep the app running even after closing the terminal, use:")
     print("  nohup ./start_SatoshiShuffle.sh &")
+    print("\n📱 Once it's running, access the web interface at:")
+    print("  http://localhost:5001")
+    print("\nYou can use the web interface to configure your BlockClock devices,")
+    print("customize text options, and control the text rotation.")
 
+    print("\n💡 If you need to stop the app, use Ctrl+C.")
     print("\nEnjoy Satoshi Shuffle! 🚀")
     
 
