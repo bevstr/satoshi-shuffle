@@ -24,12 +24,32 @@ A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi S
 
 ## Installation Options
 
----------------------------------------------------------------------------------
 
-### 📦 OPTION 1: ONE-CLICK INSTALLATION (RECOMMENDED)
 
-Best for: Most users, especially those with limited technical experience.
-The easiest way to get started. This method guides you through setup with simple prompts, automatically checks requirements, and configures your system with minimal effort. Perfect if you just want the app working quickly without worrying about technical details.
+### 🐳 OPTION 1: DOCKER INSTALLATION (RECOMMENDED)
+
+If you havent used Docker give it a go, Its easy just go to [Docker Installation Guide](docs/installation-docker.md)
+
+Using Docker eliminates the need to install Python or any Python packages directly on your system.
+Cleanly isolates the application in a container without affecting your system. Provides consistent behavior across different operating systems and simplifies updates. Ideal if you already use Docker for other applications or want to avoid potential conflicts with existing software.
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/satoshi-shuffle.git
+cd satoshi-shuffle
+
+# Build and start the Docker container
+docker-compose -f docker/docker-compose.yml up -d
+```
+
+**Need help?** See the [Docker Installation Guide](docs/installation-docker.md) for detailed instructions.
+
+
+
+### 📦 OPTION 2: ONE-CLICK INSTALLATION 
+
+Helps users who dont want to try docker, which is a crazy thought, by running the install script.
+This method guides you through setup with simple prompts, automatically checks requirements, and configures your system with minimal effort. Perfect if you just want the app working quickly without worrying about technical details.
 
 ```bash
 # Clone the repository
@@ -44,27 +64,10 @@ python install.py
 
 ---------------------------------------------------------------------------------
 
-### 🐳 OPTION 2: DOCKER INSTALLATION
-
-Best for: Users familiar with Docker or those who want containerized isolation.
-Cleanly isolates the application in a container without affecting your system. Provides consistent behavior across different operating systems and simplifies updates. Ideal if you already use Docker for other applications or want to avoid potential conflicts with existing software.
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/satoshi-shuffle.git
-cd satoshi-shuffle
-
-# Build and start the Docker container
-docker-compose -f docker/docker-compose.yml up -d
-```
-
-**Need help?** See the [Docker Installation Guide](docs/installation-docker.md) for detailed instructions.
-
----------------------------------------------------------------------------------
 
 ### 🐍 OPTION 3: MANUAL PYTHON INSTALLATION
 
-Best for: Advanced users who want complete control over the installation.
+Best for: Advanced users who want complete control over the installation. But why bother just use Docker.
 Gives you direct access to all components for customization. You'll install dependencies yourself and have full visibility into the process. Choose this if you're comfortable with Python development, want to customize the code, or need to integrate with existing systems.
 
 ```bash
