@@ -327,7 +327,8 @@ def main():
 
     print("\n💡 If you need to stop the app, use Ctrl+C.")
     print("\nEnjoy Satoshi Shuffle! 🚀")
-    
+    print("")
+    print("")
 
 if __name__ == "__main__":
     try:
