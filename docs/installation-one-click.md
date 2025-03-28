@@ -102,12 +102,12 @@ cd satoshi-shuffle
 
 Once inside the **satoshi-shuffle** folder, run:  
 ```bash
-python install.py
+python3 install.py  # Mac/Linux
+py -3 install.py    # Windows
 ```
 or 
 ```bash
-python3 install.py  # Mac/Linux
-py -3 install.py    # Windows
+python install.py
 ```
 
 **If you have multiple Python versions installed**, use:  

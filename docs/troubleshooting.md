@@ -240,4 +240,4 @@ If you're still having issues:
 
 ✅ **Now that you’ve resolved your issue, continue with:**  
 - [Configuration Guide](configuration.md)  
-- [Managing the Web Interface](web-interface.md)  
+

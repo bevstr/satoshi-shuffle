@@ -3,7 +3,7 @@ Version 1.0 - March 22, 2025
 # Satoshi Shuffle Documentation
 
 ## Project Overview
-Satoshi Shuffle (also known as BlockClock Control) provides tools to control Coinkite BlockClock Mini/Micro devices by displaying custom text messages that rotate on a configurable schedule. The project has evolved from a bash script to a full web application with multiple deployment options.
+Satoshi Shuffle provides tools to control Coinkite BlockClock Mini/Micro devices by displaying custom text messages that rotate on a configurable schedule. The project has evolved from a bash script to a full web application with multiple deployment options.
 
 ## Installation Methods
 
@@ -36,7 +36,7 @@ This provides a middle ground - simpler than manual setup but still runs directl
 **Overview:** The Docker approach containerizes the entire application:
 - Users just need Docker installed on their system
 - Everything runs in an isolated container
-- Configuration is handled through mounted volumes
+- Configuration is done in web app
 - Updates can be applied by simply pulling a new image
 
 This is the most hands-off approach, ideal for users who just want the application to work without worrying about the technical details or potentially interfering with their system.
@@ -76,6 +76,7 @@ After installation, you can configure and use Satoshi Shuffle through:
 
 1. **Web Interface**: Access http://localhost:5001 (or configured port)
    - Control text rotation (start/stop)
+   - Send one off Custom Texts to Blocckclock
    - Configure device settings
    - Customize text options
    - View logs and status

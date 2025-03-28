@@ -33,7 +33,41 @@ For most home networks, the IP will typically be in the form of 192.168.1.x or 1
 ### Installation Options
 
 <details>
-<summary><b>1️⃣ One-Click Script Installation (Recommended for most users)</b></summary>
+<summary><b>1️⃣ Docker Installation (Recommended, Try it if you havn't its easy)</b></summary>
+
+For Docker-based installation, you'll need:
+
+✅ **Docker Engine** - [Docker installation guide](https://docs.docker.com/engine/install/)  
+✅ **Docker Compose** - Usually included with Docker Desktop  
+✅ **200MB+ free disk space** (for Docker images, volumes, and application)  
+✅ **Git** (recommended for downloading the repo)  
+
+**Note:** Using Docker eliminates the need to install Python or any Python packages directly on your system.
+
+**Basic Docker commands you'll use:**
+```bash
+# Build and start container
+docker-compose -f docker/docker-compose.yml up -d
+
+# Check container status
+docker ps | grep satoshi-shuffle
+
+# View logs
+docker logs satoshi-shuffle
+```
+
+**Advantages of Docker Installation:**
+- Isolated environment
+- Consistent across different systems
+- No Python setup required
+- Easy to update and maintain
+
+[Go to Docker Installation Guide](installation-docker.md)
+</details>
+
+
+<details>
+<summary><b>2️⃣ One-Click Script Installation </b></summary>
 
 The One-Click Script handles most dependencies automatically but requires:
 
@@ -57,7 +91,7 @@ The One-Click Script handles most dependencies automatically but requires:
 </details>
 
 <details>
-<summary><b>2️⃣ Standard Python Installation (For advanced users)</b></summary>
+<summary><b>3️⃣ Standard Python Installation (For advanced users)</b></summary>
 
 For direct Python installation, you'll need:
 
@@ -89,39 +123,6 @@ python3 -m pip install -r requirements.txt
 - Easier debugging and customization
 
 [Go to Python Installation Guide](installation-python.md)
-</details>
-
-<details>
-<summary><b>3️⃣ Docker Installation (For those familiar with containers)</b></summary>
-
-For Docker-based installation, you'll need:
-
-✅ **Docker Engine** - [Docker installation guide](https://docs.docker.com/engine/install/)  
-✅ **Docker Compose** - Usually included with Docker Desktop  
-✅ **200MB+ free disk space** (for Docker images, volumes, and application)  
-✅ **Git** (recommended for downloading the repo)  
-
-**Note:** Using Docker eliminates the need to install Python or any Python packages directly on your system.
-
-**Basic Docker commands you'll use:**
-```bash
-# Build and start container
-docker-compose -f docker/docker-compose.yml up -d
-
-# Check container status
-docker ps | grep satoshi-shuffle
-
-# View logs
-docker logs satoshi-shuffle
-```
-
-**Advantages of Docker Installation:**
-- Isolated environment
-- Consistent across different systems
-- No Python setup required
-- Easy to update and maintain
-
-[Go to Docker Installation Guide](installation-docker.md)
 </details>
 
 ---

@@ -50,8 +50,8 @@ You can configure Satoshi Shuffle in two ways:
 
 1. Click the **Timing** tab  
 2. Choose how often your custom text appears:  
-   - **Clock Refresh Time:** 5, 10, 15, 30, or 60 minutes  
-   - **Displays Between Custom Text:** Number of built-in screens before your text appears  
+   - **Clock Refresh Time:** 5, 10, 15, 30, or 60 minutes as chosen in BlockClock interface  
+   - **Displays Between Custom Text:** Number values you chose in BlockClock interface   
 3. The app will calculate how frequently text will show  
 
 ### Step 5: System Settings & Backup  
@@ -134,5 +134,4 @@ For more troubleshooting, visit the [Troubleshooting Guide](troubleshooting.md).
 ## ✅ Next Steps
 
 🚀 Now that you’ve configured Satoshi Shuffle:  
-- Start using the application → **[Web Interface Guide](docs/web-interface.md)**  
 - Need more help? → **[Troubleshooting Guide](docs/troubleshooting.md)**  
