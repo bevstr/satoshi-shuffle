@@ -48,6 +48,7 @@ def setup_logging(log_file=None):
     # Get the root logger and clean any existing handlers
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
+    logging.Formatter.converter = time.localtime
     
     # Remove existing handlers
     for handler in logger.handlers[:]:
