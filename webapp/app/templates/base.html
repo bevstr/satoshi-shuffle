@@ -1,151 +1,213 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Satoshi Shuffle{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    {% block head %}{% endblock %}
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="bi bi-clock"></i> Satoshi Shuffle
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
-                            <i class="bi bi-house"></i> Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_for('settings') %}active{% endif %}" href="{{ url_for('settings') }}">
-                            <i class="bi bi-gear"></i> Settings
-                        </a>
-                    </li>
-                </ul>
-                <div class="d-flex align-items-center">
-                    <label class="dark-mode-toggle me-2" title="Toggle Dark Mode">
-                        <i class="bi bi-sun"></i>
-                        <i class="bi bi-moon"></i>
-                        <input type="checkbox" id="darkModeToggle">
-                        <span class="dark-mode-slider"></span>
-                    </label>
-                </div>
-            </div>
-        </div>
-    </nav>
+<html data-theme="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   {% block title %}Satoshi Shuffle{% endblock %}
+  </title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
+  <!-- Favicon (browser tab icon) -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <!-- Web App Manifest -->
+  <link href="{{ url_for('static', filename='manifest.json') }}" rel="manifest"/>
+  <meta content="#ff9900" name="theme-color"/>
+  <!-- iOS Home Screen Icon -->
+  <link href="{{ url_for('static', filename='ss-icon-180x180.png') }}" rel="apple-touch-icon"/>
+  <!-- iOS Launch Behavior -->
+  <meta content="yes" name="apple-mobile-web-app-capable"/>
+  <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+  {% block head %}{% endblock %}
+ </head>
+ <body>
+  <div id="splash-screen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; justify-content:center; align-items:center; z-index:9999; transition: opacity 1s ease;">
+    <img
+      src="{{ url_for('static', filename='ss-icon-180x180.png') }}"
+      alt="Satoshi Shuffle"
+      style="
+        width: 240px;
+        height: 240px;
+        object-fit: cover;
+        border-radius: 20%;
+        border: 4px solid white;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        background-color: black;
+      "
+    >
 
-    <div class="container mt-4">
-        {% with messages = get_flashed_messages(with_categories=true) %}
+    </div>
+  <div id="app-content" style="opacity: 0; transition: opacity 1s ease;">
+   <!-- ✅ Custom Splash Screen -->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+     <a class="navbar-brand" href="{{ url_for('index') }}">
+      <i class="bi bi-clock">
+      </i>
+      Satoshi Shuffle
+     </a>
+     <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+      <span class="navbar-toggler-icon">
+      </span>
+     </button>
+     <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+       <li class="nav-item">
+        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
+         <i class="bi bi-house">
+         </i>
+         Home
+        </a>
+       </li>
+       <li class="nav-item">
+        <a class="nav-link {% if request.path == url_for('settings') %}active{% endif %}" href="{{ url_for('settings') }}">
+         <i class="bi bi-gear">
+         </i>
+         Settings
+        </a>
+       </li>
+      </ul>
+      <div class="d-flex align-items-center">
+       <label class="dark-mode-toggle me-2" title="Toggle Dark Mode">
+        <i class="bi bi-sun">
+        </i>
+        <i class="bi bi-moon">
+        </i>
+        <input id="darkModeToggle" type="checkbox"/>
+        <span class="dark-mode-slider">
+        </span>
+       </label>
+      </div>
+     </div>
+    </div>
+   </nav>
+   <div class="container mt-4">
+    {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            {% endfor %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show">
+     {{ message }}
+     <button class="btn-close" data-bs-dismiss="alert" type="button">
+     </button>
+    </div>
+    {% endfor %}
         {% endif %}
         {% endwith %}
 
         {% block content %}{% endblock %}
+   </div>
+   <footer class="footer mt-5 py-3 bg-light">
+    <div class="container text-center">
+     <!-- ✅ WORKING FOOTER ZAP BUTTON -->
+     <div class="d-flex flex-wrap justify-content-center align-items-center text-center">
+      <button class="btn btn-warning me-3 mb-2" data-npub="npub12gu8c6uee3p243gez6cgk76362admlqe72aq3kp2fppjsjwmm7eqj9fle6" data-relays="wss://relay.damus.io,wss://relay.snort.social,wss://nostr.wine,wss://relay.nostr.band" id="nostr-zap-target">
+       ⚡ Zap Me
+      </button>
+      <!-- Nostr Contact Link -->
+      <span class="text-muted w-100 text-break">
+       Reach Bevo on Nostr:
+       <a class="d-inline-block" href="https://njump.me/npub12gu8c6uee3p243gez6cgk76362admlqe72aq3kp2fppjsjwmm7eqj9fle6" target="_blank">
+        npub12gu8c6uee3p243gez6cgk76362admlqe72aq3kp2fppjsjwmm7eqj9fle6
+       </a>
+      </span>
+     </div>
+     <!-- Copyright Notice -->
+     <div class="mt-3">
+      <span class="text-muted">
+       Satoshi Shuffle &copy; 2025
+      </span>
+     </div>
     </div>
-
-    <footer class="footer mt-5 py-3 bg-light">
-        <div class="container text-center">
-    
-            <!-- ✅ WORKING FOOTER ZAP BUTTON -->
-            <div class="d-flex flex-wrap justify-content-center align-items-center text-center">
-                <button
-                    id="nostr-zap-target"
-                    data-npub="npub12gu8c6uee3p243gez6cgk76362admlqe72aq3kp2fppjsjwmm7eqj9fle6"
-                    data-relays="wss://relay.damus.io,wss://relay.snort.social,wss://nostr.wine,wss://relay.nostr.band"
-                    class="btn btn-warning me-3 mb-2"
-                >
-                    ⚡ Zap Me
-                </button>
-    
-                <!-- Nostr Contact Link -->
-                <span class="text-muted w-100 text-break">
-                    Reach Bevo on Nostr: 
-                    <a href="https://njump.me/npub12gu8c6uee3p243gez6cgk76362admlqe72aq3kp2fppjsjwmm7eqj9fle6" 
-                       target="_blank" class="d-inline-block">
-                        npub12gu8c6uee3p243gez6cgk76362admlqe72aq3kp2fppjsjwmm7eqj9fle6
-                    </a>
-                </span>
-            </div>
-    
-            <!-- Copyright Notice -->
-            <div class="mt-3">
-                <span class="text-muted">Satoshi Shuffle &copy; 2025</span>
-            </div>
-    
-        </div>
-    </footer>
-
-    <!-- Configuration Confirmation Modal -->
-    <div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="configModalLabel">Confirm BlockClock Configuration</h5>
-          </div>
-          <div class="modal-body">
-            <p>Please confirm your BlockClock settings are correct:</p>
-            
-            <div class="mb-3">
-              <h6><i class="bi bi-hdd-rack"></i> BlockClock Device IPs:</h6>
-              <div id="device-list" class="ms-3">
-                <!-- Device IPs will be populated here -->
-                <div class="text-danger">No devices configured!</div>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <h6><i class="bi bi-display"></i> Number of <strong>Values Displayed</strong> chosen in Blockclock interface, e.g. moscow_time etc:</h6>
-              <div id="displays-value" class="ms-3">
-                <!-- Value will be populated here -->
-                <span class="text-danger">Not configured!</span>
-              </div>
-            </div>
-            
-            <div class="mb-3">
-              <h6><i class="bi bi-clock"></i> <strong>Screen Update Rate</strong> chosen in Blockclock interface:</h6>
-              <div id="refresh-value" class="ms-3">
-                <!-- Value will be populated here -->
-                <span class="text-danger">Not configured!</span>
-              </div>
-            </div>
-            
-            <div class="alert alert-warning">
-              <i class="bi bi-exclamation-triangle"></i> These settings must match your BlockClock configuration for the app to work correctly.
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-warning" id="goToSettings">Settings Need Changing</button>
-            <button type="button" class="btn btn-success" id="confirmSettings">Settings Are Correct</button>
-          </div>
-        </div>
+   </footer>
+   <!-- Configuration Confirmation Modal -->
+   <div aria-hidden="true" aria-labelledby="configModalLabel" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="configModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+     <div class="modal-content">
+      <div class="modal-header">
+       <h5 class="modal-title" id="configModalLabel">
+        Confirm BlockClock Configuration
+       </h5>
       </div>
+      <div class="modal-body">
+       <p>
+        Please confirm your BlockClock settings are correct:
+       </p>
+       <div class="mb-3">
+        <h6>
+         <i class="bi bi-hdd-rack">
+         </i>
+         BlockClock Device IPs:
+        </h6>
+        <div class="ms-3" id="device-list">
+         <!-- Device IPs will be populated here -->
+         <div class="text-danger">
+          No devices configured!
+         </div>
+        </div>
+       </div>
+       <div class="mb-3">
+        <h6>
+         <i class="bi bi-display">
+         </i>
+         Number of
+         <strong>
+          Values Displayed
+         </strong>
+         chosen in Blockclock interface, e.g. moscow_time etc:
+        </h6>
+        <div class="ms-3" id="displays-value">
+         <!-- Value will be populated here -->
+         <span class="text-danger">
+          Not configured!
+         </span>
+        </div>
+       </div>
+       <div class="mb-3">
+        <h6>
+         <i class="bi bi-clock">
+         </i>
+         <strong>
+          Screen Update Rate
+         </strong>
+         chosen in Blockclock interface:
+        </h6>
+        <div class="ms-3" id="refresh-value">
+         <!-- Value will be populated here -->
+         <span class="text-danger">
+          Not configured!
+         </span>
+        </div>
+       </div>
+       <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle">
+        </i>
+        These settings must match your BlockClock configuration for the app to work correctly.
+       </div>
+      </div>
+      <div class="modal-footer">
+       <button class="btn btn-warning" id="goToSettings" type="button">
+        Settings Need Changing
+       </button>
+       <button class="btn btn-success" id="confirmSettings" type="button">
+        Settings Are Correct
+       </button>
+      </div>
+     </div>
     </div>
-    
-    <!-- ✅ Load Nostr Zap Script -->
-    <script src="https://cdn.jsdelivr.net/npm/nostr-zap@0.4.0"></script>
-
-    <!-- ✅ Bootstrap & Other Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-    
-    <!-- Dark Mode Script -->
-    <script>
-        $(document).ready(function() {
+   </div>
+   <!-- ✅ Load Nostr Zap Script -->
+   <script src="https://cdn.jsdelivr.net/npm/nostr-zap@0.4.0">
+   </script>
+   <!-- ✅ Bootstrap & Other Scripts -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+   </script>
+   <script src="https://code.jquery.com/jquery-3.6.3.min.js">
+   </script>
+   <!-- Dark Mode Script -->
+   <script>
+    $(document).ready(function() {
             // Check for saved theme preference or respect OS setting
             const savedTheme = localStorage.getItem('theme');
             const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -169,10 +231,9 @@
                 }
             });
         });
-    </script>
-
-<!-- Configuration Modal Logic -->
-<script>
+   </script>
+   <!-- Configuration Modal Logic -->
+   <script>
     // Configuration Modal Logic
     document.addEventListener('DOMContentLoaded', function() {
       // Function to check if the config has been confirmed
@@ -270,8 +331,28 @@
         configModal.show();
       }
     });
-  </script>
+   </script>
+   <!-- ✅ Custom Splash Screen Hide Script -->
+   <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        const app = document.getElementById('app-content');
+        if (splash && app) {
+          // 👇 Force browser to recognize initial opacity 0
+          void app.offsetWidth;
 
-    {% block scripts %}{% endblock %}
-</body>
+          // Trigger transitions
+          splash.style.opacity = '0';
+          app.style.opacity = '1';
+
+          setTimeout(() => splash.remove(), 1000); // match fade duration
+        }
+      }, 1500); // delay before transition
+    });
+
+   </script>
+   {% block scripts %}{% endblock %}
+  </div>
+ </body>
 </html>
