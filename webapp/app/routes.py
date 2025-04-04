@@ -485,6 +485,17 @@ def restore_config():
         })
 
 
+@app.route('/get_config_summary')
+def get_config_summary():
+    """Get a summary of the critical configuration settings"""
+    config = load_config()
+    
+    return jsonify({
+        'devices': config['devices'],
+        'clock_refresh_time': config['clock_refresh_time'],
+        'displays_between_text': config['displays_between_text']
+    })
+
 def load_config():
     """Load configuration from file"""
     config_file = app.config['DEFAULT_CONFIG_FILE']
@@ -713,7 +724,7 @@ def save_settings():
     """Save settings"""
     data = request.json
     save_config(data)
-    flash('Settings saved successfully!', 'success')
+    #flash('Settings saved successfully!', 'success')
     return jsonify({'success': True})
 
 @app.route('/start', methods=['POST'])

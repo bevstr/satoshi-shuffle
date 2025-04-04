@@ -661,3 +661,17 @@ html[data-theme="dark"] body .col-md-6 .list-group .list-group-item .badge.bg-pr
   [data-theme="dark"] .alert .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
   }
+  /* Modal dark mode styling */
+[data-theme="dark"] .modal-content {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #2d2d2d;
+  }
+  
+  [data-theme="dark"] .modal-header {
+    border-bottom-color: #2d2d2d;
+  }
+  
+  [data-theme="dark"] .modal-footer {
+    border-top-color: #2d2d2d;
+  }

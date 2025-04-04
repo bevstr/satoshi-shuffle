@@ -631,6 +631,31 @@ class BlockClockControl:
             self.logger.info("")  # Empty line
             self.logger.info("----------------------------------------")
 
+
+def is_valid_ip(ip_address):
+    """
+    Check if an IP address is valid and not a placeholder
+    Returns True if valid, False otherwise
+    """
+    # Check if it's not the placeholder
+    if not ip_address or "x.xxx" in ip_address:
+        return False
+    
+    # Basic IP format validation using regex
+    import re
+    ip_pattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
+    match = ip_pattern.match(ip_address)
+    
+    if not match:
+        return False
+    
+    # Check each octet is in the valid range (0-255)
+    for octet in match.groups():
+        if int(octet) > 255:
+            return False
+    
+    return True
+
 # This code only runs when the script is executed directly
 if __name__ == "__main__":
     # Set the sentinel to true - we're running as the main script
@@ -641,6 +666,20 @@ if __name__ == "__main__":
     
     # Create and run the BlockClock control
     blockclock = BlockClockControl(config_file)
+    
+    # Check for valid device IPs before proceeding
+    has_valid_ip = False
+    for device in blockclock.devices:
+        if is_valid_ip(device["ip"]):
+            has_valid_ip = True
+            break
+    
+    if not has_valid_ip:
+        blockclock.logger.error("❌ No valid IP addresses configured.")
+        blockclock.logger.error("🛠 Please edit your configuration file at: %s", config_file)
+        blockclock.logger.error("   Or use the web interface at http://localhost:5001/settings")
+        blockclock.logger.error("🛑 Exiting script.")
+        sys.exit(1)
     
     # Check if devices are reachable
     if not blockclock.check_devices():

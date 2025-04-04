@@ -89,6 +89,52 @@
     
         </div>
     </footer>
+
+    <!-- Configuration Confirmation Modal -->
+    <div id="configModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="configModalLabel">Confirm BlockClock Configuration</h5>
+          </div>
+          <div class="modal-body">
+            <p>Please confirm your BlockClock settings are correct:</p>
+            
+            <div class="mb-3">
+              <h6><i class="bi bi-hdd-rack"></i> BlockClock Device IPs:</h6>
+              <div id="device-list" class="ms-3">
+                <!-- Device IPs will be populated here -->
+                <div class="text-danger">No devices configured!</div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6><i class="bi bi-display"></i> Number of <strong>Values Displayed</strong> chosen in Blockclock interface, e.g. moscow_time etc:</h6>
+              <div id="displays-value" class="ms-3">
+                <!-- Value will be populated here -->
+                <span class="text-danger">Not configured!</span>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <h6><i class="bi bi-clock"></i> <strong>Screen Update Rate</strong> chosen in Blockclock interface:</h6>
+              <div id="refresh-value" class="ms-3">
+                <!-- Value will be populated here -->
+                <span class="text-danger">Not configured!</span>
+              </div>
+            </div>
+            
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle"></i> These settings must match your BlockClock configuration for the app to work correctly.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" id="goToSettings">Settings Need Changing</button>
+            <button type="button" class="btn btn-success" id="confirmSettings">Settings Are Correct</button>
+          </div>
+        </div>
+      </div>
+    </div>
     
     <!-- ✅ Load Nostr Zap Script -->
     <script src="https://cdn.jsdelivr.net/npm/nostr-zap@0.4.0"></script>
@@ -124,6 +170,107 @@
             });
         });
     </script>
+
+<!-- Configuration Modal Logic -->
+<script>
+    // Configuration Modal Logic
+    document.addEventListener('DOMContentLoaded', function() {
+      // Function to check if the config has been confirmed
+      function isConfigConfirmed() {
+        return localStorage.getItem('configConfirmed') === 'true';
+      }
+      
+      // Function to mark config as confirmed
+      function setConfigConfirmed() {
+        localStorage.setItem('configConfirmed', 'true');
+      }
+      
+      // Function to reset the confirmation state
+      function resetConfigConfirmation() {
+        localStorage.removeItem('configConfirmed');
+      }
+  
+      // Function to check if configuration is valid
+      function hasValidConfiguration() {
+        // Check if there's any valid configuration data
+        let valid = false;
+        
+        $.ajax({
+          url: '/get_config_summary',
+          type: 'GET',
+          async: false, // Use synchronous request for this check
+          success: function(response) {
+            // Check if there's at least one device with IP
+            valid = response.devices && 
+                    response.devices.length > 0 && 
+                    response.devices.some(device => device.ip && device.ip.trim() !== '');
+          }
+        });
+        
+        return valid;
+      }
+      
+      // Function to populate the modal with current settings
+      function populateConfigModal() {
+        // Fetch configuration data
+        $.ajax({
+          url: '/get_config_summary',
+          type: 'GET',
+          success: function(response) {
+            // Populate device list
+            if (response.devices && response.devices.length > 0) {
+              let deviceHtml = '';
+              response.devices.forEach(function(device) {
+                deviceHtml += `<div class="text-success"><strong>${device.name}:</strong> ${device.ip}</div>`;
+              });
+              $('#device-list').html(deviceHtml);
+            }
+            
+            // Populate displays between text
+            if (response.displays_between_text) {
+              $('#displays-value').html(`<span class="text-success">${response.displays_between_text}</span>`);
+            }
+            
+            // Populate refresh time
+            if (response.clock_refresh_time) {
+              const minutes = response.clock_refresh_time / 60;
+              $('#refresh-value').html(`<span class="text-success">${minutes} minutes (${response.clock_refresh_time} seconds)</span>`);
+            }
+          },
+          error: function() {
+            console.error('Failed to load configuration summary');
+          }
+        });
+      }
+      
+      // Define the modal element and create it using Bootstrap
+      const configModal = new bootstrap.Modal(document.getElementById('configModal'));
+      
+      // Handle "Settings Are Correct" button click
+      document.getElementById('confirmSettings').addEventListener('click', function() {
+        // Only set as confirmed if we have valid configuration
+        if (hasValidConfiguration()) {
+          setConfigConfirmed();
+          configModal.hide();
+        } else {
+          alert('You must configure at least one device with a valid IP address before continuing.');
+        }
+      });
+      
+      // Handle "Settings Need Changing" button click
+      document.getElementById('goToSettings').addEventListener('click', function() {
+        window.location.href = "{{ url_for('settings') }}";
+      });
+      
+      // Show modal on page load if not confirmed or no valid configuration exists
+      // and we're on the home page
+      if ((window.location.pathname === '/' || window.location.pathname === '') && 
+          (!isConfigConfirmed() || !hasValidConfiguration())) {
+        populateConfigModal();
+        configModal.show();
+      }
+    });
+  </script>
 
     {% block scripts %}{% endblock %}
 </body>
