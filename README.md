@@ -16,9 +16,11 @@
 - Easy-to-use web interface with dark mode support
 - Real-time monitoring of your BlockClock devices
 - Three installation options to suit your preference
-<br>
-<br>
-![Docker Compatible](https://img.shields.io/badge/docker-compatible-blue)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Made for LAN](https://img.shields.io/badge/made%20for-LAN-success)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![PWA Ready](https://img.shields.io/badge/PWA-ready-orange)
+
+### 🚀 Compatibility  
+![Docker Compatible](https://img.shields.io/badge/docker-compatible-blue)
+![Made for LAN](https://img.shields.io/badge/made%20for-LAN-success)
+![PWA Ready](https://img.shields.io/badge/PWA-ready-orange)
 
 [📹 Watch the WebApp Demo](https://v.nostr.build/zgTHMtswb6CRQ6cy.mp4)
 
