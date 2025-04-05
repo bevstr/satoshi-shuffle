@@ -610,8 +610,16 @@ $('#custom-text').on('keydown', function(e) {
                     let convertedLogs = rawLogs.split('\n').map(line => {
                         const match = line.match(/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\](.*)$/);
                         if (match) {
-                            let utcTime = new Date(match[1] + ' UTC');
-                            let localTime = utcTime.toLocaleString();
+                            let utcParts = match[1].split(/[- :]/);
+                            let utcDate = new Date(Date.UTC(
+                                parseInt(utcParts[0]),
+                                parseInt(utcParts[1]) - 1,
+                                parseInt(utcParts[2]),
+                                parseInt(utcParts[3]),
+                                parseInt(utcParts[4]),
+                                parseInt(utcParts[5])
+                            ));
+                            let localTime = utcDate.toLocaleString();
                             return `[${localTime}]${match[2]}`;
                         } else {
                             return line;
