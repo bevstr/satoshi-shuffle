@@ -606,16 +606,28 @@ $('#custom-text').on('keydown', function(e) {
         function fetchLogs() {
             $.get('/logs', function(data) {
                 if (data.success) {
-                    $('#log-content').text(data.logs || 'No logs available');
+                    let rawLogs = data.logs || '';
+                    let convertedLogs = rawLogs.split('\n').map(line => {
+                        const match = line.match(/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\](.*)$/);
+                        if (match) {
+                            let utcTime = new Date(match[1] + ' UTC');
+                            let localTime = utcTime.toLocaleString();
+                            return `[${localTime}]${match[2]}`;
+                        } else {
+                            return line;
+                        }
+                    }).join('\n');
+
+                    $('#log-content').text(convertedLogs);
                 } else {
                     $('#log-content').text('Error loading logs: ' + data.logs);
                 }
-                
+
                 // Scroll to bottom of log container
                 const logContainer = document.querySelector('.log-container');
                 logContainer.scrollTop = logContainer.scrollHeight;
             });
-        }
+}
 
         // Fetch logs on page load
         fetchLogs();
