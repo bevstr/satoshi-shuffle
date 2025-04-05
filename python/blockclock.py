@@ -19,11 +19,6 @@ import subprocess
 import re
 from datetime import datetime
 
-class LocalTimeFormatter(logging.Formatter):
-    def converter(self, timestamp):
-        return time.localtime(timestamp)
-
-
 # Sentinel to prevent multiple executions
 _BLOCKCLOCK_LOADED = False
 
@@ -61,8 +56,7 @@ def setup_logging(log_file=None):
     # Set up file handler with immediate flushing
     try:
         file_handler = logging.FileHandler(log_file, mode='a')
-        file_formatter = LocalTimeFormatter("[%(asctime)s] %(message)s", "%Y-%m-%d %H:%M:%S")
-        file_formatter.converter = time.localtime
+        file_formatter = logging.Formatter("[%(asctime)s] %(message)s", "%Y-%m-%d %H:%M:%S")
         file_handler.setFormatter(file_formatter)
         file_handler.setLevel(logging.INFO)
         logger.addHandler(file_handler)
@@ -81,8 +75,7 @@ def setup_logging(log_file=None):
     
     # Set up console handler
     console_handler = logging.StreamHandler()
-    console_formatter = LocalTimeFormatter("[%(asctime)s] %(message)s", "%Y-%m-%d %H:%M:%S")
-    console_formatter.converter = time.localtime
+    console_formatter = logging.Formatter("[%(asctime)s] %(message)s", "%Y-%m-%d %H:%M:%S")
     console_handler.setFormatter(console_formatter)
     console_handler.setLevel(logging.INFO)
     logger.addHandler(console_handler)
