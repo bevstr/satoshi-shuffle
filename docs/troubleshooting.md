@@ -10,7 +10,7 @@ This guide provides solutions to common issues when using Satoshi Shuffle. **Fol
 
 ### **Web Interface Not Accessible**  
 
-**Symptoms:** Cannot access `http://localhost:5001`  
+**Symptoms:** Cannot access `http://localhost:5010`  
 
 ✅ **Fix Steps:**  
 1. **Check if the application is running:**  
@@ -27,7 +27,7 @@ This guide provides solutions to common issues when using Satoshi Shuffle. **Fol
 
 3. **Check firewall settings:**  
    ```bash
-   sudo ufw allow 5001  # Linux users
+   sudo ufw allow 5010  # Linux users
    ```
 
 
@@ -69,7 +69,7 @@ This guide provides solutions to common issues when using Satoshi Shuffle. **Fol
 
 ✅ **Fix Steps:**  
 1. **Check if rotation is active in the Web UI**  
-   - Open `http://localhost:5001`  
+   - Open `http://localhost:5010`  
    - Ensure "Text Rotation" is set to **ON**  
 
 2. **Verify Text Settings:**  

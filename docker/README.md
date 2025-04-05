@@ -38,7 +38,7 @@ satoshi-shuffle/
 
 3. Open your web browser and navigate to:
    ```
-   http://localhost:5001
+   http://localhost:5010
    ```
 
 ## Configuration

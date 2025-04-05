@@ -94,7 +94,7 @@ python webapp/blockclock_web.py
 
 Once the application is running, open your web browser and visit:
 ```
-http://localhost:5001
+http://localhost:5010
 ```
 
 ## Setting Up Your BlockClock Devices

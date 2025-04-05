@@ -677,7 +677,7 @@ if __name__ == "__main__":
     if not has_valid_ip:
         blockclock.logger.error("❌ No valid IP addresses configured.")
         blockclock.logger.error("🛠 Please edit your configuration file at: %s", config_file)
-        blockclock.logger.error("   Or use the web interface at http://localhost:5001/settings")
+        blockclock.logger.error("   Or use the web interface at http://localhost:5010/settings")
         blockclock.logger.error("🛑 Exiting script.")
         sys.exit(1)
     

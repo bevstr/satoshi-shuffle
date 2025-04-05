@@ -20,7 +20,7 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 # Expose the port the app runs on
-EXPOSE 5001
+EXPOSE 5010
 
 # Create volumes for persistent data
 VOLUME ["/app/logs", "/app/config"]

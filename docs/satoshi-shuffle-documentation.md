@@ -74,7 +74,7 @@ satoshi-shuffle/
 
 After installation, you can configure and use Satoshi Shuffle through:
 
-1. **Web Interface**: Access http://localhost:5001 (or configured port)
+1. **Web Interface**: Access http://localhost:5010 (or configured port)
    - Control text rotation (start/stop)
    - Send one off Custom Texts to Blocckclock
    - Configure device settings
@@ -91,38 +91,38 @@ Detailed usage instructions are available in the [Configuration Guide](configura
 ## Port Configuration
 
 ### Default Port
-Satoshi Shuffle uses **port 5001** by default for its web interface. This choice was made because the commonly used port 5000 is often occupied by other services (especially on macOS where AirPlay Receiver uses port 5000).
+Satoshi Shuffle uses **port 5010** by default for its web interface. This choice was made because the commonly used port 5000 is often occupied by other services (especially on macOS where AirPlay Receiver uses port 5000).
 
 ### Troubleshooting Port Issues
 
-If you encounter an error message like "Address already in use" when starting the application, it means port 5001 is already being used by another application on your system.
+If you encounter an error message like "Address already in use" when starting the application, it means port 5010 is already being used by another application on your system.
 
 #### How to Change the Port
 
 1. **Basic Python Installation**:
    Edit the `webapp/blockclock_web.py` file and change the port number:
    ```python
-   app.run(debug=False, host='0.0.0.0', port=5001, use_reloader=True)
+   app.run(debug=False, host='0.0.0.0', port=5010, use_reloader=True)
    ```
-   For example, change `port=5001` to `port=5002` or another available port.
+   For example, change `port=5010` to `port=5011` or another available port.
 
 2. **One-Click Script Installation**:
-   The script handles port conflicts automatically by testing if port 5001 is available, and if not, moving to 5002, 5003, etc. until it finds an available port. If installation completes but the web interface isn't accessible, check the logs to see which port was actually used.
+   The script handles port conflicts automatically by testing if port 5010 is available, and if not, moving to 5002, 5003, etc. until it finds an available port. If installation completes but the web interface isn't accessible, check the logs to see which port was actually used.
 
 3. **Docker Installation**:
    Edit the `docker-compose.yml` file and change the port mapping:
    ```yaml
    ports:
-     - "5001:5001"
+     - "5010:5010"
    ```
    
    To use a different port on the host, change the first number:
    ```yaml
    ports:
-     - "5002:5001"
+     - "5011:5010"
    ```
    
-   This maps port 5002 on the host to port 5001 inside the container.
+   This maps port 5011 on the host to port 5010 inside the container.
 
 ## Common Issues and Troubleshooting
 

@@ -6,10 +6,10 @@ echo "✅ Satoshi Shuffle Pre Lauch..."
 echo "✅ Gettin' Shit Organized"
 echo "=========================================================="
 
-# Kill any existing processes using port 5001
-if lsof -ti:5001 >/dev/null; then
-    echo "⚠️  Terminating existing processes using port 5001 and other crap!..."
-    lsof -ti:5001 | xargs kill
+# Kill any existing processes using port 5010
+if lsof -ti:5010 >/dev/null; then
+    echo "⚠️  Terminating existing processes using port 5010 and other crap!..."
+    lsof -ti:5010 | xargs kill
     sleep 1
 fi
 
@@ -19,7 +19,7 @@ echo "=========================================================="
 echo "Satoshi Shuffle lift off! 🚀"
 echo "=========================================================="
 echo ""
-echo "📱 Access the web interface at: http://localhost:5001"
+echo "📱 Access the web interface at: http://localhost:5010"
 echo "📊 The app will start automatically."
 echo "   You can monitor and control it from the web interface."
 echo ""
@@ -51,8 +51,8 @@ cleanup() {
     # Kill all Python processes containing 'blockclock'
     pkill -f blockclock
     
-    # Kill any processes using port 5001
-    lsof -ti:5001 | xargs kill -9 2>/dev/null || true
+    # Kill any processes using port 5010
+    lsof -ti:5010 | xargs kill -9 2>/dev/null || true
     
     # Kill all child processes
     pkill -P $$ 2>/dev/null || true
@@ -78,7 +78,7 @@ sleep 3
 # Automatically start the rotation via curl
 echo "🔄 Automatically starting Satoshi Shuffle..."
 echo ""
-curl -s -X POST http://localhost:5001/start > /dev/null
+curl -s -X POST http://localhost:5010/start > /dev/null
 
 # Wait for the Flask process
 wait $FLASK_PID
