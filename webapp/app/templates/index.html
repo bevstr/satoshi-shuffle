@@ -619,7 +619,17 @@ $('#custom-text').on('keydown', function(e) {
                                 parseInt(utcParts[4]),
                                 parseInt(utcParts[5])
                             ));
-                            let localTime = utcDate.toLocaleString();
+                            let localTime = utcDate.toLocaleString(undefined, {
+                                year: 'numeric',
+                                month: 'short',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: false
+                            });
+
+
                             return `[${localTime}]${match[2]}`;
                         } else {
                             return line;
