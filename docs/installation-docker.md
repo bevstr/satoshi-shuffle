@@ -143,6 +143,44 @@ docker logs -f satoshi-shuffle
 ```bash
 docker exec -it satoshi-shuffle /bin/bash
 ```
+<details>
+<summary><strong>🔄 How to Update the App Later</strong></summary>
+
+If you've already installed Satoshi Shuffle and want to update it to the latest version from GitHub, just follow these steps:
+
+1. **Open a terminal inside your container** (or SSH into it if you're running it remotely).
+
+2. **Navigate to the `docker` folder** inside the app directory:
+
+   ```bash
+   cd docker
+   ```
+
+3. **Run the update script** to automatically pull the latest changes and rebuild the app:
+
+   ```bash
+   bash update.sh
+   ```
+      ```bash
+   # Or if you've made it executable: ./update.sh
+   ```
+
+
+This script will:
+- 🧠 Pull the latest code from the current Git branch
+- 🔨 Rebuild the Docker container
+- 🚀 Restart the app with the new changes
+
+Once complete, open your browser and go to either:
+
+- `http://localhost:5001` (if you're running the container on your local machine)
+- or `http://<container-ip>:5001` (replace `<container-ip>` with the actual IP address of your container)
+
+Then click **Play** to start the app. ✅
+
+</details>
+
+
 
 ---
 
