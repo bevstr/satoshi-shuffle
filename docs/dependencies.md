@@ -157,7 +157,7 @@ python3 -m pip install -r requirements.txt
 
 Your system must allow communication with your BlockClock:
 
-✅ **Port 5010** must be available on your system (used by the web interface)  
+✅ **Port 5001** must be available on your system (used by the web interface)  
 ✅ **Outgoing HTTP requests** must be allowed to reach your BlockClock  
 ✅ **No firewall blocks** between your computer and the BlockClock  
 
@@ -166,12 +166,12 @@ Your system must allow communication with your BlockClock:
 # Check if your BlockClock is reachable
 ping 192.168.1.100  # Replace with your BlockClock's IP
 
-# Check if port 5010 is available on your system
-lsof -i :5010  # On macOS/Linux
-netstat -ano | findstr :5010  # On Windows
+# Check if port 5001 is available on your system
+lsof -i :5001  # On macOS/Linux
+netstat -ano | findstr :5001  # On Windows
 ```
 
-If port 5010 is already in use, you can change the port in the configuration.
+If port 5001 is already in use, you can change the port in the configuration.
 </details>
 
 ---

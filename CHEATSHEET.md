@@ -119,7 +119,7 @@ launchctl list | grep com.satoshi-shuffle
 ### Web Server Check
 ```bash
 # Check if web server is responding
-curl -I http://localhost:5010
+curl -I http://localhost:5001
 ```
 
 ## 📝 Log File Operations
@@ -267,11 +267,11 @@ docker-compose -f docker/docker-compose.yml up -d --build
 
 ### Check Port Usage
 ```bash
-# Check if port 5010 is in use
-lsof -i :5010
+# Check if port 5001 is in use
+lsof -i :5001
 
 # Alternative method
-netstat -tuln | grep 5010
+netstat -tuln | grep 5001
 ```
 
 ### Change Port (Python Installation)
@@ -280,7 +280,7 @@ netstat -tuln | grep 5010
 nano webapp/blockclock_web.py
 
 # Find this line and change port number:
-# app.run(debug=False, host='0.0.0.0', port=5010, use_reloader=True)
+# app.run(debug=False, host='0.0.0.0', port=5001, use_reloader=True)
 ```
 
 ### Change Port (Docker Installation)
@@ -289,7 +289,7 @@ nano webapp/blockclock_web.py
 nano docker/docker-compose.yml
 
 # Change port mapping, e.g., from:
-# "5010:5010" to "5011:5010"
+# "5001:5001" to "5002:5001"
 ```
 
 ## 🔒 Service Management

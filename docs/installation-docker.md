@@ -96,14 +96,14 @@ docker-compose -f docker/docker-compose.yml up -d
 💪 **This command will:**  
 - Build the Docker image  
 - Start the container in the background  
-- Expose the web interface on port `5010`  
+- Expose the web interface on port `5001`  
 
 ---
 
 ### 5️⃣ Configure Your Settings in the Web App
 Once the container is running, open your browser and go to:  
 ```
-http://localhost:5010
+http://localhost:5001
 ```
 
 Here you **MUST configure the variables** before using the app. For more detailed information, refer to the [Configuration Guide](docs/configuration.md).
@@ -173,8 +173,8 @@ This script will:
 
 Once complete, open your browser and go to either:
 
-- `http://localhost:5010` (if you're running the container on your local machine)
-- or `http://<container-ip>:5010` (replace `<container-ip>` with the actual IP address of your container)
+- `http://localhost:5001` (if you're running the container on your local machine)
+- or `http://<container-ip>:5001` (replace `<container-ip>` with the actual IP address of your container)
 
 Then click **Play** to start the app. ✅
 
@@ -192,12 +192,12 @@ If you encounter any issues:
 systemctl status docker  # Linux
 ```
 
-### **2️⃣ Port Conflict (Port 5010 Already in Use)**
+### **2️⃣ Port Conflict (Port 5001 Already in Use)**
 - Open **`docker-compose.yml`**  
 - Change this line:
   ```yaml
   ports:
-    - "5011:5010"
+    - "5002:5001"
   ```
 - Restart the container.
 
@@ -211,7 +211,7 @@ docker logs satoshi-shuffle
 
 ## ✅ Next Steps
 🚀 Now that you’ve installed Satoshi Shuffle:  
-- **Configure your settings in the web interface** (http://localhost:5010)  
+- **Configure your settings in the web interface** (http://localhost:5001)  
 - **Explore all features inside the web app**  
 - **Need more help?** Check the [Troubleshooting Guide](docs/troubleshooting.md)  
 

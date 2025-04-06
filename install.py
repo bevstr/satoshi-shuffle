@@ -321,7 +321,7 @@ def main():
     print("\n💡 To keep the app running even after closing the terminal, use:")
     print("  nohup ./start_SatoshiShuffle.sh &")
     print("\n📱 Once it's running, access the web interface at:")
-    print("  http://localhost:5010")
+    print("  http://localhost:5001")
     print("\nYou can use the web interface to configure your BlockClock devices,")
     print("customize text options, and control the text rotation.")
 
