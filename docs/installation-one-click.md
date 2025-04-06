@@ -217,7 +217,7 @@ To verify your autostart configuration:
 
 1. **Restart your computer**
 2. **Wait about 1-2 minutes** after login for the application to start
-3. **Open your browser** and navigate to `http://localhost:5001`
+3. **Open your browser** and navigate to `http://localhost:5010`
 4. **Check the logs** if the web interface isn't responding:
    ```bash
    cat logs/cron.log

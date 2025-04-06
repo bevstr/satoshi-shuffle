@@ -18,7 +18,7 @@ You can configure Satoshi Shuffle in two ways:
 ### Step 1: Open the Web Interface  
 
 1. Open your **web browser**  
-2. Go to `http://localhost:5001`  
+2. Go to `http://localhost:5010`  
 3. Click **Settings** in the top menu  
 
 ### Step 2: Add BlockClock Devices  

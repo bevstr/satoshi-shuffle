@@ -8,7 +8,7 @@ services:
     container_name: satoshi-shuffle
     restart: unless-stopped
     ports:
-      - "5001:5001"
+      - "5010:5010"
     volumes:
       - ../config:/app/config
       - ../logs:/app/logs
