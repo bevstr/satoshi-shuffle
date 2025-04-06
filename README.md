@@ -1,21 +1,20 @@
 # Satoshi Shuffle 
 
-## Features - What is it?
+A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate in sync with your regular BlockClock displays. Text is chosen randomley from your configurable list.
 
-- Manage multiple BlockClock devices from a single interface
+
+## Features
+
+- Manage upto 5 BlockClock devices from a single interface
 - Configure custom text messages that appear between regular BlockClock displays
 - Easy-to-use web interface with dark mode support
 - Real-time monitoring of your BlockClock devices
+- Progressive Web App (PWA) support buil in 
+- Send one time TEXT to your devices
+- In app setting adjustments
+- Cinfiguration Backup/Import ability
 - Three installation options to suit your preference
-# Satoshi Shuffle 
-
-## Features - What is it?
-
-- Manage multiple BlockClock devices from a single interface
-- Configure custom text messages that appear between regular BlockClock displays
-- Easy-to-use web interface with dark mode support
-- Real-time monitoring of your BlockClock devices
-- Three installation options to suit your preference
+- And much more
 
 ### 🚀 Compatibility  
 ![Docker Compatible](https://img.shields.io/badge/docker-compatible-blue)
@@ -36,11 +35,6 @@ See [Dependencies List](docs/dependencies.md) for a complete list of requirement
 [📹 Watch the WebApp Demo](https://v.nostr.build/zgTHMtswb6CRQ6cy.mp4)
 
 ![BlockClock Control](Images/Dashboard.png)
-
-
-A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate on a configurable schedule.
-
-
 
 ## Installation Options
 
