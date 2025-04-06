@@ -1,6 +1,6 @@
 # Satoshi Shuffle 
 
-A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate in sync with your regular BlockClock displays. Text is chosen randomley from your configurable list.
+A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate in sync with your regular BlockClock displays. Text is chosen randomly from your configurable list.
 
 
 ## Features
@@ -9,10 +9,10 @@ A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi S
 - Configure custom text messages that appear between regular BlockClock displays
 - Easy-to-use web interface with dark mode support
 - Real-time monitoring of your BlockClock devices
-- Progressive Web App (PWA) support buil in 
+- Progressive Web App (PWA) support built-in 
 - Send one time TEXT to your devices
 - In app setting adjustments
-- Cinfiguration Backup/Import ability
+- Configuration Backup/Import ability
 - Three installation options to suit your preference
 - And much more
 
@@ -42,14 +42,14 @@ See [Dependencies List](docs/dependencies.md) for a complete list of requirement
 
 ### 🐳 OPTION 1: DOCKER INSTALLATION (RECOMMENDED)
 
-If you havent used Docker give it a go, Its easy just go to [Docker Installation Guide](docs/installation-docker.md)
+If you havent used Docker give it a go, Its easy.... [Docker Installation Guide](docs/installation-docker.md)
 
 Using Docker eliminates the need to install Python or any Python packages directly on your system.
 Cleanly isolates the application in a container without affecting your system. Provides consistent behavior across different operating systems and simplifies updates. Ideal if you already use Docker for other applications or want to avoid potential conflicts with existing software.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/satoshi-shuffle.git
+git clone https://github.com/bevstr/satoshi-shuffle.git
 cd satoshi-shuffle
 
 # Build and start the Docker container
