@@ -22,17 +22,8 @@
 ![Made for LAN](https://img.shields.io/badge/made%20for-LAN-success)
 ![PWA Ready](https://img.shields.io/badge/PWA-ready-orange)
 
-[📹 Watch the WebApp Demo](https://v.nostr.build/zgTHMtswb6CRQ6cy.mp4)
-
-![BlockClock Control](Images/Dashboard.png)
-
 ## Prerequisites
 
-[📹 Watch the WebApp Demo](https://v.nostr.build/zgTHMtswb6CRQ6cy.mp4)
-
-![BlockClock Control](Images/Dashboard.png)
-
-## Prerequisites
 
 - Python 3.6 or higher
 - pip (Python package manager)
@@ -41,6 +32,11 @@
 - Administrator/sudo privileges (for service installation)
 
 See [Dependencies List](docs/dependencies.md) for a complete list of requirements.
+
+[📹 Watch the WebApp Demo](https://v.nostr.build/zgTHMtswb6CRQ6cy.mp4)
+
+![BlockClock Control](Images/Dashboard.png)
+
 
 A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi Shuffle displays custom text messages on your BlockClock that rotate on a configurable schedule.
 
