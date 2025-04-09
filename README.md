@@ -67,7 +67,7 @@ This method guides you through setup with simple prompts, automatically checks r
 
 ```bash
 # Clone the repository
-git clone https://github.com/bevstr/satoshi-shuffle.git
+git clone https://github.com/yourusername/satoshi-shuffle.git
 cd satoshi-shuffle
 
 # Run the installation script and follow the prompts
@@ -86,7 +86,7 @@ Gives you direct access to all components for customization. You'll install depe
 
 ```bash
 # Clone the repository
-git clone https://github.com/bevstr/satoshi-shuffle.git
+git clone https://github.com/yourusername/satoshi-shuffle.git
 cd satoshi-shuffle
 
 # Install dependencies
