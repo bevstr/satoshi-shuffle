@@ -738,13 +738,13 @@ def start():
 
 @app.route('/stop', methods=['POST'])
 def stop():
-    """Stop text rotation"""
+    """Stop text rotation in background to prevent UI timeouts"""
     try:
-        if stop_rotation():
-            return jsonify({'success': True, 'active': False})
-        else:
-            flash('Failed to stop text rotation!', 'danger')
-            return jsonify({'success': False, 'error': 'Failed to stop text rotation'})
+        def background_stop():
+            stop_rotation()
+
+        threading.Thread(target=background_stop).start()
+        return jsonify({'success': True, 'active': False})
     except Exception as e:
         logger.error(f"❌ Error in stop endpoint: {str(e)}")
         return jsonify({'success': False, 'error': str(e)})
@@ -987,152 +987,137 @@ def current_display():
 def send_text():
     """Send a custom text to devices"""
     global rotation_active, blockclock_process, first_refresh_detected, monitoring_message, monitoring_start_time, last_manual_text_time
-    
+
     # Check if rotation is active
     if not rotation_active:
         return jsonify({
             'success': False,
             'message': 'BlockClock rotation is not running. Please start rotation first.'
         })
-    
+
     # Check rate limit
     rate_limit_ok, wait_time = check_rate_limit()
     if not rate_limit_ok:
-        # Rate limit exceeded, return error with wait time
         return jsonify({
             'success': False,
             'rate_limited': True,
             'wait_time': int(wait_time),
             'message': f'Please wait {int(wait_time)} seconds before sending another text.'
         })
-    
+
     data = request.json
     text = data.get('text', '')
-    
+
     if not text.strip():
         return jsonify({
             'success': False,
             'message': 'Please enter text to send'
         })
-    
+
     try:
-        # Log that we're sending a one-time text
         logger.info("")
         logger.info(f"📱 Manual one-time text requested: \"{text}\"")
         logger.info("")
 
-        # Instead of creating a new instance, we'll call the API directly for each device
-        # This avoids creating a parallel process
         config_file = app.config['DEFAULT_CONFIG_FILE']
-        
-        # Load devices from config
         devices = []
+
         with open(config_file, 'r') as f:
             config_content = f.read()
-            
-        # Parse devices from the config - reuse the same code pattern from load_config()
-        for i in range(1, 6):  # Check for up to 5 devices
-            device_name_key = f"DEVICE_{i}_NAME"
-            device_ip_key = f"DEVICE_{i}_IP"
-            device_password_key = f"DEVICE_{i}_PASSWORD"
-            
-            name_match = device_name_key + '="([^"]*)"'
-            ip_match = device_ip_key + '="?([^"]*)"?'
-            password_match = device_password_key + '="?([^"]*)"?'
-            
-            name = re.search(name_match, config_content)
-            ip = re.search(ip_match, config_content)
-            password = re.search(password_match, config_content)
-            
-            if ip and ip.group(1).strip():
-                device = {
-                    'name': name.group(1) if name else f"Device {i}",
-                    'ip': ip.group(1),
-                    'password': password.group(1) if password else ""
-                }
-                devices.append(device)
-        
+
+        for i in range(1, 6):
+            name_match = re.search(f'DEVICE_{i}_NAME="([^"]*)"', config_content)
+            ip_match = re.search(f'DEVICE_{i}_IP="?([^"]*)"?', config_content)
+            password_match = re.search(f'DEVICE_{i}_PASSWORD="?([^"]*)"?', config_content)
+
+            if ip_match and ip_match.group(1).strip():
+                devices.append({
+                    'name': name_match.group(1) if name_match else f"Device {i}",
+                    'ip': ip_match.group(1),
+                    'password': password_match.group(1) if password_match else ""
+                })
+
         if not devices:
             logger.error("❌ No devices configured for manual text send")
-            return jsonify({
-                'success': False,
-                'message': 'No devices configured'
-            })
-        
-        # Check if at least one device is reachable
-        any_reachable = False
-        for device in devices:
-            ping_command = ["ping", "-c", "1", "-W", "2", device['ip']]
-            try:
-                result = subprocess.run(ping_command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                if result.returncode == 0:
-                    any_reachable = True
-                    break
-            except Exception as e:
-                continue
-        
+            return jsonify({'success': False, 'message': 'No devices configured'})
+
+        any_reachable = any(
+            subprocess.run(["ping", "-c", "1", "-W", "2", d['ip']],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+            for d in devices
+        )
+
         if not any_reachable:
             logger.error("❌ No devices reachable for manual text send")
-            return jsonify({
-                'success': False,
-                'message': 'No devices are reachable'
-            })
-        
-        # Send text directly to each device without creating a new BlockClockControl instance
-        for device in devices:
-            name = device["name"]
-            ip = device["ip"]
-            password = device["password"]
-            
-            # Prepare API URL
-            url = f"http://{ip}/api/show/text/{text}"
-            
-            try:
-                # Make the request
-                if password:
-                    response = requests.get(url, auth=("", password), timeout=5)
-                else:
-                    response = requests.get(url, timeout=5)
-                
-                # Log the text send
-                logger.info(f"✅ [{name}] updated with one-time text: \"{text}\"")
-            except Exception as e:
-                logger.error(f"❌ Error sending text to {name}: {str(e)}")
-        
-        # After sending text, restart the app process
-        logger.info("🔄 Restarting background process to maintain synchronization")
+            return jsonify({'success': False, 'message': 'No devices are reachable'})
 
+        for device in devices:
+            url = f"http://{device['ip']}/api/show/text/{text}"
+            try:
+                if device["password"]:
+                    requests.get(url, auth=("", device["password"]), timeout=5)
+                else:
+                    requests.get(url, timeout=5)
+                logger.info(f"✅ [{device['name']}] updated with one-time text: \"{text}\"")
+            except Exception as e:
+                logger.error(f"❌ Error sending text to {device['name']}: {str(e)}")
+
+        logger.info("🔄 Restarting background process to maintain synchronization")
         logger.info("")
         logger.info("==================================================")
         logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
         logger.info("==================================================")
         logger.info("")
-        
-        # Stop all processes
+
         stop_rotation()
-        
-        # Wait a moment to ensure clean shutdown
         time.sleep(1)
-        
-        # Start new process with updated path
+
         script_path = os.path.join(project_root, 'python', 'blockclock.py')
         logger.info("▶️  Starting new background process")
         blockclock_process = subprocess.Popen(['python3', script_path, config_file])
         logger.info("✅ New process started successfully")
-        
-        # Reset flags
+
         first_refresh_detected = False
         monitoring_message = "⏳ Waiting for first refresh to synchronize..."
         monitoring_start_time = time.time()
         rotation_active = True
-        
-        # Update the rate limit timestamp
         last_manual_text_time = time.time()
-        
+
         return jsonify({
             'success': True,
             'message': f'Text "{text}" sent successfully (restarting app to maintain sync)'
         })
+
+    except Exception as e:
+        logger.error(f"❌ Error in send_text: {str(e)}")
+        return jsonify({'success': False, 'message': str(e)})
+def restart_script():
+    logger.info("🔄 Restarting background process to maintain synchronization")
+    logger.info("")
+    logger.info("==================================================")
+    logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
+    logger.info("==================================================")
+    logger.info("")
+    
+    stop_rotation()
+    time.sleep(1)
+    
+    script_path = os.path.join(project_root, 'python', 'blockclock.py')
+    logger.info("▶️  Starting new background process")
+    global blockclock_process
+    blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+    logger.info("✅ New process started successfully")
+
+    # Reset flags
+    global first_refresh_detected, monitoring_message, monitoring_start_time, rotation_active
+    first_refresh_detected = False
+    monitoring_message = "⏳ Waiting for first refresh to synchronize..."
+    monitoring_start_time = time.time()
+    rotation_active = True
+
+threading.Thread(target=restart_script).start()
+
+return response
     except Exception as e:
         logger.error(f"❌ Error in send_text: {str(e)}")
         return jsonify({
