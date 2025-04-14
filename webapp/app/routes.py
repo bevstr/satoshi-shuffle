@@ -1116,9 +1116,12 @@ def send_text():
         
         # Start new process with updated path
         script_path = os.path.join(project_root, 'python', 'blockclock.py')
-        logger.info("▶️  Starting new background process")
-        blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-        logger.info("✅ New process started successfully")
+        logger.info(f"▶️  Attempting to start background process: python3 {script_path} {config_file}")
+        try:
+            blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+            logger.info("✅ New process started successfully")
+        except Exception as e:
+            logger.error(f"❌ Failed to start new process: {str(e)}")
         
         # Reset flags
         first_refresh_detected = False
