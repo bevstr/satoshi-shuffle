@@ -738,13 +738,13 @@ def start():
 
 @app.route('/stop', methods=['POST'])
 def stop():
-    """Stop text rotation"""
+    """Stop text rotation in background to prevent UI timeouts"""
     try:
-        if stop_rotation():
-            return jsonify({'success': True, 'active': False})
-        else:
-            flash('Failed to stop text rotation!', 'danger')
-            return jsonify({'success': False, 'error': 'Failed to stop text rotation'})
+        def background_stop():
+            stop_rotation()
+
+        threading.Thread(target=background_stop).start()
+        return jsonify({'success': True, 'active': False})
     except Exception as e:
         logger.error(f"❌ Error in stop endpoint: {str(e)}")
         return jsonify({'success': False, 'error': str(e)})
@@ -1100,38 +1100,39 @@ def send_text():
                 logger.error(f"❌ Error sending text to {name}: {str(e)}")
         
         # After sending text, restart the app process
+        # Log restart event
         logger.info("🔄 Restarting background process to maintain synchronization")
-
         logger.info("")
         logger.info("==================================================")
         logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
         logger.info("==================================================")
         logger.info("")
-        
-        # Stop all processes
-        stop_rotation()
-        
-        # Wait a moment to ensure clean shutdown
-        time.sleep(1)
-        
-        # Start new process with updated path
-        script_path = os.path.join(project_root, 'python', 'blockclock.py')
-        logger.info("▶️  Starting new background process")
-        blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-        logger.info("✅ New process started successfully")
-        
-        # Reset flags
-        first_refresh_detected = False
-        monitoring_message = "⏳ Waiting for first refresh to synchronize..."
-        monitoring_start_time = time.time()
-        rotation_active = True
-        
-        # Update the rate limit timestamp
-        last_manual_text_time = time.time()
-        
+
+        # Define the restart logic in a background thread
+        def restart_background_process():
+            nonlocal blockclock_process
+            stop_rotation()
+            time.sleep(1)
+            script_path = os.path.join(project_root, 'python', 'blockclock.py')
+            logger.info("▶️  Starting new background process")
+            blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+            logger.info("✅ New process started successfully")
+            
+            # Reset flags
+            nonlocal first_refresh_detected, monitoring_message, monitoring_start_time, rotation_active, last_manual_text_time
+            first_refresh_detected = False
+            monitoring_message = "⏳ Waiting for first refresh to synchronize..."
+            monitoring_start_time = time.time()
+            rotation_active = True
+            last_manual_text_time = time.time()
+
+        # Start the restart in a separate thread
+        threading.Thread(target=restart_background_process).start()
+
+        # Respond to the browser immediately
         return jsonify({
             'success': True,
-            'message': f'Text "{text}" sent successfully (restarting app to maintain sync)'
+            'message': f'Text \"{text}\" sent successfully (restarting app in background)"
         })
     except Exception as e:
         logger.error(f"❌ Error in send_text: {str(e)}")
