@@ -1093,48 +1093,45 @@ def send_text():
                 logger.error(f"❌ Error sending text to {name}: {str(e)}")
         
         # After sending text, restart the app process
-        logger.info("🔄 Restarting background process to maintain synchronization")
+                logger.info("🔄 Restarting background process to maintain synchronization")
 
-        logger.info("")
-        logger.info("==================================================")
-        logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
-        logger.info("==================================================")
-        logger.info("")
+                logger.info("")
+                logger.info("==================================================")
+                logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
+                logger.info("==================================================")
+                logger.info("")
 
-        logger.info("🛑 skip stop_rotation() for Docker test")
-        #stop_rotation()
-        #time.sleep(1)
+                if os.environ.get("RUNNING_IN_DOCKER") == "1":
+                    logger.warning("🐳 Running in Docker — skipping stop_rotation() and restart to prevent network error")
+                    first_refresh_detected = False
+                    rotation_active = False
+                    last_manual_text_time = time.time()
+                    return jsonify({
+                        'success': True,
+                        'message': f'Text \"{text}\" sent successfully. Please press Start to resume the app.'
+                    })
 
-        # Detect if running in Docker (via env var)
-        if os.environ.get("RUNNING_IN_DOCKER") == "1":
-            logger.warning("🐳 Running in Docker — skipping start_rotation() to prevent network error")
-            first_refresh_detected = False
-            rotation_active = False
-            last_manual_text_time = time.time()
-            return jsonify({
-                'success': True,
-                'message': f'Text \"{text}\" sent successfully. Please press Start to resume the app.'
-            })
-        else:
-            # Start new process with updated path
-            script_path = os.path.join(project_root, 'python', 'blockclock.py')
-            logger.info("▶️  Starting new background process")
-            blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-            logger.info("✅ New process started successfully")
+                # Outside Docker: safe to proceed
+                stop_rotation()
+                time.sleep(1)
 
-            # Reset flags
-            first_refresh_detected = False
-            rotation_active = True
-            last_manual_text_time = time.time()
+                script_path = os.path.join(project_root, 'python', 'blockclock.py')
+                logger.info("▶️  Starting new background process")
+                blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+                logger.info("✅ New process started successfully")
 
-            return jsonify({
-                'success': True,
-                'message': f'Text \"{text}\" sent successfully (restarting app to maintain sync)'
-            })
+                first_refresh_detected = False
+                rotation_active = True
+                last_manual_text_time = time.time()
 
-    except Exception as e:
-        logger.error(f"❌ Error in send_text: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': str(e)
-        })
+                return jsonify({
+                    'success': True,
+                    'message': f'Text \"{text}\" sent successfully (restarting app to maintain sync)'
+                })
+
+                    except Exception as e:
+                        logger.error(f"❌ Error in send_text: {str(e)}")
+                        return jsonify({
+                            'success': False,
+                            'message': str(e)
+                        })
