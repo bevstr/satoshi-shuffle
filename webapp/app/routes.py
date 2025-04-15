@@ -1119,7 +1119,7 @@ def send_text():
         time.sleep(1)
         
         # Start new process with updated path
-        script_path = os.path.join(project_root, 'python', 'blockclock.py')
+        script_path = '/app/python/blockclock.py'
         logger.info(f"▶️  Attempting to start background process: python3 {script_path} {config_file}")
         try:
             blockclock_process = subprocess.Popen(['python3', script_path, config_file])
