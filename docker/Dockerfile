@@ -1,5 +1,12 @@
 FROM python:3.9-slim
 
+
+# Install tini to handle zombie processes
+RUN apt-get update && apt-get install -y tini
+
+# Set tini as the init system
+ENTRYPOINT ["/usr/bin/tini", "--"]
+
 WORKDIR /app
 
 # Install required packages

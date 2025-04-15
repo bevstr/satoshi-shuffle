@@ -173,30 +173,24 @@ def scheduled_log_rotation():
 def kill_all_blockclock_processes():
     """Kill all blockclock processes using the same approach as the startup script"""
     try:
+        # Use pkill -f blockclock to kill all processes with blockclock in the command line
         logger.info("🧹 Cleaning up any existing blockclock processes")
-
-        # Attempt graceful shutdown
-        result = subprocess.run(["pkill", "-f", "blockclock"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        logger.info(f"📦 pkill stdout: {result.stdout.decode().strip()}")
-        logger.info(f"⚠️ pkill stderr: {result.stderr.decode().strip()}")
-
-        time.sleep(1)  # Wait for processes to exit
-
-        # Check for remaining processes
-        check = subprocess.run(["pgrep", "-f", "blockclock"], stdout=subprocess.PIPE)
-        if check.returncode == 0:
-            logger.warning("⚠️ Some blockclock processes still running, attempting force kill")
-            force = subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            logger.info(f"💀 Force kill stdout: {force.stdout.decode().strip()}")
-            logger.info(f"💀 Force kill stderr: {force.stderr.decode().strip()}")
-
+        subprocess.run(["pkill", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
+        # Give processes a moment to terminate
+        time.sleep(1)
+        
+        # Check if any processes are still hanging and force kill if needed
+        result = subprocess.run(["pgrep", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if result.returncode == 0:  # Processes still exist
+            logger.info("⚠️ Some processes still hanging, forcefully terminating")
+            subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        
         logger.info("✅ Cleanup complete")
         return True
-
     except Exception as e:
-        logger.error(f"❌ Error during cleanup: {str(e)}")
+        logger.error(f"⚠️ Error cleaning up processes: {str(e)}")
         return False
-        
 
 def start_rotation():
     """Start the text rotation as a separate process"""
@@ -1121,15 +1115,10 @@ def send_text():
         time.sleep(1)
         
         # Start new process with updated path
-        script_path = '/app/python/blockclock.py'
-        logger.info(f"▶️  Attempting to start background process: python3 {script_path} {config_file}")
-        try:
-            logger.info(f"🔁 About to run: python3 {script_path} {config_file}")
-            blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-            logger.info(f"📦 Subprocess started with: python3 {script_path} {config_file}")
-            logger.info("✅ New process started successfully")
-        except Exception as e:
-            logger.error(f"❌ Failed to start new process: {str(e)}")
+        script_path = os.path.join(project_root, 'python', 'blockclock.py')
+        logger.info("▶️  Starting new background process")
+        blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+        logger.info("✅ New process started successfully")
         
         # Reset flags
         first_refresh_detected = False
