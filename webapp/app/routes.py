@@ -1102,8 +1102,16 @@ def send_text():
         logger.info("==================================================")
         logger.info("")
 
+        # 🔪 Always kill any old processes if in Docker
         if os.environ.get("RUNNING_IN_DOCKER") == "1":
-            logger.warning("🐳 Running in Docker — skipping stop_rotation() and restart to prevent network error")
+            try:
+                logger.info("🐳 Attempting manual kill of any existing blockclock.py processes in Docker")
+                subprocess.run(["pkill", "-f", "blockclock.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                time.sleep(1)
+            except Exception as e:
+                logger.warning(f"⚠️ Failed to manually kill blockclock.py in Docker: {e}")
+
+            logger.warning("🐳 Running in Docker — skipping start_rotation() to prevent network error")
             first_refresh_detected = False
             rotation_active = False
             last_manual_text_time = time.time()
