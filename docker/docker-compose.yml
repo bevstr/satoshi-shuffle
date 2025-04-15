@@ -16,6 +16,7 @@ services:
       - satoshi-network
     environment:
       - TZ=UTC
+      - RUNNING_IN_DOCKER=1
     cap_add:
       - CAP_SYS_PTRACE
 

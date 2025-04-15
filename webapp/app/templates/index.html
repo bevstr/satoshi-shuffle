@@ -546,9 +546,10 @@ $('#send-text-form').submit(function(e) {
         success: function(response) {
             if (response.success) {
                 $('#custom-text').val('');
-                alert('Text sent successfully!');
+                alert(response.message || 'Text sent successfully!');
                 // Update display immediately after sending text
                 updateLiveDisplay();
+
                 
                 // Since text was sent successfully, start rate limit countdown
                 if (response.wait_time) {

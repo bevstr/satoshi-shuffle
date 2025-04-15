@@ -1100,31 +1100,37 @@ def send_text():
         logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
         logger.info("==================================================")
         logger.info("")
-        
-        # Stop all processes
+
         stop_rotation()
-        
-        # Wait a moment to ensure clean shutdown
         time.sleep(1)
-        
-        # Start new process with updated path
-        script_path = os.path.join(project_root, 'python', 'blockclock.py')
-        logger.info("▶️  Starting new background process")
-        blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-        logger.info("✅ New process started successfully")
-        
-        # Reset flags
-        first_refresh_detected = False
-    
-        rotation_active = True
-        
-        # Update the rate limit timestamp
-        last_manual_text_time = time.time()
-        
-        return jsonify({
-            'success': True,
-            'message': f'Text "{text}" sent successfully (restarting app to maintain sync)'
-        })
+
+        # Detect if running in Docker (via env var)
+        if os.environ.get("RUNNING_IN_DOCKER") == "1":
+            logger.warning("🐳 Running in Docker — skipping start_rotation() to prevent network error")
+            first_refresh_detected = False
+            rotation_active = False
+            last_manual_text_time = time.time()
+            return jsonify({
+                'success': True,
+                'message': f'Text \"{text}\" sent successfully. Please press Start to resume the app.'
+            })
+        else:
+            # Start new process with updated path
+            script_path = os.path.join(project_root, 'python', 'blockclock.py')
+            logger.info("▶️  Starting new background process")
+            blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+            logger.info("✅ New process started successfully")
+
+            # Reset flags
+            first_refresh_detected = False
+            rotation_active = True
+            last_manual_text_time = time.time()
+
+            return jsonify({
+                'success': True,
+                'message': f'Text \"{text}\" sent successfully (restarting app to maintain sync)'
+            })
+
     except Exception as e:
         logger.error(f"❌ Error in send_text: {str(e)}")
         return jsonify({
