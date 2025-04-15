@@ -174,27 +174,25 @@ def kill_all_blockclock_processes():
     """Kill all blockclock processes using the same approach as the startup script"""
     try:
         logger.info("🧹 Cleaning up any existing blockclock processes")
-
         logger.info("👉 Running: pkill -f blockclock")
         subprocess.run(["pkill", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
         time.sleep(1)
 
-        logger.info("👉 Checking for leftover processes with: pgrep -f blockclock")
+        logger.info("🔍 Checking for lingering processes with: pgrep -f blockclock")
         result = subprocess.run(["pgrep", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        logger.info(f"🔁 pgrep return code: {result.returncode}")
 
         if result.returncode == 0:
-            logger.warning("⚠️ Some processes still hanging. Attempting force kill.")
-            logger.info("👉 Running: pkill -9 -f blockclock")
+            logger.info("⚠️ Still running — forcing kill with: pkill -9 -f blockclock")
             subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
-            logger.info("✅ No leftover processes found.")
+            logger.info("✅ No lingering processes detected")
 
-        logger.info("✅ Cleanup complete.")
+        logger.info("✅ Cleanup complete")
         return True
-
     except Exception as e:
-        logger.error(f"❌ Error cleaning up processes: {str(e)}")
+        logger.error(f"⚠️ Error cleaning up processes: {str(e)}")
         return False
         
 
