@@ -16,6 +16,9 @@ services:
       - satoshi-network
     environment:
       - TZ=UTC
+    cap_add:
+      - SYS_PTRACE
+      - SYS_KILL
 
 networks:
   satoshi-network:
