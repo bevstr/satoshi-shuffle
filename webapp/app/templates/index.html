@@ -313,7 +313,9 @@ setInterval(resetSendButton, 75000); // Check every 75 seconds (just after rate 
             // Set flag and start countdown based on actual refresh cycle
             isInitializing = true;
             let secondsRemaining = countdownSeconds;
-            
+
+// Kill the sync banner injection
+/*
             // Create countdown banner if it doesn't exist
             if (!$('#initialization-banner').length) {
                 const bannerHtml = `
@@ -331,7 +333,7 @@ setInterval(resetSendButton, 75000); // Check every 75 seconds (just after rate 
                 `;
                 $('.card-body').first().prepend(bannerHtml);
             }
-            
+            */
             // Update countdown every second
             initializationTimer = setInterval(function() {
                 secondsRemaining--;

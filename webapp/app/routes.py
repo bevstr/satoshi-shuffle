@@ -223,13 +223,6 @@ def start_rotation():
             # Set flag to indicate rotation is active
             rotation_active = True
             
-            # Set initial monitoring status
-            monitoring_active = True
-            monitoring_message = "⏳ Waiting for first refresh to synchronize..."
-            monitoring_start_time = time.time()
-            
-            # Start monitoring logs
-            monitor_logs()
             
             return True
         except Exception as e:
@@ -1122,8 +1115,7 @@ def send_text():
         
         # Reset flags
         first_refresh_detected = False
-        monitoring_message = "⏳ Waiting for first refresh to synchronize..."
-        monitoring_start_time = time.time()
+    
         rotation_active = True
         
         # Update the rate limit timestamp
