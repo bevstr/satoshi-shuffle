@@ -529,12 +529,7 @@ $('#send-text-form').submit(function(e) {
         return;
     }
     
-    // If system is still initializing, show a warning confirmation
-    if (isInitializing) {
-        if (!confirm('System is still initializing. Sending text now may disrupt synchronization. Continue anyway?')) {
-            return; // User canceled
-        }
-    }
+    
     
     let submitBtn = $(this).find('button[type="submit"]');
     submitButtonOriginalHtml = submitBtn.html();
