@@ -232,16 +232,17 @@ def start_rotation():
 def stop_rotation():
     """Stop the text rotation process"""
     global blockclock_process, rotation_active, monitoring_active
-    
+
     with rotation_lock:
-        # Kill all blockclock processes
-        kill_all_blockclock_processes()
+        if os.environ.get("RUNNING_IN_DOCKER") == "1":
+            logger.info("🐳 stop_rotation() called in Docker — skipping internal cleanup")
+        else:
+            kill_all_blockclock_processes()
         
-        # Reset global state
         blockclock_process = None
         rotation_active = False
         monitoring_active = False
-        
+
         return True
 
 #######################################################
@@ -733,11 +734,24 @@ def start():
 def stop():
     """Stop text rotation"""
     try:
+        if os.environ.get("RUNNING_IN_DOCKER") == "1":
+            logger.warning("🐳 Docker detected — using manual pkill to stop blockclock")
+            subprocess.run(["pkill", "-f", "blockclock.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            
+            global blockclock_process, rotation_active, monitoring_active
+            blockclock_process = None
+            rotation_active = False
+            monitoring_active = False
+            
+            return jsonify({'success': True, 'active': False})
+        
+        # Normal local logic
         if stop_rotation():
             return jsonify({'success': True, 'active': False})
         else:
             flash('Failed to stop text rotation!', 'danger')
             return jsonify({'success': False, 'error': 'Failed to stop text rotation'})
+    
     except Exception as e:
         logger.error(f"❌ Error in stop endpoint: {str(e)}")
         return jsonify({'success': False, 'error': str(e)})
