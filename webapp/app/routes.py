@@ -1101,8 +1101,9 @@ def send_text():
         logger.info("==================================================")
         logger.info("")
 
-        stop_rotation()
-        time.sleep(1)
+        logger.info("🛑 skip stop_rotation() for Docker test")
+        #stop_rotation()
+        #time.sleep(1)
 
         # Detect if running in Docker (via env var)
         if os.environ.get("RUNNING_IN_DOCKER") == "1":
