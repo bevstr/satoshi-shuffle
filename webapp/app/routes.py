@@ -223,13 +223,14 @@ def start_rotation():
             # Set flag to indicate rotation is active
             rotation_active = True
             
+
             # Set initial monitoring status
             monitoring_active = True
             monitoring_message = "⏳ Waiting for first refresh to synchronize..."
             monitoring_start_time = time.time()
-            
-            # Start monitoring logs
-            monitor_logs()
+
+            # Start monitoring logs in the background
+            threading.Thread(target=monitor_logs, daemon=True).start()
             
             return True
         except Exception as e:
