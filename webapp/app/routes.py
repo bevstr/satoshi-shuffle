@@ -1100,31 +1100,26 @@ def send_text():
                 logger.error(f"❌ Error sending text to {name}: {str(e)}")
         
         # After sending text, restart the app process
-        logger.info("🔄 Restarting background process to maintain synchronization")
 
+        # After sending text, restart the app process — use same logic as Play button
         logger.info("")
         logger.info("==================================================")
         logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
         logger.info("==================================================")
         logger.info("")
-        
-        # Stop all processes
+
+        # Stop any running instance
         stop_rotation()
-        
-        # Wait a moment to ensure clean shutdown
+
+        # Wait a moment
         time.sleep(1)
-        
-        # Start new process with updated path
-        script_path = os.path.join(project_root, 'python', 'blockclock.py')
-        logger.info("▶️  Starting new background process")
-        blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-        logger.info("✅ New process started successfully")
-        
-        # Reset flags
-        first_refresh_detected = False
-        monitoring_message = "⏳ Waiting for first refresh to synchronize..."
-        monitoring_start_time = time.time()
-        rotation_active = True
+
+        # Restart using the standard rotation starter
+        if start_rotation():
+            logger.info("✅ Restarted via start_rotation() after one-time text")
+        else:
+            logger.warning("⚠️ Failed to restart via start_rotation() after one-time text")
+
         
         # Update the rate limit timestamp
         last_manual_text_time = time.time()
