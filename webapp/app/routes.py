@@ -1091,47 +1091,48 @@ def send_text():
                 logger.info(f"✅ [{name}] updated with one-time text: \"{text}\"")
             except Exception as e:
                 logger.error(f"❌ Error sending text to {name}: {str(e)}")
-        
+
+        # ✅ This block must be OUTSIDE the for-loop
         # After sending text, restart the app process
-                logger.info("🔄 Restarting background process to maintain synchronization")
+        logger.info("🔄 Restarting background process to maintain synchronization")
 
-                logger.info("")
-                logger.info("==================================================")
-                logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
-                logger.info("==================================================")
-                logger.info("")
+        logger.info("")
+        logger.info("==================================================")
+        logger.info("🔄 RESTARTING AFTER MANUAL TEXT - Resyncing Satoshi Shuffle")
+        logger.info("==================================================")
+        logger.info("")
 
-                if os.environ.get("RUNNING_IN_DOCKER") == "1":
-                    logger.warning("🐳 Running in Docker — skipping stop_rotation() and restart to prevent network error")
-                    first_refresh_detected = False
-                    rotation_active = False
-                    last_manual_text_time = time.time()
-                    return jsonify({
-                        'success': True,
-                        'message': f'Text \"{text}\" sent successfully. Please press Start to resume the app.'
-                    })
+        if os.environ.get("RUNNING_IN_DOCKER") == "1":
+            logger.warning("🐳 Running in Docker — skipping stop_rotation() and restart to prevent network error")
+            first_refresh_detected = False
+            rotation_active = False
+            last_manual_text_time = time.time()
+            return jsonify({
+                'success': True,
+                'message': f'Text \"{text}\" sent successfully. Please press Start to resume the app.'
+            })
 
-                # Outside Docker: safe to proceed
-                stop_rotation()
-                time.sleep(1)
+        # Outside Docker: safe to proceed
+        stop_rotation()
+        time.sleep(1)
 
-                script_path = os.path.join(project_root, 'python', 'blockclock.py')
-                logger.info("▶️  Starting new background process")
-                blockclock_process = subprocess.Popen(['python3', script_path, config_file])
-                logger.info("✅ New process started successfully")
+        script_path = os.path.join(project_root, 'python', 'blockclock.py')
+        logger.info("▶️  Starting new background process")
+        blockclock_process = subprocess.Popen(['python3', script_path, config_file])
+        logger.info("✅ New process started successfully")
 
-                first_refresh_detected = False
-                rotation_active = True
-                last_manual_text_time = time.time()
+        first_refresh_detected = False
+        rotation_active = True
+        last_manual_text_time = time.time()
 
-                return jsonify({
-                    'success': True,
-                    'message': f'Text \"{text}\" sent successfully (restarting app to maintain sync)'
-                })
+        return jsonify({
+            'success': True,
+            'message': f'Text \"{text}\" sent successfully (restarting app to maintain sync)'
+        })
 
-                    except Exception as e:
-                        logger.error(f"❌ Error in send_text: {str(e)}")
-                        return jsonify({
-                            'success': False,
-                            'message': str(e)
-                        })
+    except Exception as e:
+        logger.error(f"❌ Error in send_text: {str(e)}")
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        })
