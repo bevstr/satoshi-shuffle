@@ -171,26 +171,41 @@ def scheduled_log_rotation():
 #######################################################
 
 def kill_all_blockclock_processes():
-    """Kill all blockclock processes using the same approach as the startup script"""
+    """Kill all blockclock processes using the same approach as the startup script, with extra diagnostics."""
     try:
-        # Use pkill -f blockclock to kill all processes with blockclock in the command line
         logger.info("🧹 Cleaning up any existing blockclock processes")
-        subprocess.run(["pkill", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        
-        # Give processes a moment to terminate
+
+        # Try graceful kill
+        result = subprocess.run(
+            ["pkill", "-f", "blockclock"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        logger.debug(f"pkill output: {result.stdout}")
+        logger.debug(f"pkill errors: {result.stderr}")
+
+        # Wait a moment for processes to terminate
         time.sleep(1)
-        
-        # Check if any processes are still hanging and force kill if needed
-        result = subprocess.run(["pgrep", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if result.returncode == 0:  # Processes still exist
-            logger.info("⚠️ Some processes still hanging, forcefully terminating")
-            subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        
+
+        # Check if anything is still running
+        result = subprocess.run(
+            ["pgrep", "-f", "blockclock"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if result.returncode == 0:
+            logger.warning("⚠️ Some blockclock processes still running. Forcing termination with pkill -9...")
+            logger.debug(f"pgrep output (still running): {result.stdout}")
+            subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
         logger.info("✅ Cleanup complete")
         return True
     except Exception as e:
-        logger.error(f"⚠️ Error cleaning up processes: {str(e)}")
+        logger.error(f"⚠️ Error during cleanup: {str(e)}")
         return False
+        
 
 def start_rotation():
     """Start the text rotation as a separate process"""
