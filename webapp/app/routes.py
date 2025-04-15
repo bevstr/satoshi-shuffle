@@ -171,39 +171,30 @@ def scheduled_log_rotation():
 #######################################################
 
 def kill_all_blockclock_processes():
-    """Kill all blockclock processes using the same approach as the startup script, with extra diagnostics."""
+    """Kill all blockclock processes using the same approach as the startup script"""
     try:
         logger.info("🧹 Cleaning up any existing blockclock processes")
 
-        # Try graceful kill
-        result = subprocess.run(
-            ["pkill", "-f", "blockclock"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
-        logger.debug(f"pkill output: {result.stdout}")
-        logger.debug(f"pkill errors: {result.stderr}")
+        logger.info("👉 Running: pkill -f blockclock")
+        subprocess.run(["pkill", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        # Wait a moment for processes to terminate
         time.sleep(1)
 
-        # Check if anything is still running
-        result = subprocess.run(
-            ["pgrep", "-f", "blockclock"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
-        if result.returncode == 0:
-            logger.warning("⚠️ Some blockclock processes still running. Forcing termination with pkill -9...")
-            logger.debug(f"pgrep output (still running): {result.stdout}")
-            subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        logger.info("👉 Checking for leftover processes with: pgrep -f blockclock")
+        result = subprocess.run(["pgrep", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        logger.info("✅ Cleanup complete")
+        if result.returncode == 0:
+            logger.warning("⚠️ Some processes still hanging. Attempting force kill.")
+            logger.info("👉 Running: pkill -9 -f blockclock")
+            subprocess.run(["pkill", "-9", "-f", "blockclock"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            logger.info("✅ No leftover processes found.")
+
+        logger.info("✅ Cleanup complete.")
         return True
+
     except Exception as e:
-        logger.error(f"⚠️ Error during cleanup: {str(e)}")
+        logger.error(f"❌ Error cleaning up processes: {str(e)}")
         return False
         
 
