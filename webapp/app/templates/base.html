@@ -54,22 +54,23 @@
      </button>
      <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
-       <li class="nav-item">
-        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
-         <i class="bi bi-house">
-         </i>
-         Home
-        </a>
-       </li>
-       <li class="nav-item">
-        <a class="nav-link {% if request.path == url_for('settings') %}active{% endif %}" href="{{ url_for('settings') }}">
-         <i class="bi bi-gear">
-         </i>
-         Settings
-        </a>
-       </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
+            <i class="bi bi-house"></i> Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == url_for('settings') %}active{% endif %}" href="{{ url_for('settings') }}">
+            <i class="bi bi-gear"></i> Settings
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == url_for('faq') %}active{% endif %}" href="{{ url_for('faq') }}">
+            <i class="bi bi-question-circle"></i> FAQ
+          </a>
+        </li>
       </ul>
-      <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center">
        <label class="dark-mode-toggle me-2" title="Toggle Dark Mode">
         <i class="bi bi-sun">
         </i>

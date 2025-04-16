@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from app import app
 from datetime import datetime, timedelta
+import markdown
 import os
 import sys
 import json
@@ -698,6 +699,14 @@ DEFAULT_THEME="{config_data.get('default_theme', 'light')}"
 #######################################################
 # ROUTE HANDLERS
 #######################################################
+
+@app.route('/faq')
+def faq():
+    with open('docs/Satoshi_Shuffle_Collapsible_Cheatsheet_FAQ.md', 'r') as f:
+        md_content = f.read()
+    html_content = markdown.markdown(md_content, extensions=['fenced_code', 'codehilite', 'tables'])
+    return render_template('faq.html', content=html_content)
+
 
 @app.route('/')
 def index():
