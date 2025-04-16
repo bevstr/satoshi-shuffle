@@ -5,8 +5,6 @@ This cheatsheet provides quick reference commands for managing your Satoshi Shuf
 <details>
 <summary><strong>🚀 Starting the Application</strong></summary>
 
-## 🚀 Starting the Application
-
 <h3>Using the Start Script (Recommended)</h3>
 ```bash
 # Navigate to your Satoshi Shuffle directory
@@ -69,8 +67,6 @@ docker-compose -f docker/docker-compose.yml up -d
 <details>
 <summary><strong>⚙️ Installation Commands</strong></summary>
 
-## ⚙️ Installation Commands
-
 <h3>One-Click Installation</h3>
 ```bash
 # Run the interactive installation script
@@ -106,8 +102,6 @@ python3 -m pip install -r requirements.txt
 <details>
 <summary><strong>✅ Checking Application Status</strong></summary>
 
-## ✅ Checking Application Status
-
 <h3>Process Checking</h3>
 ```bash
 # Check if Python process is running
@@ -139,8 +133,6 @@ curl -I http://localhost:5010
 
 <details>
 <summary><strong>📝 Log File Operations</strong></summary>
-
-## 📝 Log File Operations
 
 <h3>Viewing Logs</h3>
 ```bash
@@ -213,8 +205,6 @@ launchctl unload ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 <details>
 <summary><strong>🔄 Restarting the Application</strong></summary>
 
-## 🔄 Restarting the Application
-
 <h3>Standard Method</h3>
 ```bash
 # Kill and restart
@@ -250,8 +240,6 @@ launchctl load ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 <details>
 <summary><strong>🔍 Device Connectivity</strong></summary>
 
-## 🔍 Device Connectivity
-
 <h3>Check Device Reachability</h3>
 ```bash
 # Ping a BlockClock device
@@ -274,8 +262,6 @@ curl -v http://192.168.1.100/api/show/text/BITCOIN
 
 <details>
 <summary><strong>🛠️ Updating Satoshi Shuffle</strong></summary>
-
-## 🛠️ Updating Satoshi Shuffle
 
 <h3>Standard Method</h3>
 ```bash
@@ -303,8 +289,6 @@ docker-compose -f docker/docker-compose.yml up -d --build
 
 <details>
 <summary><strong>🔌 Port Management</strong></summary>
-
-## 🔌 Port Management
 
 <h3>Check Port Usage</h3>
 ```bash
@@ -338,8 +322,6 @@ nano docker/docker-compose.yml
 <details>
 <summary><strong>🔒 Service Management</strong></summary>
 
-## 🔒 Service Management
-
 <h3>Setting Up Service (Linux)</h3>
 ```bash
 # Create systemd service file
@@ -366,9 +348,7 @@ launchctl load -w ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 <details>
 <summary><strong>💻 Screen Session (Alternative to nohup)</strong></summary>
 
-## 💻 Screen Session (Alternative to nohup)
-
-Using `screen` is another way to keep applications running after closing your terminal:
+<p><em><strong>Using <code>screen</code> is another way to keep applications running after closing your terminal:</strong></em></p>
 
 ```bash
 # Install screen (if not already installed)
@@ -401,8 +381,6 @@ screen -r satoshi-shuffle
 <details>
 <summary><strong>🔏 Docker-Specific Commands</strong></summary>
 
-## 🔏 Docker-Specific Commands
-
 <h3>Container Management</h3>
 ```bash
 # Enter container shell
@@ -429,8 +407,6 @@ docker volume inspect satoshi-shuffle_config
 <details>
 <summary><strong>📡 Network Troubleshooting</strong></summary>
 
-## 📡 Network Troubleshooting
-
 <h3>Network Diagnostics</h3>
 ```bash
 # Check your IP address
@@ -449,8 +425,6 @@ arp -a
 
 <details>
 <summary><strong>🧹 Cleanup Operations</strong></summary>
-
-## 🧹 Cleanup Operations
 
 <h3>File Cleanup</h3>
 ```bash
@@ -477,8 +451,6 @@ docker system prune
 
 <details>
 <summary><strong>📂 Backup and Restore</strong></summary>
-
-## 📂 Backup and Restore
 
 <h3>Configuration Backup</h3>
 ```bash
