@@ -336,23 +336,29 @@
    <!-- ✅ Custom Splash Screen Hide Script -->
    <script>
     window.addEventListener('load', () => {
-      setTimeout(() => {
+      if (window.location.pathname === '/' || window.location.pathname === '') {
+        setTimeout(() => {
+          const splash = document.getElementById('splash-screen');
+          const app = document.getElementById('app-content');
+          if (splash && app) {
+            void app.offsetWidth;
+            splash.style.opacity = '0';
+            app.style.opacity = '1';
+            setTimeout(() => splash.remove(), 750);
+          }
+        }, 400);
+      } else {
+        // Immediately hide splash on other pages
         const splash = document.getElementById('splash-screen');
         const app = document.getElementById('app-content');
         if (splash && app) {
-          // 👇 Force browser to recognize initial opacity 0
-          void app.offsetWidth;
-
-          // Trigger transitions
-          splash.style.opacity = '0';
+          splash.style.display = 'none';
           app.style.opacity = '1';
-
-          setTimeout(() => splash.remove(), 750); // match fade duration
         }
-      }, 400); // delay before transition
+      }
     });
-
    </script>
+
    {% block scripts %}{% endblock %}
   </div>
  </body>
