@@ -347,7 +347,7 @@ launchctl load -w ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 
 <details>
 <summary><strong>💻 Screen Session (Alternative to nohup)</strong></summary>
-
+<br/>
 <p><em><strong>Using <code>screen</code> is another way to keep applications running after closing your terminal:</strong></em></p>
 
 ```bash
