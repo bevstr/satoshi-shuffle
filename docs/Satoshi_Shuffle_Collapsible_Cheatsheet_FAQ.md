@@ -177,8 +177,6 @@ du -sh logs/blockclock.log
 <details>
 <summary><strong>❌ Stopping the Application</strong></summary>
 
-## ❌ Stopping the Application
-
 ### Standard Method
 ```bash
 # Kill Python process
