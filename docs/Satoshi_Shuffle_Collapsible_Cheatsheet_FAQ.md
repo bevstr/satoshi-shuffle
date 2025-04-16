@@ -177,7 +177,7 @@ du -sh logs/blockclock.log
 <details>
 <summary><strong>❌ Stopping the Application</strong></summary>
 
-### Standard Method
+<h3>Standard Method</h3>
 ```bash
 # Kill Python process
 pkill -f blockclock_web.py
@@ -190,7 +190,7 @@ ps aux | grep blockclock_web.py
 kill [PID]  # Replace [PID] with the actual process ID
 ```
 
-### Docker Method
+<h3>Docker Method<h3>
 ```bash
 # Stop container but keep it
 docker-compose -f docker/docker-compose.yml stop
@@ -199,7 +199,7 @@ docker-compose -f docker/docker-compose.yml stop
 docker-compose -f docker/docker-compose.yml down
 ```
 
-### Service Method
+<h3>Service Method<h3>
 ```bash
 # Linux systemd
 sudo systemctl stop satoshi-shuffle
