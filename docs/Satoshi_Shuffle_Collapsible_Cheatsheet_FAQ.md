@@ -7,7 +7,7 @@ This cheatsheet provides quick reference commands for managing your Satoshi Shuf
 
 ## 🚀 Starting the Application
 
-### Using the Start Script (Recommended)
+<h3>Using the Start Script (Recommended)</h3>
 ```bash
 # Navigate to your Satoshi Shuffle directory
 cd /path/to/satoshi-shuffle
@@ -19,7 +19,7 @@ chmod +x start_SatoshiShuffle.sh
 ./start_SatoshiShuffle.sh
 ```
 
-### Standard Python Method
+<h3>Standard Python Method</h3>
 ```bash
 # Navigate to your Satoshi Shuffle directory
 cd /path/to/satoshi-shuffle
@@ -31,7 +31,7 @@ python webapp/blockclock_web.py
 python3 webapp/blockclock_web.py
 ```
 
-### Run in Background (Keep Running After Terminal Closes)
+<h3>Run in Background (Keep Running After Terminal Closes)</h3>
 ```bash
 # On macOS/Linux - Keep running after terminal closes
 nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
@@ -55,7 +55,7 @@ ps aux | grep blockclock_web.py
 pkill -f blockclock_web.py
 ```
 
-### Docker Method
+<h3>Docker Method</h3>
 ```bash
 # Navigate to your Satoshi Shuffle directory
 cd /path/to/satoshi-shuffle
@@ -71,7 +71,7 @@ docker-compose -f docker/docker-compose.yml up -d
 
 ## ⚙️ Installation Commands
 
-### One-Click Installation
+<h3>One-Click Installation</h3>
 ```bash
 # Run the interactive installation script
 python install.py
@@ -83,7 +83,7 @@ python install.py --no-docker
 python install.py -p 5002
 ```
 
-### Docker Installation
+<h3>Docker Installation</h3>
 ```bash
 # Build the Docker image
 docker-compose -f docker/docker-compose.yml build
@@ -92,7 +92,7 @@ docker-compose -f docker/docker-compose.yml build
 docker-compose -f docker/docker-compose.yml build --no-cache
 ```
 
-### Python Installation
+<h3>Python Installation</h3>
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -108,7 +108,7 @@ python3 -m pip install -r requirements.txt
 
 ## ✅ Checking Application Status
 
-### Process Checking
+<h3>Process Checking</h3>
 ```bash
 # Check if Python process is running
 ps aux | grep blockclock_web.py
@@ -120,7 +120,7 @@ pgrep -fl blockclock_web.py
 docker ps | grep satoshi-shuffle
 ```
 
-### Service Status
+<h3>Service Status</h3>
 ```bash
 # Linux systemd service
 sudo systemctl status satoshi-shuffle
@@ -129,7 +129,7 @@ sudo systemctl status satoshi-shuffle
 launchctl list | grep com.satoshi-shuffle
 ```
 
-### Web Server Check
+<h3>Web Server Check</h3>
 ```bash
 # Check if web server is responding
 curl -I http://localhost:5010
@@ -142,7 +142,7 @@ curl -I http://localhost:5010
 
 ## 📝 Log File Operations
 
-### Viewing Logs
+<h3>Viewing Logs</h3>
 ```bash
 # View last 20 log entries
 tail -n 20 logs/blockclock.log
@@ -160,7 +160,7 @@ docker logs satoshi-shuffle
 docker logs -f satoshi-shuffle
 ```
 
-### Log Management
+<h3>Log Management</h3>
 ```bash
 # Clear log file
 echo "" > logs/blockclock.log
@@ -215,7 +215,7 @@ launchctl unload ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 
 ## 🔄 Restarting the Application
 
-### Standard Method
+<h3>Standard Method</h3>
 ```bash
 # Kill and restart
 pkill -f blockclock_web.py
@@ -226,7 +226,7 @@ pkill -f blockclock_web.py
 nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
 ```
 
-### Docker Method
+<h3>Docker Method</h3>
 ```bash
 # Restart container
 docker-compose -f docker/docker-compose.yml restart
@@ -235,7 +235,7 @@ docker-compose -f docker/docker-compose.yml restart
 docker-compose -f docker/docker-compose.yml up -d --build
 ```
 
-### Service Method
+<h3>Service Method</h3>
 ```bash
 # Linux systemd
 sudo systemctl restart satoshi-shuffle
@@ -252,7 +252,7 @@ launchctl load ~/Library/LaunchAgents/com.satoshi-shuffle.plist
 
 ## 🔍 Device Connectivity
 
-### Check Device Reachability
+<h3>Check Device Reachability</h3>
 ```bash
 # Ping a BlockClock device
 ping -c 3 192.168.1.100
@@ -261,7 +261,7 @@ ping -c 3 192.168.1.100
 docker exec -it satoshi-shuffle ping -c 3 192.168.1.100
 ```
 
-### Test BlockClock API
+<h3>Test BlockClock API</h3>
 ```bash
 # Test device API (displays time)
 curl -v http://192.168.1.100/api/show/time
@@ -277,7 +277,7 @@ curl -v http://192.168.1.100/api/show/text/BITCOIN
 
 ## 🛠️ Updating Satoshi Shuffle
 
-### Standard Method
+<h3>Standard Method</h3>
 ```bash
 # Get latest code
 git pull
@@ -290,7 +290,7 @@ pkill -f blockclock_web.py
 nohup python3 webapp/blockclock_web.py > /dev/null 2>&1 &
 ```
 
-### Docker Method
+<h3>Docker Method</h3>
 ```bash
 # Get latest code
 git pull
@@ -306,7 +306,7 @@ docker-compose -f docker/docker-compose.yml up -d --build
 
 ## 🔌 Port Management
 
-### Check Port Usage
+<h3>Check Port Usage</h3>
 ```bash
 # Check if port 5010 is in use
 lsof -i :5010
@@ -315,7 +315,7 @@ lsof -i :5010
 netstat -tuln | grep 5010
 ```
 
-### Change Port (Python Installation)
+<h3>Change Port (Python Installation)</h3>
 ```bash
 # Edit the web application file
 nano webapp/blockclock_web.py
@@ -324,7 +324,7 @@ nano webapp/blockclock_web.py
 # app.run(debug=False, host='0.0.0.0', port=5010, use_reloader=True)
 ```
 
-### Change Port (Docker Installation)
+<h3>Change Port (Docker Installation)</h3>
 ```bash
 # Edit docker-compose file
 nano docker/docker-compose.yml
@@ -340,7 +340,7 @@ nano docker/docker-compose.yml
 
 ## 🔒 Service Management
 
-### Setting Up Service (Linux)
+<h3>Setting Up Service (Linux)</h3>
 ```bash
 # Create systemd service file
 sudo nano /etc/systemd/system/satoshi-shuffle.service
@@ -352,7 +352,7 @@ sudo systemctl enable satoshi-shuffle
 sudo systemctl start satoshi-shuffle
 ```
 
-### Setting Up Service (macOS)
+<h3>Setting Up Service (macOS)</h3>
 ```bash
 # Create launchd plist file
 nano ~/Library/LaunchAgents/com.satoshi-shuffle.plist
@@ -403,7 +403,7 @@ screen -r satoshi-shuffle
 
 ## 🔏 Docker-Specific Commands
 
-### Container Management
+<h3>Container Management</h3>
 ```bash
 # Enter container shell
 docker exec -it satoshi-shuffle /bin/bash
@@ -415,7 +415,7 @@ docker inspect satoshi-shuffle
 docker stats satoshi-shuffle
 ```
 
-### Docker Volumes
+<h3>Docker Volumes</h3>
 ```bash
 # List Docker volumes
 docker volume ls
@@ -431,7 +431,7 @@ docker volume inspect satoshi-shuffle_config
 
 ## 📡 Network Troubleshooting
 
-### Network Diagnostics
+<h3>Network Diagnostics</h3>
 ```bash
 # Check your IP address
 ifconfig    # macOS/Linux
@@ -452,7 +452,7 @@ arp -a
 
 ## 🧹 Cleanup Operations
 
-### File Cleanup
+<h3>File Cleanup</h3>
 ```bash
 # Remove log files
 rm logs/*.log
@@ -461,7 +461,7 @@ rm logs/*.log
 rm -rf logs/archive/*
 ```
 
-### Docker Cleanup
+<h3>Docker Cleanup</h3>
 ```bash
 # Remove container and images
 docker-compose -f docker/docker-compose.yml down --rmi all
@@ -480,7 +480,7 @@ docker system prune
 
 ## 📂 Backup and Restore
 
-### Configuration Backup
+<h3>Configuration Backup</h3>
 ```bash
 # Manual backup of config file
 cp config/blockclock.conf config/blockclock.conf.backup
@@ -489,7 +489,7 @@ cp config/blockclock.conf config/blockclock.conf.backup
 tar -czvf satoshi-shuffle-backup.tar.gz config/ logs/
 ```
 
-### Docker Volume Backup
+<h3>Docker Volume Backup</h3>
 ```bash
 # Create a backup container and copy from volume
 docker run --rm -v satoshi-shuffle_config:/backup -v $(pwd):/host alpine cp -r /backup /host/config-backup
@@ -497,4 +497,3 @@ docker run --rm -v satoshi-shuffle_config:/backup -v $(pwd):/host alpine cp -r /
 </details>
 
 ---
-
