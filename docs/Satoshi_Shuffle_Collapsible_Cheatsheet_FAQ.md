@@ -1,4 +1,4 @@
-# Satoshi Shuffle Command Line Cheatsheet
+<h1 style="color: #ff9900;">Satoshi Shuffle Command Line Cheatsheet</h1>
 
 This cheatsheet provides quick reference commands for managing your Satoshi Shuffle installation. Commands are organized by task and installation type.
 
@@ -469,3 +469,147 @@ docker run --rm -v satoshi-shuffle_config:/backup -v $(pwd):/host alpine cp -r /
 </details>
 
 ---
+
+<hr style="margin-top: 3rem; margin-bottom: 1.5rem; border-top: 2px solid #ccc;">
+
+<h3 style="color: #ff9900;">🛠 Troubleshooting – Expand Any Section</h3>
+
+<h3>🔌 Connection Issues</h3>
+
+<details>
+<summary><strong>Web Interface Not Accessible</strong></summary>
+
+**Possible Causes:**
+- App not running
+- Port blocked or already in use
+- Incorrect URL or IP address
+
+**Solutions:**
+```bash
+# Check if app is running
+ps aux | grep blockclock_web.py
+
+# Make sure the port (default 5010) is open
+lsof -i :5010
+
+# Restart app
+pkill -f blockclock_web.py
+python3 webapp/blockclock_web.py
+```
+</details>
+
+<details>
+<summary><strong>Can't Reach Web Interface on Phone</strong></summary>
+
+**Possible Causes:**
+- Device not on same Wi-Fi
+- Using localhost instead of local IP
+
+**Solutions:**
+```bash
+# Find local IP
+hostname -I    # Linux/macOS
+ipconfig       # Windows
+
+# Use IP in phone browser, e.g. http://192.168.0.50:5010
+```
+</details>
+
+<h3>💻 Display Issues</h3>
+
+<details>
+<summary><strong>BlockClock Not Showing Custom Text</strong></summary>
+
+**Possible Causes:**
+- Wrong IP configured
+- BlockClock not refreshing properly
+- Not enough custom text items
+
+**Solutions:**
+- Double-check device IPs in settings
+- Ensure BlockClock is set to refresh every 5 minutes
+- Ensure app has at least 1 custom text in list
+</details>
+
+<details>
+<summary><strong>Nothing Shows on BlockClock</strong></summary>
+
+**Possible Causes:**
+- Devices unreachable
+- App not pushing data
+
+**Solutions:**
+- Check log output
+- Use “Send one-time text” to test manual push
+</details>
+
+### 🔄 App Not Starting Properly
+
+<details>
+<summary><strong>App Starts but Immediately Stops</strong></summary>
+
+**Possible Causes:**
+- Port already in use
+- Missing dependencies
+
+**Solutions:**
+```bash
+# Check port usage
+lsof -i :5010
+
+# Check for errors in terminal log
+tail -n 50 logs/blockclock.log
+
+# Reinstall dependencies
+pip install -r requirements.txt
+```
+</details>
+
+<h3>⚙️ Configuration Problems</h3>
+
+<details>
+<summary><strong>Modal Keeps Appearing on Home Screen</strong></summary>
+
+**Reason:**
+- Config hasn’t been confirmed yet
+
+**Solution:**
+- Go to settings tab
+- Click “Settings Are Correct”
+</details>
+
+<details>
+<summary><strong>Config Modal Won’t Go Away</strong></summary>
+
+**Solution:**
+- Clear your browser local storage:
+```bash
+# In browser DevTools Console
+localStorage.removeItem("configConfirmed")
+```
+</details>
+
+<h3>📁 File & Log Issues</h3>
+
+<details>
+<summary><strong>Logs Not Updating</strong></summary>
+
+**Possible Causes:**
+- App not running
+- File write permission issues
+
+**Solution:**
+```bash
+# Check log file
+tail -f logs/blockclock.log
+```
+</details>
+
+<details>
+<summary><strong>Can't Find Saved Config</strong></summary>
+
+**Check if config file exists:**
+```bash
+ls -l config/blockclock.conf
+```
+</details>
