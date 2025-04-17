@@ -1,4 +1,4 @@
-<h1 style="color: #ff9900;">Satoshi Shuffle Command Line Cheatsheet</h1>
+<h3 style="color: #ff9900;">Satoshi Shuffle Command Line Cheatsheet</h3>
 
 This cheatsheet provides quick reference commands for managing your Satoshi Shuffle installation. Commands are organized by task and installation type.
 
