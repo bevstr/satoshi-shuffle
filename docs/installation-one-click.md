@@ -12,7 +12,7 @@ The One-Click Script will handle most of the installation process for you, but *
 <details>
 <summary><b>Installing Python - click to expand</b></summary>
 
-You need Python 3.6 or higher. Follow the instructions for your operating system:
+You need Python 3.10 or higher. Follow the instructions for your operating system:
 
 #### **MacOS**  
 1. **Check if Homebrew is installed**  
@@ -52,7 +52,7 @@ sudo apt update && sudo apt install python3 python3-pip
    ```bash
    python --version  # or python3 --version on some systems
    ```  
-   It should return version **3.6 or higher**.
+   It should return version **3.10 or higher**.
 </details>
 <br>
 

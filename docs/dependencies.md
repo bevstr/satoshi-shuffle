@@ -71,7 +71,7 @@ docker logs satoshi-shuffle
 
 The One-Click Script handles most dependencies automatically but requires:
 
-✅ **Python 3.6 or higher** - [How to install](#installing-python)  
+✅ **Python 3.10 or higher** - [How to install](#installing-python)  
 ✅ **100MB+ free disk space** for application and logs  
 ✅ **Basic command line knowledge**
 
@@ -95,7 +95,7 @@ The One-Click Script handles most dependencies automatically but requires:
 
 For direct Python installation, you'll need:
 
-✅ **Python 3.6 or higher** - [How to install](#installing-python)  
+✅ **Python 3.10 or higher** - [How to install](#installing-python)  
 ✅ **pip** (Python package manager)  
 ✅ **100MB+ free disk space** for application and logs  
 ✅ **Git** (recommended for downloading the repo)  
@@ -187,7 +187,7 @@ If port 5010 is already in use, you can change the port in the configuration.
 brew install python
 
 # Verify installation
-python3 --version  # Should show 3.6 or higher
+python3 --version  # Should show 3.10 or higher
 ```
 
 ### Ubuntu/Debian
@@ -195,7 +195,7 @@ python3 --version  # Should show 3.6 or higher
 sudo apt update && sudo apt install python3 python3-pip
 
 # Verify installation
-python3 --version  # Should show 3.6 or higher
+python3 --version  # Should show 3.10 or higher
 ```
 
 ### Windows

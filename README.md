@@ -24,7 +24,7 @@ A web application for managing Coinkite BlockClock Mini/Micro devices. Satoshi S
 ## Prerequisites
 
 
-- Python 3.6 or higher
+- Python 3.10 or higher
 - pip (Python package manager)
 - Network connection to your BlockClock device(s)
 - For Docker installation: Docker and Docker Compose
@@ -125,7 +125,7 @@ http://localhost:5010
 
 - This project is not affiliated with Coinkite
 - BlockClock is a product of Coinkite - this is an unofficial companion tool
-- Requires Python 3.6 or higher
+- Requires Python 3.10 or higher
 
 ## License
 
