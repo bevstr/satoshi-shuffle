@@ -8,7 +8,7 @@ This guide provides detailed instructions for installing Satoshi Shuffle using P
 ## 📌 Before You Begin
 
 Before installing, ensure you have:  
-✅ **Python 3.6 or higher** installed  
+✅ **Python 3.10 or higher** installed  
 ✅ **pip (Python package manager)** installed  
 ✅ **Terminal (Mac/Linux) or Command Prompt (Windows)** available 
 
@@ -51,7 +51,7 @@ sudo apt update && sudo apt install python3 python3-pip
    ```bash
    python --version  # or python3 --version
    ```  
-   It should return version **3.6 or higher**.  
+   It should return version **3.10 or higher**.  
 
 3. Check if `pip` is installed:  
    ```bash

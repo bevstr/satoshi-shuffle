@@ -61,10 +61,10 @@ def check_command(command):
         return False
 
 def check_python_version():
-    """Check if Python version is 3.6+"""
+    """Check if Python version is 3.10+"""
     version = sys.version_info
-    if version.major < 3 or (version.major == 3 and version.minor < 6):
-        print_error(f"Python 3.6+ is required. You have Python {version.major}.{version.minor}")
+    if version.major < 3 or (version.major == 3 and version.minor < 10):
+        print_error(f"Python 3.10+ is required. You have Python {version.major}.{version.minor}")
         return False
     return True
 
@@ -123,7 +123,7 @@ def install_python_packages():
         
         # Create a basic requirements file
         with open(root_requirements, 'w') as f:
-            f.write("Flask==2.3.3\nrequests==2.32.3\nFlask-WTF==1.1.1\n")
+            f.write("Flask==3.1.3\nrequests==2.33.0\nFlask-WTF==1.2.0\n")
         
         requirements_path = root_requirements
     
